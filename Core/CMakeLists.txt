@@ -1,5 +1,5 @@
-find_package(glad CONFIG REQUIRED)
-find_package(glfw3 CONFIG REQUIRED)
+find_package(glad 0.1.36 CONFIG REQUIRED)
+find_package(glfw3 3.3.8 CONFIG REQUIRED)
 
 set(LIB_NAME Fussion)
 
