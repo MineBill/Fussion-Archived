@@ -1,4 +1,5 @@
 #include "Application.hpp"
+#include <chrono>
 
 using namespace fussion;
 
@@ -9,10 +10,18 @@ Application::Application()
 void Application::Run() {
     OnInitialize();
 
+    using clock = std::chrono::steady_clock;
+
+    auto now = clock::now();
+    auto previous = now;
     while (!m_window->ShouldClose()) {
+        now = clock::now();
+        std::chrono::duration<f32> elapsed_time = now - previous;
+        previous = now;
+
         m_window->PollEvents();
 
-        OnUpdate();
+        OnUpdate(elapsed_time.count());
 
         m_window->SwapBuffers();
     }

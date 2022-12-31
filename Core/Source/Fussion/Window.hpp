@@ -5,7 +5,7 @@ namespace fussion {
 
 struct WindowProps {
     i32 width { 0 }, height { 0 };
-    std::string title { "" };
+    std::string title;
 };
 
 class Window {

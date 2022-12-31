@@ -6,3 +6,5 @@ add_executable(
 )
 
 target_link_libraries(Game Fussion)
+
+set_project_warnings(Game ON)

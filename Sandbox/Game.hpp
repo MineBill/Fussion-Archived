@@ -7,7 +7,7 @@ class Game final : public fsn::Application {
 
     void OnInitialize() override;
 
-    void OnUpdate() override;
+    void OnUpdate(f32 delta) override;
 
     void OnEvent() override;
 

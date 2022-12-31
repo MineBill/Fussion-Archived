@@ -1,4 +1,4 @@
-#include "Window.hpp"
+#include "Fussion/Window.hpp"
 #include <GLFW/glfw3.h>
 
 namespace fussion {

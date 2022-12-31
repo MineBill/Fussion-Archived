@@ -9,12 +9,13 @@ class Application {
 
 protected:
     virtual void OnInitialize() { }
-    virtual void OnUpdate() { }
+    virtual void OnUpdate(f32) { }
     virtual void OnEvent() { }
     virtual void OnShutdown() { }
 
 public:
     Application();
+    virtual ~Application() = default;
 
     void Run();
 };

@@ -1,19 +1,20 @@
 find_package(glad 0.1.36 CONFIG REQUIRED)
 find_package(glfw3 3.3.8 CONFIG REQUIRED)
 
-set(LIB_NAME Fussion)
+set(ENGINE_NAME Fussion)
 
-add_library(
-        ${LIB_NAME}
-        Fussion/Application.hpp
-        Fussion/Application.cpp
-        Fussion/Window.hpp
-        Fussion/Types.hpp
+add_library(${ENGINE_NAME})
 
-        Impl/WindowGLFW.hpp
-        Impl/WindowGLFW.cpp)
+target_sources(${ENGINE_NAME}
+        PRIVATE
+        Impl/WindowGLFW.cpp
+        Impl/WindowGLFW.hpp)
 
-target_link_libraries(${LIB_NAME} PRIVATE glfw glad::glad)
+add_subdirectory(Source/Fussion)
 
-target_include_directories(${LIB_NAME} PRIVATE Fussion)
-target_include_directories(${LIB_NAME} PUBLIC .)
+target_link_libraries(${ENGINE_NAME} PRIVATE glfw glad::glad)
+
+target_include_directories(${ENGINE_NAME} PRIVATE Source/Fussion)
+target_include_directories(${ENGINE_NAME} PUBLIC Source)
+
+set_project_warnings(${ENGINE_NAME} ON)
