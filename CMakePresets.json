@@ -1,0 +1,52 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "common",
+            "hidden": true,
+            "binaryDir": "${sourceDir}/out/${presetName}"
+        },
+        {
+            "name": "release",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "debug",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "windows-x64",
+            "inherits": "common",
+            "hidden": true
+        },
+        {
+            "name": "windows-x64-mingw",
+            "inherits": "windows-x64",
+            "hidden": true,
+            "generator": "Ninja"
+        },
+        {
+            "name": "windows-x64-vs2022",
+            "inherits": "windows-x64",
+            "hidden": true,
+            "generator": "Visual Studio 17 2022"
+        },
+        {
+            "name": "linux-x64",
+            "inherits": "common",
+            "hidden": true
+        },
+        {
+            "name": "linux-x64-ninja",
+            "inherits": "linux-x64",
+            "hidden": true,
+            "generator": "Ninja"
+        }
+    ]
+}

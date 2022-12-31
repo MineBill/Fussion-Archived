@@ -1,0 +1,37 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "mingw-debug",
+            "inherits": [
+                "windows-x64-mingw",
+                "debug"
+            ],
+            "toolchainFile": "I:/git/vcpkg/scripts/buildsystems/vcpkg.cmake"
+        },
+        {
+            "name": "mingw-release",
+            "inherits": [
+                "windows-x64-mingw",
+                "release"
+            ],
+            "toolchainFile": "I:/git/vcpkg/scripts/buildsystems/vcpkg.cmake"
+        },
+        {
+            "name": "vs-debug",
+            "inherits": [
+                "windows-x64-vs2022",
+                "debug"
+            ],
+            "toolchainFile": "I:/git/vcpkg/scripts/buildsystems/vcpkg.cmake"
+        },
+        {
+            "name": "vs-release",
+            "inherits": [
+                "windows-x64-vs2022",
+                "release"
+            ],
+            "toolchainFile": "I:/git/vcpkg/scripts/buildsystems/vcpkg.cmake"
+        }
+    ]
+}
