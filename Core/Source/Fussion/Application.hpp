@@ -10,7 +10,7 @@ class Application {
 protected:
     virtual void OnInitialize() { }
     virtual void OnUpdate(f32) { }
-    virtual void OnEvent() { }
+    virtual void OnEvent(Ref<Event>) { }
     virtual void OnShutdown() { }
 
 public:

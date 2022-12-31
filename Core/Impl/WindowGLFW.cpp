@@ -1,4 +1,6 @@
 #include "WindowGLFW.hpp"
+#include "Fussion/Events/ApplicationEvents.hpp"
+#include <cassert>
 
 using namespace fussion;
 
@@ -18,10 +20,6 @@ WindowGLFW::WindowGLFW(WindowProps const& props) noexcept {
 
 WindowGLFW::~WindowGLFW() = default;
 
-bool WindowGLFW::ShouldClose() {
-    return glfwWindowShouldClose(m_native_handle);
-}
-
 void WindowGLFW::PollEvents() const {
     glfwPollEvents();
 }
@@ -30,5 +28,21 @@ void WindowGLFW::SwapBuffers() const {
     glfwSwapBuffers(m_native_handle);
 }
 
-void WindowGLFW::SetupBindings() {
+void WindowGLFW::OnEvent(const Window::EventCallback& callback) {
+    m_event_callback = callback;
 }
+
+bool WindowGLFW::ShouldClose() {
+    return glfwWindowShouldClose(m_native_handle);
+}
+
+void WindowGLFW::SetupBindings() {
+    glfwSetWindowUserPointer(m_native_handle, this);
+
+    glfwSetWindowSizeCallback(m_native_handle, [](GLFWwindow *window, i32 width, i32 height) {
+        auto me = static_cast<WindowGLFW*>(glfwGetWindowUserPointer(window));
+        assert(me != nullptr);
+        me->m_event_callback(std::make_shared<WindowResized>(width, height));
+    });
+}
+

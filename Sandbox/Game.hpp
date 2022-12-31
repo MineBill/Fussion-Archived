@@ -9,7 +9,7 @@ class Game final : public fsn::Application {
 
     void OnUpdate(f32 delta) override;
 
-    void OnEvent() override;
+    void OnEvent(Ref<fsn::Event>) override;
 
 public:
     Game() = default;
