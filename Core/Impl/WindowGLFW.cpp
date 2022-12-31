@@ -1,4 +1,4 @@
-#include "WindowGlfw.hpp"
+#include "WindowGLFW.hpp"
 
 using namespace fussion;
 
