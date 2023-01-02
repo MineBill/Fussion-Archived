@@ -11,13 +11,13 @@ public:
     explicit WindowGLFW(WindowProps const& props) noexcept;
     ~WindowGLFW() override;
 
-    bool ShouldClose() override;
+    bool should_close() override;
 
-    void PollEvents() const override;
-    void SwapBuffers() const override;
-    void OnEvent(EventCallback const& callback) override;
+    void poll_events() const override;
+    void swap_buffers() const override;
+    void on_event(EventCallback const& callback) override;
 
-    void SetupBindings();
+    void setup_bindings();
 };
 
 }

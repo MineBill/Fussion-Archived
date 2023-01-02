@@ -1,22 +1,23 @@
 #pragma once
 #include "Fussion/Input/Keys.hpp"
 #include "Fussion/Types.hpp"
+#include <concepts>
 #include <functional>
 #include <string>
 #include <utility>
 #include <vector>
 
-#define EVENT(name)                         \
-    static EventType StaticType() {         \
-        return EventType::name;             \
-    }                                       \
-                                            \
-    EventType Type() const override {       \
-        return StaticType();                \
-    }                                       \
-                                            \
-    std::string ToString() const override { \
-        return #name;                       \
+#define EVENT(name)                          \
+    static EventType static_type() {         \
+        return EventType::name;              \
+    }                                        \
+                                             \
+    EventType type() const override {        \
+        return static_type();                \
+    }                                        \
+                                             \
+    std::string to_string() const override { \
+        return #name;                        \
     }
 
 namespace fussion {
@@ -44,8 +45,8 @@ class Event {
 public:
     virtual ~Event() = default;
 
-    mustuse virtual EventType Type() const = 0;
-    mustuse virtual std::string ToString() const = 0;
+    mustuse virtual EventType type() const = 0;
+    mustuse virtual std::string to_string() const = 0;
 
 protected:
     bool m_handled { false };
@@ -61,19 +62,20 @@ public:
     explicit Dispatcher(Ref<Event> event)
         : m_event(std::move(event)) {
     }
-    template<typename T>
-    void Dispatch(EventFn<T> fn) {
-        if (m_event->Type() == T::StaticType()) {
-            fn(std::dynamic_pointer_cast<T>(m_event));
-            m_event->m_handled = true;
-        }
+
+    template<std::derived_from<Event> T>
+    void dispatch(EventFn<T> fn) {
+        if (m_event->m_handled || m_event->type() != T::static_typef()) return;
+
+        fn(std::dynamic_pointer_cast<T>(m_event));
+        m_event->m_handled = true;
     }
 
-    template<typename T>
-    void DispatchNoConsume(EventFn<T> fn) {
-        if (m_event->Type() == T::StaticType()) {
-            fn(std::dynamic_pointer_cast<T>(m_event));
-        }
+    template<std::derived_from<Event> T>
+    void dispatch_no_consume(EventFn<T> fn) {
+        if (m_event->m_handled || m_event->type() != T::static_type()) return;
+
+        fn(std::dynamic_pointer_cast<T>(m_event));
     }
 };
 

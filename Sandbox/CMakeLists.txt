@@ -3,6 +3,7 @@ add_executable(
         main.cpp
         Game.hpp
         Game.cpp
+        CubeData.hpp
 )
 
 target_link_libraries(Game Fussion)

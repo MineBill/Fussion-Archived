@@ -8,7 +8,12 @@ add_library(${ENGINE_NAME})
 target_sources(${ENGINE_NAME}
         PRIVATE
         Impl/WindowGLFW.cpp
-        Impl/WindowGLFW.hpp)
+        Impl/WindowGLFW.hpp
+
+        Impl/VertexArrayImpl.cpp
+        Impl/VertexBufferImpl.cpp
+        Impl/Shader.cpp
+)
 
 add_subdirectory(Source/Fussion)
 

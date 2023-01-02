@@ -6,29 +6,29 @@
 using namespace fussion;
 
 Application::Application()
-    : m_window(Window::Create(WindowProps { .width = 640, .height = 480, .title = "Hello! :^)" })) {
-    m_window->OnEvent([this](Ref<Event> event) {
-        OnEvent(std::move(event));
+    : m_window(Window::create(WindowProps { .width = 640, .height = 480, .title = "Hello! :^)" })) {
+    m_window->on_event([this](Ref<Event> event) {
+        on_event(std::move(event));
     });
 }
 
-void Application::Run() {
-    OnInitialize();
+void Application::run() {
+    on_initialize();
 
     using clock = std::chrono::steady_clock;
 
     auto now = clock::now();
     auto previous = now;
-    while (!m_window->ShouldClose()) {
+    while (!m_window->should_close()) {
         now = clock::now();
         std::chrono::duration<f32> elapsed_time = now - previous;
         previous = now;
 
-        m_window->PollEvents();
+        m_window->poll_events();
 
-        OnUpdate(elapsed_time.count());
+        on_update(elapsed_time.count());
 
-        m_window->SwapBuffers();
+        m_window->swap_buffers();
     }
 
     OnShutdown();

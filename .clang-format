@@ -8,6 +8,8 @@ BreakBeforeInheritanceComma: true
 BreakConstructorInitializers: BeforeComma
 IndentPPDirectives: AfterHash
 BreakBeforeBraces: Custom
+PointerAlignment: Right
+ReferenceAlignment: Right
 BraceWrapping:
   AfterFunction: false
 NamespaceIndentation: None

@@ -8,16 +8,16 @@ class Application {
     bool m_running { true };
 
 protected:
-    virtual void OnInitialize() { }
-    virtual void OnUpdate(f32) { }
-    virtual void OnEvent(Ref<Event>) { }
+    virtual void on_initialize() { }
+    virtual void on_update(f32) { }
+    virtual void on_event(Ref<Event>) { }
     virtual void OnShutdown() { }
 
 public:
     Application();
     virtual ~Application() = default;
 
-    void Run();
+    void run();
 };
 
 } // namespace fussion

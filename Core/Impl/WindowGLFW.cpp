@@ -4,7 +4,7 @@
 
 using namespace fussion;
 
-Ptr<Window> Window::Create(WindowProps const& props) {
+Ptr<Window> Window::create(WindowProps const& props) {
     return std::make_unique<WindowGLFW>(props);
 }
 
@@ -15,28 +15,28 @@ WindowGLFW::WindowGLFW(WindowProps const& props) noexcept {
 
     m_native_handle = glfwCreateWindow(props.width, props.height, props.title.c_str(), nullptr, nullptr);
 
-    SetupBindings();
+    setup_bindings();
 }
 
 WindowGLFW::~WindowGLFW() = default;
 
-void WindowGLFW::PollEvents() const {
+void WindowGLFW::poll_events() const {
     glfwPollEvents();
 }
 
-void WindowGLFW::SwapBuffers() const {
+void WindowGLFW::swap_buffers() const {
     glfwSwapBuffers(m_native_handle);
 }
 
-void WindowGLFW::OnEvent(const Window::EventCallback& callback) {
+void WindowGLFW::on_event(const Window::EventCallback& callback) {
     m_event_callback = callback;
 }
 
-bool WindowGLFW::ShouldClose() {
+bool WindowGLFW::should_close() {
     return glfwWindowShouldClose(m_native_handle);
 }
 
-void WindowGLFW::SetupBindings() {
+void WindowGLFW::setup_bindings() {
     glfwSetWindowUserPointer(m_native_handle, this);
 
     glfwSetWindowSizeCallback(m_native_handle, [](GLFWwindow *window, i32 width, i32 height) {

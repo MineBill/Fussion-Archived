@@ -12,4 +12,8 @@ target_sources(
         Events/MouseEvents.hpp
         Events/KeyboardEvents.hpp
         Events/ApplicationEvents.hpp
+
+        Rendering/VertexArray.hpp
+        Rendering/VertexBuffer.hpp
+        Rendering/Shader.hpp
 )

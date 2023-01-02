@@ -1,5 +1,6 @@
 #pragma once
 #include "Event.hpp"
+#include "Fussion/Types.hpp"
 
 namespace fussion {
 
@@ -11,8 +12,8 @@ public:
         , m_y(y) {
     }
 
-    [[nodiscard]] f64 x() const { return m_x; }
-    [[nodiscard]] f64 y() const { return m_y; }
+    mustuse f64 x() const { return m_x; }
+    mustuse f64 y() const { return m_y; }
 
 private:
     f64 m_x, m_y;
@@ -36,7 +37,7 @@ public:
         : m_button(button) {
     }
 
-    [[nodiscard]] MouseButton button() const { return m_button; }
+    mustuse MouseButton button() const { return m_button; }
 
 private:
     MouseButton m_button {};
@@ -49,7 +50,7 @@ public:
         : m_button(button) {
     }
 
-    [[nodiscard]] MouseButton button() const { return m_button; }
+    mustuse MouseButton button() const { return m_button; }
 
 private:
     MouseButton m_button {};
@@ -63,8 +64,8 @@ public:
         , m_y_offset(y) {
     }
 
-    [[nodiscard]] f32 x_offset() const { return m_x_offset; }
-    [[nodiscard]] f32 y_offset() const { return m_y_offset; }
+    mustuse f32 x_offset() const { return m_x_offset; }
+    mustuse f32 y_offset() const { return m_y_offset; }
 
 private:
     f32 m_x_offset { 0.0f }, m_y_offset { 0.0f };

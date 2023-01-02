@@ -15,13 +15,13 @@ public:
     using EventCallback = std::function<void(Ref<Event>)>;
     virtual ~Window() = default;
 
-    mustuse static Ptr<Window> Create(WindowProps const&);
+    mustuse static Ptr<Window> create(WindowProps const&);
 
-    virtual void PollEvents() const = 0;
-    virtual void SwapBuffers() const = 0;
-    virtual void OnEvent(EventCallback const& callback) = 0;
+    virtual void poll_events() const = 0;
+    virtual void swap_buffers() const = 0;
+    virtual void on_event(EventCallback const& callback) = 0;
 
-    mustuse virtual bool ShouldClose() = 0;
+    mustuse virtual bool should_close() = 0;
 };
 
 }
