@@ -6,6 +6,7 @@
 
 void Game::on_initialize() {
     va = fussion::VertexArray::create(CUBE_DATA, { fussion::VertexType::Vector3, fussion::VertexType::Vector2, fussion::VertexType::Vector3 });
+    std::cout << "HEHEHE" << '\n';
 }
 
 void Game::on_update(f32) {
@@ -14,7 +15,7 @@ void Game::on_update(f32) {
 
 void Game::on_event(Ref<fsn::Event> event) {
     fsn::Dispatcher dispatcher(event);
-    dispatcher.dispatch_no_consume<fsn::WindowResized>([](const Ref<fsn::WindowResized>& window_resized) {
+    dispatcher.dispatch_no_consume<fsn::WindowResized>([](const Ref<fsn::WindowResized> &window_resized) {
         std::cout << window_resized->to_string() << '\n';
     });
 }

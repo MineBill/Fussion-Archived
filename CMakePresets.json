@@ -35,7 +35,7 @@
             "name": "windows-x64-vs2022",
             "inherits": "windows-x64",
             "hidden": true,
-            "generator": "Visual Studio 17 2022"
+            "generator": "Visual Studio 17"
         },
         {
             "name": "linux-x64",

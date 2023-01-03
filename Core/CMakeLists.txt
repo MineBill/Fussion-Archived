@@ -12,7 +12,7 @@ target_sources(${ENGINE_NAME}
 
         Impl/VertexArrayImpl.cpp
         Impl/VertexBufferImpl.cpp
-        Impl/Shader.cpp
+        Impl/OpenGLShader.cpp
 )
 
 add_subdirectory(Source/Fussion)
