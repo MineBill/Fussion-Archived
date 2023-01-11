@@ -5,9 +5,9 @@ SpaceAfterTemplateKeyword: false
 AlignEscapedNewlines: Left
 AlignTrailingComments: true
 BreakBeforeInheritanceComma: true
-BreakConstructorInitializers: BeforeComma
-IndentPPDirectives: AfterHash
-BreakBeforeBraces: Custom
+BreakConstructorInitializers: AfterColon
+IndentPPDirectives: BeforeHash
+BreakBeforeBraces: Linux
 PointerAlignment: Right
 ReferenceAlignment: Right
 BraceWrapping:

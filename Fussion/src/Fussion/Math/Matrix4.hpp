@@ -1,0 +1,34 @@
+#pragma once
+#include "Fussion/Types.hpp"
+#include "Vector3.hpp"
+#include <array>
+
+namespace fussion
+{
+
+struct mustuse Matrix4 final {
+    std::array<float, 16> data {
+        1.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 1.0f
+    };
+
+    float operator()(std::size_t row, std::size_t column) const;
+    float &operator()(std::size_t row, std::size_t column);
+
+    Matrix4 operator*(const Matrix4 &other) const;
+
+    static Matrix4 CreateRotationX(float angle);
+    static Matrix4 CreateRotationY(float angle);
+    static Matrix4 CreateRotationZ(float angle);
+
+    static Matrix4 CreateTranslation(Vector3 translation);
+    static Matrix4 CreateScale(Vector3 scale);
+
+    static Matrix4 CreatePerspectiveOffCenter(float left, float right, float bottom, float top, float depth_near, float depth_far);
+};
+
+}
+
+using Matrix = fussion::Matrix4;
