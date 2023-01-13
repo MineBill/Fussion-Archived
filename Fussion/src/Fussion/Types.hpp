@@ -3,6 +3,7 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <string_view>
 
 #define mustuse [[nodiscard]]
 #define unused (void)
@@ -19,6 +20,9 @@ using i64 = int64_t;
 
 using f32 = float;
 using f64 = double;
+
+using String = std::string;
+using StringView = std::string_view;
 
 template<typename T>
 using Optional = std::optional<T>;

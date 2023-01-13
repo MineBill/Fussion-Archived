@@ -1,0 +1,4 @@
+Checks: 'clang-analyzer-*,performance-*'
+CheckOptions:
+  - key:             modernize-use-nullptr.NullMacros
+    value:           NULL,CUSTOM_NULL

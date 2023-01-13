@@ -3,43 +3,43 @@
 
 namespace fussion {
 
-class OnKeyRepeated : public Event {
-    Key key {};
+class OnKeyDown : public Event {
+    Key m_key {};
 
 public:
     EVENT(OnKeyDown)
 
-    explicit OnKeyRepeated(Key key)
-        : key(key) {
+    explicit OnKeyDown(Key key)
+        : m_key(key) {
     }
 
-    mustuse Key Key() const { return key; }
+    mustuse Key GetKey() const { return m_key; }
 };
 
 class OnKeyPressed : public Event {
-    Key key {};
+    Key m_key {};
 
 public:
     EVENT(OnKeyPressed)
 
     explicit OnKeyPressed(Key key)
-        : key(key) {
+        : m_key(key) {
     }
 
-    mustuse Key Key() const { return key; }
+    mustuse Key GetKey() const { return m_key; }
 };
 
 class OnKeyReleased : public Event {
-    Key key {};
+    Key m_key {};
 
 public:
     EVENT(OnKeyReleased)
 
     explicit OnKeyReleased(Key key)
-        : key(key) {
+        : m_key(key) {
     }
 
-    mustuse Key Key() const { return key; }
+    mustuse Key GetKey() const { return m_key; }
 };
 
 }

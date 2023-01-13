@@ -1,6 +1,5 @@
 find_package(glad 0.1.36 CONFIG REQUIRED)
 find_package(glfw3 3.3.8 CONFIG REQUIRED)
-find_package(imgui CONFIG REQUIRED)
 
 FetchContent_Declare(
         libassert
@@ -16,13 +15,18 @@ add_library(${ENGINE_NAME}
         Platform/WindowGLFW.cpp
         Platform/VertexArrayImpl.cpp
         Platform/VertexBufferImpl.cpp
+        Platform/IndexBufferImpl.cpp
         Platform/OpenGLShader.cpp
         Platform/OpenGLTexture.cpp
         Platform/StbImage.c
         Platform/StbImage.hpp
+#        Platform/ImGuiImplFussion.cpp
 
         src/Fussion/Types.hpp
         src/Fussion/Layer.hpp
+        src/Fussion/Layers/ImGuiImpl.hpp
+        src/Fussion/Layers/ImGuiLayer.hpp
+        src/Fussion/Layers/ImGuiLayer.cpp
         src/Fussion/Application.hpp
         src/Fussion/Application.cpp
         src/Fussion/Windowing/Window.hpp
@@ -36,6 +40,7 @@ add_library(${ENGINE_NAME}
 
         src/Fussion/Rendering/VertexArray.hpp
         src/Fussion/Rendering/VertexBuffer.hpp
+        src/Fussion/Rendering/IndexBuffer.hpp
         src/Fussion/Rendering/Texture.hpp
         src/Fussion/Rendering/Shader.hpp
         src/Fussion/GameObject.hpp
@@ -45,9 +50,15 @@ add_library(${ENGINE_NAME}
         src/Fussion/Math/Vector3.hpp
         src/Fussion/Math/Matrix4.cpp
         src/Fussion/Math/Matrix4.hpp
-        )
+        src/Fussion/Components/Transform.cpp src/Fussion/Components/Transform.hpp src/Fussion/Components/IComponent.hpp src/Fussion/World.cpp src/Fussion/World.hpp)
 
-target_link_libraries(${ENGINE_NAME} PUBLIC glfw glad::glad imgui::imgui assert dbghelp)
+if (LINUX)
+        set(debug_library dl)
+elseif(WIN32)
+        set(debug_library dbghelp)
+endif()
+
+target_link_libraries(${ENGINE_NAME} PUBLIC glfw glad::glad imgui assert ${debug_library})
 
 target_include_directories(${ENGINE_NAME} PUBLIC src)
 

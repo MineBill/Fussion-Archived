@@ -1,0 +1,29 @@
+Root {
+    GameObject name="GameObject 1" id=1 group="1,2,123,1923" visible=true {
+        Components {}
+        Children {
+            GameObject name="EditorCamera" {
+                Components {
+                    EditorCameraController {
+                        Speed 23
+                    }
+                    MeshRenderer {
+                        Data "10231301320312djwdi1jd8123hd19728dh13dh38217dh2387dgh2387d23g8d23gd8723gd8723gd"
+                    }
+                }
+                Children {
+                    GameObject name="CameraHolder" {
+                        Components {
+                            Camera {
+                                Fov (f64)123
+                                MinDistance 0.1
+                                MaxDistance 
+                                Position (Vector3)"(1,13,123)"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

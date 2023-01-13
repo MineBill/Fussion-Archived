@@ -1,20 +1,39 @@
 #include "Application.hpp"
 #include "Events/Event.hpp"
+#include "Events/KeyboardEvents.hpp"
+#include "Fussion/Events/ApplicationEvents.hpp"
+#include <assert.hpp>
 #include <chrono>
+#include <glad/glad.h>
+#include <iostream>
 #include <utility>
 
 using namespace fussion;
 
+Application *Application::s_instance = nullptr;
+
 Application::Application(const WindowProps &props) :
     window(Window::create(props))
 {
+    s_instance = this;
+    glDebugMessageCallback([](u32, u32, u32, u32, i32, const char *, const void *) {
+        //        std::cout << message << '\n';
+    },
+        nullptr);
     window->SetVSync(false);
+    m_imgui = std::make_unique<ImGuiLayer>();
+    m_imgui->OnLoad();
 }
 
 void Application::Run()
 {
     window->OnEvent([this](const Ref<Event> &event) {
+        for (const auto &layer : m_layers) {
+            layer->OnEvent(event);
+        }
+
         OnEvent(event);
+        m_imgui->OnEvent(event);
     });
 
     OnLoad();
@@ -27,13 +46,36 @@ void Application::Run()
         now = clock::now();
         std::chrono::duration<float> elapsed_time = now - previous;
         previous = now;
+        f32 elapsed = elapsed_time.count();
 
+        m_imgui->BeginFrame(elapsed);
         window->PollEvents();
 
-        OnUpdate(elapsed_time.count());
+        for (const auto &layer : m_layers) {
+            layer->OnUpdate(elapsed);
+        }
+
+        OnUpdate(elapsed);
+        m_imgui->EndFrame();
 
         window->SwapBuffers();
     }
 
     OnShutdown();
+}
+
+void Application::Quit()
+{
+    window->SetShouldClose(true);
+}
+
+Application &Application::GetInstance()
+{
+    return *s_instance;
+}
+
+Window &Application::GetWindow()
+{
+    ASSERT(window != nullptr);
+    return *window.get();
 }

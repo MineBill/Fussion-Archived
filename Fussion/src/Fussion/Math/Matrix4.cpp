@@ -6,12 +6,12 @@ using namespace fussion;
 
 float Matrix4::operator()(std::size_t row, std::size_t column) const
 {
-    return data[row + column * 4];
+    return data[column + row * 4];
 }
 
 float &Matrix4::operator()(std::size_t row, std::size_t column)
 {
-    return data[row + column * 4];
+    return data[column + row * 4];
 }
 
 Matrix4 Matrix4::operator*(const Matrix4 &o) const
@@ -126,5 +126,37 @@ Matrix4 Matrix4::CreatePerspectiveOffCenter(float left, float right, float botto
     result(3, 1) = 0.0f;
     result(3, 2) = num6;
     result(3, 3) = 0.0f;
+    return result;
+}
+
+Matrix4 Matrix4::CreatePerspectiveFieldOfView(f32 fov, f32 aspect, f32 depth_near, f32 depth_far)
+{
+    ASSERT(fov > 0 && fov <= std::numbers::pi_v<f32>, "Fov must be within range");
+    ASSERT(aspect > 0);
+    ASSERT(depth_near > 0);
+    ASSERT(depth_far > 0);
+
+    auto max_y = depth_near * tanf(0.5f * fov);
+    auto min_y = -max_y;
+    auto min_x = min_y * aspect;
+    auto max_x = max_y * aspect;
+
+    return CreatePerspectiveOffCenter(min_x, max_x, min_y, max_y, depth_near, depth_far);
+}
+
+Matrix4 Matrix4::CreateOrthographicOffCenter(f32 left, f32 right, f32 bottom, f32 top, f32 near, f32 far)
+{
+    auto result = Matrix4();
+
+    auto num1 = (1.0f / (right - left));
+    auto num2 = (1.0f / (top - bottom));
+    auto num3 = (1.0f / (far - near));
+    result(0, 0) = 2.0f * num1;
+    result(1, 1) = 2.0f * num2;
+    result(2, 2) = -2.0f * num3;
+    result(3, 0) = -(right + left) * num1;
+    result(3, 1) = -(top + bottom) * num2;
+    result(3, 2) = -(far + near) * num3;
+
     return result;
 }

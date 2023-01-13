@@ -27,6 +27,9 @@ struct mustuse Matrix4 final {
     static Matrix4 CreateScale(Vector3 scale);
 
     static Matrix4 CreatePerspectiveOffCenter(float left, float right, float bottom, float top, float depth_near, float depth_far);
+    static Matrix4 CreatePerspectiveFieldOfView(f32 fov, f32 aspect, f32 depth_near, f32 depth_far);
+
+    static Matrix4 CreateOrthographicOffCenter(f32 left, f32 right, f32 bottom, f32 top, f32 near, f32 far);
 };
 
 }

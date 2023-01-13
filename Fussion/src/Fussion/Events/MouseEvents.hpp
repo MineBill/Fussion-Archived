@@ -7,21 +7,28 @@ namespace fussion
 
 class MouseMoved : public Event
 {
-    double x {};
-    double y {};
+    f64 m_x {};
+    f64 m_y {};
+
+    f64 m_rel_x {};
+    f64 m_rel_y {};
 
 public:
     EVENT(MouseMoved)
-    MouseMoved(double x, double y) :
-        x(x), y(y)
+    MouseMoved(f64 x, f64 y, f64 rel_x, f64 rel_y) :
+        m_x(x), m_y(y), m_rel_x(rel_x), m_rel_y(rel_y)
     {
     }
 
-    mustuse double X() const { return x; }
-    mustuse double Y() const { return y; }
+    mustuse f64 X() const { return m_x; }
+    mustuse f64 Y() const { return m_y; }
+
+    mustuse f64 RelX() const { return m_rel_x; }
+    mustuse f64 RelY() const { return m_rel_y; }
 };
 
 enum class MouseButton {
+    None,
     Left,
     Right,
     Middle,
@@ -34,16 +41,16 @@ enum class MouseButton {
 
 class MouseButtonPressed : public Event
 {
-    MouseButton button {};
+    MouseButton m_button {};
 
 public:
     EVENT(MouseButtonPressed)
     explicit MouseButtonPressed(MouseButton button) :
-        button(button)
+        m_button(button)
     {
     }
 
-    mustuse MouseButton Button() const { return button; }
+    mustuse MouseButton GetButton() const { return m_button; }
 };
 
 class MouseButtonReleased : public Event
@@ -60,19 +67,33 @@ public:
     mustuse MouseButton Button() const { return button; }
 };
 
+class MouseButtonDown : public Event
+{
+    MouseButton m_button {};
+
+public:
+    EVENT(MouseButtonDown)
+    explicit MouseButtonDown(MouseButton button) :
+        m_button(button)
+    {
+    }
+
+    mustuse MouseButton Button() const { return m_button; }
+};
+
 class MouseWheelMoved : public Event
 {
-    float x_offset { 0.0f };
-    float y_offset { 0.0f };
+    float m_x_offset { 0.0f };
+    float m_y_offset { 0.0f };
 
 public:
     EVENT(MouseWheelMoved)
     explicit MouseWheelMoved(float x, float y) :
-        x_offset(x), y_offset(y)
+        m_x_offset(x), m_y_offset(y)
     {
     }
 
-    mustuse std::pair<float, float> Offset() const { return { x_offset, y_offset }; }
+    mustuse std::pair<float, float> Offset() const { return { m_x_offset, m_y_offset }; }
 };
 
 }

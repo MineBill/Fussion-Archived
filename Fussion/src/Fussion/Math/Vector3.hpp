@@ -7,7 +7,7 @@ namespace fussion
 {
 
 struct mustuse Vector3 final {
-    std::array<float, 3> data;
+    std::array<float, 3> data { 0.0f, 0.0f, 0.0f };
 
     inline float x() const { return data[0]; }
     inline float y() const { return data[1]; }
@@ -15,6 +15,9 @@ struct mustuse Vector3 final {
     inline float &x() { return data[0]; }
     inline float &y() { return data[1]; }
     inline float &z() { return data[2]; }
+
+    Vector3() :
+        data { 0.0f, 0.0f, 0.0f } { }
 
     Vector3(float x, float y, float z) :
         data { x, y, z }
