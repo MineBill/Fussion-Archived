@@ -7,14 +7,18 @@
 #include <glad/glad.h>
 #include <iostream>
 #include <utility>
+#include "Fussion/Log.h"
 
 using namespace Fussion;
 
 Application *Application::s_instance = nullptr;
 
-Application::Application(const WindowProps &props) : window(Window::create(props))
+Application::Application(const WindowProps &props)
 {
     s_instance = this;
+    Log::Init();
+
+    window = Window::create(props);
     glDebugMessageCallback(
         [](u32, u32, u32, u32, i32, const char *, const void *) {
             //        std::cout << message << '\n';

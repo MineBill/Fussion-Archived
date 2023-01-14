@@ -1,7 +1,7 @@
 #include "Fussion/Rendering/Shader.h"
 #include <fstream>
 #include <glad/glad.h>
-#include <iostream>
+#include "Fussion/Log.h"
 
 namespace Fussion
 {
@@ -125,7 +125,7 @@ namespace Fussion
             return {};
         }
 
-        void ReportCompilationError(u32 shader)
+        static void ReportCompilationError(u32 shader)
         {
             i32 status;
             glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
@@ -134,7 +134,7 @@ namespace Fussion
 
             char message[512];
             glGetShaderInfoLog(shader, 512, nullptr, message);
-            std::cout << "SHADER ERROR: " << std::string(message) << std::endl;
+            FSN_CORE_ERR("Shader compilation error: {}", message);
         }
     };
 

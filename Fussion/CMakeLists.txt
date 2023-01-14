@@ -2,6 +2,9 @@ set(ENGINE_NAME Fussion)
 
 add_library(
         ${ENGINE_NAME}
+        src/Fussion/Core.h
+        src/Fussion/Log.cpp
+        src/Fussion/Log.h
         src/Fussion/Types.h
         src/Fussion/Layer.h
         src/Fussion/Layers/ImGuiLayer.h
@@ -17,6 +20,7 @@ add_library(
         src/Fussion/Events/KeyboardEvents.h
         src/Fussion/Events/ApplicationEvents.h
 
+        src/Fussion/Rendering/RenderContext.h
         src/Fussion/Rendering/VertexArray.h
         src/Fussion/Rendering/VertexBuffer.h
         src/Fussion/Rendering/IndexBuffer.h
@@ -27,7 +31,7 @@ add_library(
         src/Fussion/Math/Vector3.h
         src/Fussion/Math/Matrix4.cpp
         src/Fussion/Math/Matrix4.h
-        src/Fussion/Core.h src/Fussion/Rendering/RenderContext.h)
+)
 add_subdirectory(src/Platform)
 
 if (LINUX)
