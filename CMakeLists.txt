@@ -1,5 +1,5 @@
 # We use 3.25 because it introduced SYSTEM options for FetchContent_Declare
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.24)
 project(Fussion VERSION 0.0.1)
 
 include(FetchContent)
