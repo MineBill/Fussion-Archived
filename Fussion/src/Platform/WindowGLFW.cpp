@@ -1,16 +1,12 @@
 #include "WindowGLFW.h"
+#include "Fussion/Core.h"
 #include "Fussion/Events/ApplicationEvents.h"
 #include "Fussion/Events/KeyboardEvents.h"
 #include "Fussion/Events/MouseEvents.h"
 #include "Fussion/Input/Keys.h"
 #include "Fussion/Windowing/Window.h"
 #include "Platform/OpenGL/OpenGLRenderContext.h"
-#if 1
-    // This is to make sure the formatter doesn't rearrange glad bellow glfw.
-    #include <glad/glad.h>
-#endif
 #include <GLFW/glfw3.h>
-#include <assert.hpp>
 
 namespace Fussion
 {
@@ -77,13 +73,13 @@ namespace Fussion
 
         glfwSetWindowSizeCallback(window_ptr, [](GLFWwindow *window, int width, int height) {
             auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
-            DEBUG_ASSERT(me != nullptr);
+            FSN_CORE_ASSERT(me != nullptr, "");
             me->event_callback(std::make_shared<WindowResized>(width, height));
         });
 
         glfwSetKeyCallback(window_ptr, [](GLFWwindow *window, int key, int, int action, int) {
             auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
-            DEBUG_ASSERT(me != nullptr);
+            FSN_CORE_ASSERT(me != nullptr, "");
 
             auto our_key = glfw_key_to_fussion_key(key);
             switch (action) {
@@ -97,13 +93,13 @@ namespace Fussion
                 me->event_callback(std::make_shared<OnKeyDown>(our_key));
                 break;
             default:
-                DEBUG_ASSERT(false, "Should never reach this assert");
+                FSN_CORE_ASSERT(false, "Should never reach this assert");
             }
         });
 
         glfwSetCursorPosCallback(window_ptr, [](GLFWwindow *window, f64 x, f64 y) {
             auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
-            DEBUG_ASSERT(me != nullptr);
+            FSN_CORE_ASSERT(me != nullptr, "");
 
             auto rel_x = x - me->old_mouse_x;
             auto rel_y = y - me->old_mouse_y;
@@ -114,7 +110,7 @@ namespace Fussion
 
         glfwSetMouseButtonCallback(window_ptr, [](GLFWwindow *window, int button, int action, int) {
             auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
-            DEBUG_ASSERT(me != nullptr);
+            FSN_CORE_ASSERT(me != nullptr, "");
 
             auto mouse_button = glfw_button_mouse_button(button);
             switch (action) {
@@ -128,7 +124,18 @@ namespace Fussion
                 me->event_callback(std::make_shared<MouseButtonDown>(mouse_button));
                 break;
             default:
-                DEBUG_ASSERT(false, "Should never reach this assert");
+                FSN_CORE_ASSERT(false, "Should never reach this assert");
+            }
+        });
+
+        glfwSetWindowMaximizeCallback(window_ptr, [](GLFWwindow *window, int maximized) {
+            auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
+            FSN_CORE_ASSERT(me != nullptr, "");
+
+            if (maximized == 1) {
+                me->event_callback(std::make_shared<WindowMaximized>());
+            } else {
+                me->event_callback(std::make_shared<WindowMinimized>());
             }
         });
     }

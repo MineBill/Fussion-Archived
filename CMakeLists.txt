@@ -9,6 +9,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 20)
 
 set(RENDER_API "OpenGL")
+add_definitions(-DFSN_USE_ASSERTIONS)
 
 add_subdirectory(ThirdParty)
 add_subdirectory(Fussion)
