@@ -4,92 +4,42 @@
 
 namespace Fussion
 {
-
-    unsigned VertexTypeCount(VertexType vt)
+    GLenum VertexElementTypeGLEnum(VertexElementType type)
     {
-        using enum VertexType;
-        switch (vt) {
-        case Vector2:
-            return 2;
-        case Vector3:
-            return 3;
-        case Vector4:
-            return 4;
+        using enum VertexElementType;
+        switch (type) {
+        case Int:
+        case Int2:
+        case Int3:
+        case Int4:
+            return GL_INT;
+        case Float:
+        case Float2:
+        case Float3:
+        case Float4:
+        case Mat4:
+            return GL_FLOAT;
         default:
-            FSN_CORE_ASSERT(false, "Forgot to handle switch case");
+            FSN_CORE_ASSERT(false, "Unhandled case");
+            return 0;
         }
-        return 0;
     }
 
-    OpenGLVertexBuffer::OpenGLVertexBuffer(const std::vector<f32> &vertices, const std::vector<VertexType> &usage)
+    OpenGLVertexBuffer::OpenGLVertexBuffer(const std::vector<f32> &vertices)
     {
         glCreateBuffers(1, &m_id);
         glBindBuffer(GL_ARRAY_BUFFER, m_id);
 
         glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizei>(vertices.size() * sizeof(f32)), vertices.data(),
                      GL_STATIC_DRAW);
-
-        auto stride = 0u;
-        for (auto const &elem : usage) {
-            stride += VertexTypeCount(elem);
-        }
-        stride *= sizeof(float);
-
-        auto previous_offset = 0u;
-        auto index = 0u;
-        for (auto const &elem : usage) {
-            auto elem_count = VertexTypeCount(elem);
-            if (elem == VertexType::Vector4) {
-                glVertexAttribPointer(index, static_cast<GLsizei>(elem_count), GL_UNSIGNED_BYTE, true,
-                                      static_cast<GLsizei>(stride),
-                                      reinterpret_cast<const void *>( // NOLINT(performance-no-int-to-ptr)
-                                          previous_offset * sizeof(float)));
-            } else {
-                glVertexAttribPointer(index, static_cast<GLsizei>(elem_count), GL_FLOAT, false,
-                                      static_cast<GLsizei>(stride),
-                                      reinterpret_cast<const void *>( // NOLINT(performance-no-int-to-ptr)
-                                          previous_offset * sizeof(float)));
-            }
-            glEnableVertexAttribArray(index);
-
-            previous_offset += elem_count;
-            index++;
-        }
     }
 
-    OpenGLVertexBuffer::OpenGLVertexBuffer(i32 size, const std::vector<VertexType> &usage)
+    OpenGLVertexBuffer::OpenGLVertexBuffer(i32 size)
     {
         glCreateBuffers(1, &m_id);
         glBindBuffer(GL_ARRAY_BUFFER, m_id);
 
         glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
-
-        auto stride = 0u;
-        for (auto const &elem : usage) {
-            stride += VertexTypeCount(elem);
-        }
-        stride *= sizeof(float);
-
-        auto previous_offset = 0u;
-        auto index = 0u;
-        for (auto const &elem : usage) {
-            auto elem_count = VertexTypeCount(elem);
-            if (elem == VertexType::Vector4) {
-                glVertexAttribPointer(index, static_cast<GLsizei>(elem_count), GL_UNSIGNED_BYTE, true,
-                                      static_cast<GLsizei>(stride),
-                                      reinterpret_cast<const void *>( // NOLINT(performance-no-int-to-ptr)
-                                          previous_offset * sizeof(float)));
-            } else {
-                glVertexAttribPointer(index, static_cast<GLsizei>(elem_count), GL_FLOAT, false,
-                                      static_cast<GLsizei>(stride),
-                                      reinterpret_cast<const void *>( // NOLINT(performance-no-int-to-ptr)
-                                          previous_offset * sizeof(float)));
-            }
-            glEnableVertexAttribArray(index);
-
-            previous_offset += elem_count;
-            index++;
-        }
     }
 
     OpenGLVertexBuffer::~OpenGLVertexBuffer()
@@ -112,6 +62,17 @@ namespace Fussion
     {
         Use();
         glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
+    }
+
+    void OpenGLVertexBuffer::SetLayout(const AttributeLayout &layout)
+    {
+        m_layout = layout;
+    }
+
+    const AttributeLayout &OpenGLVertexBuffer::GetLayout() const
+    {
+        FSN_CORE_ASSERT(m_layout.has_value(), "Layout is not set already");
+        return *m_layout;
     }
 
 } // namespace Fussion

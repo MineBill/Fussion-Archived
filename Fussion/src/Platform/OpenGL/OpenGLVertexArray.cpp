@@ -4,42 +4,9 @@
 namespace Fussion
 {
 
-    void OpenGLVertexArray::UpdateVertexBufferSubDataRaw(i32 offset, const void *data, i32 size)
-    {
-        vertex_buffer->UpdateSubDataRawPtr(offset, data, size);
-    }
-
-    void OpenGLVertexArray::UpdateIndexBufferSubDataRaw(i32 offset, const void *data, i32 size)
-    {
-        index_buffer->UpdateSubDataRawPtr(offset, data, size);
-    }
-
-    OpenGLVertexArray::OpenGLVertexArray(const std::vector<f32> &vertices, const std::vector<VertexType> &usage)
+    OpenGLVertexArray::OpenGLVertexArray()
     {
         glCreateVertexArrays(1, &id);
-        glBindVertexArray(id);
-
-        vertex_buffer = VertexBuffer::Create(vertices, usage);
-        index_buffer = IndexBuffer::Create({});
-    }
-
-    OpenGLVertexArray::OpenGLVertexArray(const std::vector<f32> &vertices, const std::vector<u32> &indices,
-                                         const std::vector<VertexType> &usage)
-    {
-        glCreateVertexArrays(1, &id);
-        glBindVertexArray(id);
-
-        vertex_buffer = VertexBuffer::Create(vertices, usage);
-        index_buffer = IndexBuffer::Create(indices);
-    }
-
-    OpenGLVertexArray::OpenGLVertexArray(i32 vertex_size, i32 index_size, const std::vector<VertexType> &usage)
-    {
-        glCreateVertexArrays(1, &id);
-        glBindVertexArray(id);
-
-        vertex_buffer = VertexBuffer::WithSize(vertex_size, usage);
-        index_buffer = IndexBuffer::WithSize(index_size);
     }
 
     OpenGLVertexArray::~OpenGLVertexArray()
@@ -50,23 +17,31 @@ namespace Fussion
     void OpenGLVertexArray::Use() const
     {
         glBindVertexArray(id);
-        vertex_buffer->Use();
-        index_buffer->Use();
     }
 
-    void OpenGLVertexArray::ResizeVertexBuffer(i32 new_size)
+    void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer> &vertexBuffer)
     {
-        vertex_buffer->Resize(new_size);
+        FSN_CORE_ASSERT(!vertexBuffer->GetLayout().GetAttributes().empty(), "")
+
+        glBindVertexArray(id);
+        m_vertexBuffers.push_back(vertexBuffer);
+
+        auto layout = vertexBuffer->GetLayout();
+        for (i32 i = 0; const auto &attribute : layout.GetAttributes()) {
+            glEnableVertexAttribArray(i);
+            glVertexAttribPointer(i, attribute.Count, GL_FLOAT, GL_FALSE, layout.GetString(),
+                                  reinterpret_cast<const void *>(static_cast<intptr_t>(attribute.Offset)));
+            i++;
+        }
     }
 
-    void OpenGLVertexArray::ResizeIndexBuffer(i32 new_size)
+    void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer> &indexBuffer)
     {
-        index_buffer->Resize(new_size);
+        m_indexBuffer = indexBuffer;
     }
 
     mustuse i32 OpenGLVertexArray::Count() const
     {
-        return 36;
+        return m_indexBuffer->Count();
     }
-
 } // namespace Fussion

@@ -15,21 +15,58 @@ namespace Editor
 
     void EditorApplication::OnLoad()
     {
-        using enum Fussion::VertexType;
+        using enum Fussion::VertexElementType;
         // clang-format off
         auto triangleVertices = {
-            -0.5f, -0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f,
-            0.0f, 0.5f, 0.0f
+            -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+            0.5f, -0.5f, 0.0f,0.0f, 1.0f, 0.0f, 1.0f,
+            0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f
         };
+        // clang-format on
 
         auto triangleIndices = {0u, 1u, 2u};
-        // clang-format on
-        va = VertexArray::Create(triangleVertices, triangleIndices, {Vector3});
 
-        shader = Shader::Create("Resources/simple.vert", "Resources/simple.frag");
-        container = Texture::LoadFromFile("Resources/container2.png");
-        container_specular = Texture::LoadFromFile("Resources/container2_specular.png");
+        AttributeLayout layout = {
+            {VertexElementType::Float3, "a_Position"},
+            {VertexElementType::Float4, "a_Color"},
+        };
+
+        auto vb = VertexBuffer::Create(triangleVertices);
+        vb->SetLayout(layout);
+        va = VertexArray::Create();
+        va->AddVertexBuffer(vb);
+
+        auto ib = IndexBuffer::Create(triangleIndices);
+        va->SetIndexBuffer(ib);
+
+        constexpr auto vertexSource = R"(
+#version 460 core
+layout (location = 0) in vec3 a_Position;
+layout (location = 1) in vec4 a_Color;
+
+out vec3 s_Position;
+out vec4 s_Color;
+
+void main() {
+    gl_Position = vec4(a_Position, 1.0);
+    s_Position = a_Position * 0.5 + 0.5;
+    s_Color = a_Color;
+}
+        )";
+
+        constexpr auto fragmentSource = R"glsl(
+#version 460 core
+out vec4 FragColor;
+
+in vec3 s_Position;
+in vec4 s_Color;
+
+void main() {
+    FragColor =  s_Color;
+}
+        )glsl";
+
+        shader = Shader::FromStringLiterals(vertexSource, fragmentSource);
 
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_DEBUG_OUTPUT);
@@ -41,6 +78,7 @@ namespace Editor
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         va->Use();
+        shader->Use();
 
         glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 

@@ -1,66 +1,62 @@
 #include "Buffers.h"
+#include "Fussion/Core.h"
 #include "Fussion/Rendering/Renderer.h"
 #include "Platform/OpenGL/OpenGLIndexBuffer.h"
 #include "Platform/OpenGL/OpenGLVertexBuffer.h"
-#include "Fussion/Core.h"
 
 namespace Fussion
 {
 
-    Ptr<VertexBuffer> VertexBuffer::Create(const std::vector<float> &vertices, const std::vector<VertexType> &usage)
+    Ref<VertexBuffer> VertexBuffer::Create(const std::vector<float> &vertices)
     {
-        switch(Renderer::GetAPI())
-        {
+        switch (Renderer::GetAPI()) {
         case RenderAPI::None:
             FSN_CORE_ASSERT(false, "RenderAPI None is not supported");
             return nullptr;
         case RenderAPI::OpenGL:
-            return std::make_unique<OpenGLVertexBuffer>(vertices, usage);
+            return std::make_shared<OpenGLVertexBuffer>(vertices);
         }
 
         FSN_CORE_ASSERT(false, "Reached unreachable(huh) code");
         return nullptr;
     }
 
-    Ptr<VertexBuffer> VertexBuffer::WithSize(i32 size, const std::vector<VertexType> &usage)
+    Ref<VertexBuffer> VertexBuffer::WithSize(i32 size)
     {
-        switch(Renderer::GetAPI())
-        {
+        switch (Renderer::GetAPI()) {
         case RenderAPI::None:
-        FSN_CORE_ASSERT(false, "RenderAPI None is not supported");
+            FSN_CORE_ASSERT(false, "RenderAPI None is not supported");
             return nullptr;
         case RenderAPI::OpenGL:
-            return std::make_unique<OpenGLVertexBuffer>(size, usage);
+            return std::make_shared<OpenGLVertexBuffer>(size);
         }
 
         FSN_CORE_ASSERT(false, "Reached unreachable(huh) code");
         return nullptr;
     }
 
-    Ptr<IndexBuffer> IndexBuffer::Create(std::vector<u32> const &indices)
+    Ref<IndexBuffer> IndexBuffer::Create(std::vector<u32> const &indices)
     {
-        switch(Renderer::GetAPI())
-        {
+        switch (Renderer::GetAPI()) {
         case RenderAPI::None:
-        FSN_CORE_ASSERT(false, "RenderAPI None is not supported");
+            FSN_CORE_ASSERT(false, "RenderAPI None is not supported");
             return nullptr;
         case RenderAPI::OpenGL:
-            return std::make_unique<OpenGLIndexBuffer>(indices);
+            return std::make_shared<OpenGLIndexBuffer>(indices);
         }
 
         FSN_CORE_ASSERT(false, "Reached unreachable(huh) code");
         return nullptr;
     }
 
-    Ptr<IndexBuffer> IndexBuffer::WithSize(i32 size)
+    Ref<IndexBuffer> IndexBuffer::WithSize(i32 count)
     {
-        switch(Renderer::GetAPI())
-        {
+        switch (Renderer::GetAPI()) {
         case RenderAPI::None:
-        FSN_CORE_ASSERT(false, "RenderAPI None is not supported");
+            FSN_CORE_ASSERT(false, "RenderAPI None is not supported");
             return nullptr;
         case RenderAPI::OpenGL:
-            return std::make_unique<OpenGLIndexBuffer>(size);
+            return std::make_shared<OpenGLIndexBuffer>(count);
         }
 
         FSN_CORE_ASSERT(false, "Reached unreachable(huh) code");

@@ -4,7 +4,7 @@
 namespace Fussion
 {
 
-    OpenGLIndexBuffer::OpenGLIndexBuffer(const std::vector<u32> &indices)
+    OpenGLIndexBuffer::OpenGLIndexBuffer(const std::vector<u32> &indices) : m_count(static_cast<i32>(indices.size()))
     {
         glCreateBuffers(1, &m_id);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_id);
@@ -13,12 +13,12 @@ namespace Fussion
                      GL_STATIC_DRAW);
     }
 
-    OpenGLIndexBuffer::OpenGLIndexBuffer(i32 size)
+    OpenGLIndexBuffer::OpenGLIndexBuffer(i32 count) : m_count(count)
     {
         glCreateBuffers(1, &m_id);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_id);
 
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, static_cast<GLsizei>(count * sizeof(u32)), nullptr, GL_DYNAMIC_DRAW);
     }
 
     OpenGLIndexBuffer::~OpenGLIndexBuffer()
@@ -41,6 +41,11 @@ namespace Fussion
     {
         Use();
         glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, size, data);
+    }
+
+    i32 OpenGLIndexBuffer::Count() const
+    {
+        return 0;
     }
 
 } // namespace Fussion

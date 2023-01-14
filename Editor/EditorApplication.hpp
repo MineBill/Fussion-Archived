@@ -11,10 +11,8 @@ namespace Editor
 {
     class EditorApplication final : public fsn::Application
     {
-        Ptr<fsn::VertexArray> va{};
-        Ptr<fsn::Shader> shader{};
-        Ptr<fsn::Texture> container{};
-        Ptr<fsn::Texture> container_specular{};
+        Ref<fsn::VertexArray> va{};
+        Ref<fsn::Shader> shader{};
 
         void OnLoad() override;
 
