@@ -9,13 +9,13 @@
 #include <imgui.h>
 #include <spdlog/spdlog.h>
 
-using namespace fussion;
+using namespace Fussion;
 using namespace editor;
 
 void Editor::OnLoad()
 {
-    using enum fussion::VertexType;
-    va = VertexArray::Create(CUBE_DATA, { Vector3, Vector2, Vector3 });
+    using enum Fussion::VertexType;
+    va = VertexArray::Create(CUBE_DATA, {Vector3, Vector2, Vector3});
 
     shader = Shader::Create("Resources/simple.vert", "Resources/simple.frag");
     container = Texture::LoadFromFile("Resources/container2.png");

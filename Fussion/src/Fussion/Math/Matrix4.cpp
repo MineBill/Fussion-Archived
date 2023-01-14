@@ -3,7 +3,7 @@
 #include <cmath>
 #include <numbers>
 
-using namespace fussion;
+using namespace Fussion;
 
 float Matrix4::operator()(std::size_t row, std::size_t column) const
 {
@@ -17,7 +17,7 @@ float &Matrix4::operator()(std::size_t row, std::size_t column)
 
 Matrix4 Matrix4::operator*(const Matrix4 &o) const
 {
-    auto result = Matrix4 {};
+    auto result = Matrix4{};
 
     result.data = {
         (*this)(0, 0) * o(0, 0) + (*this)(0, 1) * o(1, 0) + (*this)(0, 2) * o(2, 0) + (*this)(0, 3) * o(3, 0),
@@ -38,8 +38,7 @@ Matrix4 Matrix4::operator*(const Matrix4 &o) const
         (*this)(3, 0) * o(0, 0) + (*this)(3, 1) * o(1, 0) + (*this)(3, 2) * o(2, 0) + (*this)(3, 3) * o(3, 0),
         (*this)(3, 0) * o(0, 1) + (*this)(3, 1) * o(1, 1) + (*this)(3, 2) * o(2, 1) + (*this)(3, 3) * o(3, 1),
         (*this)(3, 0) * o(0, 2) + (*this)(3, 1) * o(1, 2) + (*this)(3, 2) * o(2, 2) + (*this)(3, 3) * o(3, 2),
-        (*this)(3, 0) * o(0, 3) + (*this)(3, 1) * o(1, 3) + (*this)(3, 2) * o(2, 3) + (*this)(3, 3) * o(3, 3)
-    };
+        (*this)(3, 0) * o(0, 3) + (*this)(3, 1) * o(1, 3) + (*this)(3, 2) * o(2, 3) + (*this)(3, 3) * o(3, 3)};
 
     return result;
 }
@@ -98,7 +97,8 @@ Matrix4 Matrix4::CreateScale(Vector3 scale)
     return result;
 }
 
-Matrix4 Matrix4::CreatePerspectiveOffCenter(float left, float right, float bottom, float top, float depth_near, float depth_far)
+Matrix4 Matrix4::CreatePerspectiveOffCenter(float left, float right, float bottom, float top, float depth_near,
+                                            float depth_far)
 {
     DEBUG_ASSERT(depth_near > 0);
     DEBUG_ASSERT(depth_far > 0);

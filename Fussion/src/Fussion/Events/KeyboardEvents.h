@@ -2,67 +2,73 @@
 #include "Event.h"
 #include <spdlog/fmt/bundled/core.h>
 
-namespace fussion
+namespace Fussion
 {
 
-class OnKeyDown : public Event
-{
-    Key m_key {};
-
-public:
-    EVENT(OnKeyDown)
-
-    explicit OnKeyDown(Key key) :
-        m_key(key)
+    class OnKeyDown : public Event
     {
-    }
+        Key m_key{};
 
-    mustuse Key GetKey() const { return m_key; }
+    public:
+        EVENT(OnKeyDown)
 
-    mustuse String ToString() const override
+        explicit OnKeyDown(Key key) : m_key(key)
+        {
+        }
+
+        mustuse Key GetKey() const
+        {
+            return m_key;
+        }
+
+        mustuse String ToString() const override
+        {
+            return fmt::format("OnKeyDown({})", static_cast<i32>(m_key));
+        }
+    };
+
+    class OnKeyPressed : public Event
     {
-        return fmt::format("OnKeyDown({})", static_cast<i32>(m_key));
-    }
-};
+        Key m_key{};
 
-class OnKeyPressed : public Event
-{
-    Key m_key {};
+    public:
+        EVENT(OnKeyPressed)
 
-public:
-    EVENT(OnKeyPressed)
+        explicit OnKeyPressed(Key key) : m_key(key)
+        {
+        }
 
-    explicit OnKeyPressed(Key key) :
-        m_key(key)
+        mustuse Key GetKey() const
+        {
+            return m_key;
+        }
+
+        mustuse String ToString() const override
+        {
+            return fmt::format("OnKeyPressed({})", static_cast<i32>(m_key));
+        }
+    };
+
+    class OnKeyReleased : public Event
     {
-    }
+        Key m_key{};
 
-    mustuse Key GetKey() const { return m_key; }
+    public:
+        EVENT(OnKeyReleased)
 
-    mustuse String ToString() const override
-    {
-        return fmt::format("OnKeyPressed({})", static_cast<i32>(m_key));
-    }
-};
+        explicit OnKeyReleased(Key key) : m_key(key)
+        {
+        }
 
-class OnKeyReleased : public Event
-{
-    Key m_key {};
+        mustuse Key GetKey() const
+        {
+            return m_key;
+        }
 
-public:
-    EVENT(OnKeyReleased)
+        mustuse String ToString() const override
+        {
+            return fmt::format("OnKeyReleased({})", static_cast<i32>(m_key));
+        }
+    };
 
-    explicit OnKeyReleased(Key key) :
-        m_key(key)
-    {
-    }
-
-    mustuse Key GetKey() const { return m_key; }
-
-    mustuse String ToString() const override
-    {
-        return fmt::format("OnKeyReleased({})", static_cast<i32>(m_key));
-    }
-};
-
-}
+} // namespace Fussion

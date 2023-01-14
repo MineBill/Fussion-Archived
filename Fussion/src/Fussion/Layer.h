@@ -2,17 +2,25 @@
 #include "Fussion/Events/Event.h"
 #include "Fussion/Types.h"
 
-namespace fussion {
+namespace Fussion
+{
 
-class Layer {
-public:
-    virtual ~Layer() = default;
+    class Layer
+    {
+      public:
+        virtual ~Layer() = default;
 
-    virtual void OnLoad() {}
+        virtual void OnLoad()
+        {
+        }
 
-    virtual void OnUpdate(f32) {}
+        virtual void OnUpdate(f32)
+        {
+        }
 
-    virtual void OnEvent(const Ref<Event>&) {}
-};
+        virtual void OnEvent(const Ref<Event> &)
+        {
+        }
+    };
 
-}
+} // namespace Fussion

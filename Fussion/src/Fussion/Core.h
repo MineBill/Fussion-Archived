@@ -1,9 +1,9 @@
 #pragma once
 #include "Fussion/Types.h"
 
-#include <vector>
 #include <array>
 #include <bitset>
 #include <utility>
+#include <vector>
 
 #include <assert.hpp>

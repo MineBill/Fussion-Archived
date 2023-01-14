@@ -5,29 +5,28 @@
 #include "Fussion/Rendering/Texture.h"
 #include "Fussion/Rendering/VertexArray.h"
 
-namespace fsn = fussion;
+namespace fsn = Fussion;
 
 namespace editor
 {
+    class Editor final : public fsn::Application
+    {
+        Ptr<fsn::VertexArray> va{};
+        Ptr<fsn::Shader> shader{};
+        Ptr<fsn::Texture> container{};
+        Ptr<fsn::Texture> container_specular{};
 
-class Editor final : public fsn::Application
-{
-    Ptr<fsn::VertexArray> va {};
-    Ptr<fsn::Shader> shader {};
-    Ptr<fsn::Texture> container {};
-    Ptr<fsn::Texture> container_specular {};
+        void OnLoad() override;
 
-    void OnLoad() override;
+        void OnUpdate(float delta) override;
 
-    void OnUpdate(float delta) override;
+        void OnEvent(const Ref<fsn::Event> &) override;
 
-    void OnEvent(const Ref<fsn::Event> &) override;
+        void Interface();
 
-    void Interface();
-
-public:
-    explicit Editor(const fussion::WindowProps &props) :
-        Application(props) { }
-};
-
-}
+      public:
+        explicit Editor(const Fussion::WindowProps &props) : Application(props)
+        {
+        }
+    };
+} // namespace editor

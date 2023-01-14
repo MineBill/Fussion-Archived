@@ -1,21 +1,21 @@
 #pragma once
 #include "Fussion/Layer.h"
 
-namespace fussion
+namespace Fussion
 {
 
-class ImGuiLayer : public fussion::Layer
-{
-public:
-    void OnLoad() override;
+    class ImGuiLayer : public Fussion::Layer
+    {
+    public:
+        void OnLoad() override;
 
-    void OnUpdate(f32 elapsed) override;
+        void OnUpdate(f32 elapsed) override;
 
-    void OnEvent(const Ref<fussion::Event> &event) override;
+        void OnEvent(const Ref<Fussion::Event> &event) override;
 
-    static void BeginFrame(f32 elapsed);
+        static void BeginFrame(f32 elapsed);
 
-    void EndFrame();
-};
+        void EndFrame();
+    };
 
-}
+} // namespace Fussion

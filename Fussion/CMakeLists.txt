@@ -27,7 +27,7 @@ add_library(
         src/Fussion/Math/Vector3.h
         src/Fussion/Math/Matrix4.cpp
         src/Fussion/Math/Matrix4.h
-        src/Fussion/Core.h)
+        src/Fussion/Core.h src/Fussion/Rendering/RenderContext.h)
 add_subdirectory(src/Platform)
 
 if (LINUX)

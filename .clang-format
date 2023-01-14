@@ -1,15 +1,17 @@
 ---
 Language: Cpp
-BasedOnStyle: WebKit
+BasedOnStyle: Microsoft
 SpaceAfterTemplateKeyword: false
 AlignEscapedNewlines: Left
 AlignTrailingComments: true
 BreakBeforeInheritanceComma: true
-BreakConstructorInitializers: AfterColon
+#BreakConstructorInitializers: AfterColon
 IndentPPDirectives: BeforeHash
 BreakBeforeBraces: Linux
-PointerAlignment: Right
-ReferenceAlignment: Right
-BraceWrapping:
-  AfterFunction: false
-NamespaceIndentation: None
+#PointerAlignment: Right
+#ReferenceAlignment: Right
+#BraceWrapping:
+#  AfterFunction: false
+NamespaceIndentation: All
+AccessModifierOffset: -4
+AlwaysBreakTemplateDeclarations: Yes

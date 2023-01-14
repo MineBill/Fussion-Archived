@@ -4,173 +4,176 @@
 #include "Fussion/Input/Keys.h"
 #include "Fussion/Windowing/Window.h"
 #if 1
+    // This is to make sure the formatter doesn't rearrange glad bellow glfw.
     #include <glad/glad.h>
 #endif
 #include <GLFW/glfw3.h>
 #include <assert.hpp>
 
-using namespace fussion;
-
-Key glfw_key_to_fussion_key(int);
-MouseButton glfw_button_mouse_button(int);
-
-class WindowGLFW final : public Window
+namespace Fussion
 {
-    GLFWwindow *window_ptr {};
-    EventCallback event_callback {};
 
-    f64 old_mouse_x {}, old_mouse_y {};
-    std::pair<f32, f32> m_size { 0.0f, 0.0f };
+    Key glfw_key_to_fussion_key(int);
+    MouseButton glfw_button_mouse_button(int);
 
-public:
-    explicit WindowGLFW(WindowProps const &props) noexcept
+    class WindowGLFW final : public Window
     {
-        if (!glfwInit()) {
-            return;
-        }
+        GLFWwindow *window_ptr{};
+        EventCallback event_callback{};
 
-        glfwWindowHint(GLFW_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        window_ptr = glfwCreateWindow(props.width, props.height, props.title.c_str(), nullptr, nullptr);
-        glfwMakeContextCurrent(window_ptr);
+        f64 old_mouse_x{}, old_mouse_y{};
+        std::pair<f32, f32> m_size{0.0f, 0.0f};
 
-        gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
-
-        SetupBindings();
-    }
-
-    ~WindowGLFW() override = default;
-
-    void PollEvents() const override
-    {
-        glfwPollEvents();
-    }
-
-    void SwapBuffers() const override
-    {
-        glfwSwapBuffers(window_ptr);
-    }
-
-    void OnEvent(const Window::EventCallback &callback) override
-    {
-        event_callback = callback;
-    }
-
-    bool ShouldClose() override
-    {
-        return glfwWindowShouldClose(window_ptr);
-    }
-
-    void SetVSync(bool enabled) override
-    {
-        auto status = 0;
-        if (enabled) {
-            status = 1;
-        }
-        glfwSwapInterval(status);
-    }
-
-    void SetShouldClose(bool enable) override
-    {
-        glfwSetWindowShouldClose(window_ptr, enable);
-    }
-
-    void SetupBindings()
-    {
-        glfwSetWindowUserPointer(window_ptr, this);
-
-        glfwSetWindowSizeCallback(window_ptr, [](GLFWwindow *window, int width, int height) {
-            auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
-            DEBUG_ASSERT(me != nullptr);
-            me->event_callback(std::make_shared<WindowResized>(width, height));
-        });
-
-        glfwSetKeyCallback(window_ptr, [](GLFWwindow *window, int key, int, int action, int) {
-            auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
-            DEBUG_ASSERT(me != nullptr);
-
-            auto our_key = glfw_key_to_fussion_key(key);
-            switch (action) {
-            case GLFW_RELEASE:
-                me->event_callback(std::make_shared<OnKeyReleased>(our_key));
-                break;
-            case GLFW_PRESS:
-                me->event_callback(std::make_shared<OnKeyPressed>(our_key));
-                break;
-            case GLFW_REPEAT:
-                me->event_callback(std::make_shared<OnKeyDown>(our_key));
-                break;
+    public:
+        explicit WindowGLFW(WindowProps const &props) noexcept
+        {
+            if (!glfwInit()) {
+                return;
             }
-        });
 
-        glfwSetCursorPosCallback(window_ptr, [](GLFWwindow *window, f64 x, f64 y) {
-            auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
-            DEBUG_ASSERT(me != nullptr);
+            glfwWindowHint(GLFW_VERSION_MAJOR, 3);
+            glfwWindowHint(GLFW_VERSION_MINOR, 3);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+            window_ptr = glfwCreateWindow(props.width, props.height, props.title.c_str(), nullptr, nullptr);
 
-            auto rel_x = x - me->old_mouse_x;
-            auto rel_y = y - me->old_mouse_y;
-            me->old_mouse_x = x;
-            me->old_mouse_y = y;
-            me->event_callback(std::make_unique<MouseMoved>(x, y, rel_x, rel_y));
-        });
+            glfwMakeContextCurrent(window_ptr);
+            gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
 
-        glfwSetMouseButtonCallback(window_ptr, [](GLFWwindow *window, int button, int action, int) {
-            auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
-            DEBUG_ASSERT(me != nullptr);
-
-            auto mouse_button = glfw_button_mouse_button(button);
-            switch (action) {
-            case GLFW_RELEASE:
-                me->event_callback(std::make_shared<MouseButtonReleased>(mouse_button));
-                break;
-            case GLFW_PRESS:
-                me->event_callback(std::make_shared<MouseButtonPressed>(mouse_button));
-                break;
-            case GLFW_REPEAT:
-                me->event_callback(std::make_shared<MouseButtonDown>(mouse_button));
-                break;
-            }
-        });
-    }
-
-    mustuse std::vector<VideoMode> VideoModes() const override
-    {
-        int count = 0;
-        const auto *video_modes = glfwGetVideoModes(glfwGetPrimaryMonitor(), &count);
-        const auto last = video_modes + count;
-
-        std::vector<VideoMode> retval {};
-        retval.reserve(static_cast<std::size_t>(count));
-        for (const auto &mode : std::vector<GLFWvidmode> { video_modes, last }) {
-            retval.push_back(VideoMode { .Width = mode.width, .Height = mode.height, .RefreshRate = mode.refreshRate });
+            SetupBindings();
         }
-        return retval;
-    }
 
-    mustuse std::pair<i32, i32> Size() const override
+        ~WindowGLFW() override = default;
+
+        void PollEvents() const override
+        {
+            glfwPollEvents();
+        }
+
+        void SwapBuffers() const override
+        {
+            glfwSwapBuffers(window_ptr);
+        }
+
+        void OnEvent(const Window::EventCallback &callback) override
+        {
+            event_callback = callback;
+        }
+
+        bool ShouldClose() override
+        {
+            return glfwWindowShouldClose(window_ptr);
+        }
+
+        void SetVSync(bool enabled) override
+        {
+            auto status = 0;
+            if (enabled) {
+                status = 1;
+            }
+            glfwSwapInterval(status);
+        }
+
+        void SetShouldClose(bool enable) override
+        {
+            glfwSetWindowShouldClose(window_ptr, enable);
+        }
+
+        void SetupBindings()
+        {
+            glfwSetWindowUserPointer(window_ptr, this);
+
+            glfwSetWindowSizeCallback(window_ptr, [](GLFWwindow *window, int width, int height) {
+                auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
+                DEBUG_ASSERT(me != nullptr);
+                me->event_callback(std::make_shared<WindowResized>(width, height));
+            });
+
+            glfwSetKeyCallback(window_ptr, [](GLFWwindow *window, int key, int, int action, int) {
+                auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
+                DEBUG_ASSERT(me != nullptr);
+
+                auto our_key = glfw_key_to_fussion_key(key);
+                switch (action) {
+                case GLFW_RELEASE:
+                    me->event_callback(std::make_shared<OnKeyReleased>(our_key));
+                    break;
+                case GLFW_PRESS:
+                    me->event_callback(std::make_shared<OnKeyPressed>(our_key));
+                    break;
+                case GLFW_REPEAT:
+                    me->event_callback(std::make_shared<OnKeyDown>(our_key));
+                    break;
+                }
+            });
+
+            glfwSetCursorPosCallback(window_ptr, [](GLFWwindow *window, f64 x, f64 y) {
+                auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
+                DEBUG_ASSERT(me != nullptr);
+
+                auto rel_x = x - me->old_mouse_x;
+                auto rel_y = y - me->old_mouse_y;
+                me->old_mouse_x = x;
+                me->old_mouse_y = y;
+                me->event_callback(std::make_unique<MouseMoved>(x, y, rel_x, rel_y));
+            });
+
+            glfwSetMouseButtonCallback(window_ptr, [](GLFWwindow *window, int button, int action, int) {
+                auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
+                DEBUG_ASSERT(me != nullptr);
+
+                auto mouse_button = glfw_button_mouse_button(button);
+                switch (action) {
+                case GLFW_RELEASE:
+                    me->event_callback(std::make_shared<MouseButtonReleased>(mouse_button));
+                    break;
+                case GLFW_PRESS:
+                    me->event_callback(std::make_shared<MouseButtonPressed>(mouse_button));
+                    break;
+                case GLFW_REPEAT:
+                    me->event_callback(std::make_shared<MouseButtonDown>(mouse_button));
+                    break;
+                }
+            });
+        }
+
+        mustuse std::vector<VideoMode> VideoModes() const override
+        {
+            int count = 0;
+            const auto *video_modes = glfwGetVideoModes(glfwGetPrimaryMonitor(), &count);
+            const auto last = video_modes + count;
+
+            std::vector<VideoMode> retval{};
+            retval.reserve(static_cast<std::size_t>(count));
+            for (const auto &mode : std::vector<GLFWvidmode>{video_modes, last}) {
+                retval.push_back(
+                    VideoMode{.Width = mode.width, .Height = mode.height, .RefreshRate = mode.refreshRate});
+            }
+            return retval;
+        }
+
+        mustuse std::pair<i32, i32> Size() const override
+        {
+            i32 width, height;
+            glfwGetWindowSize(window_ptr, &width, &height);
+            return {width, height};
+        }
+
+        mustuse void *Raw() override
+        {
+            return static_cast<void *>(window_ptr);
+        }
+    };
+
+    Ptr<Window> Window::create(WindowProps const &props)
     {
-        i32 width, height;
-        glfwGetWindowSize(window_ptr, &width, &height);
-        return {width, height};
+        return std::make_unique<WindowGLFW>(props);
     }
 
-    mustuse void *Raw() override
+    Key glfw_key_to_fussion_key(int key)
     {
-        return static_cast<void *>(window_ptr);
-    }
-};
-
-Ptr<Window> Window::create(WindowProps const &props)
-{
-    return std::make_unique<WindowGLFW>(props);
-}
-
-Key glfw_key_to_fussion_key(int key)
-{
-    // clang-format off
+        // clang-format off
     switch (key) {
     case GLFW_KEY_SPACE         : return Key::Space;
     case GLFW_KEY_APOSTROPHE    : return Key::Apostrophe;
@@ -294,12 +297,12 @@ Key glfw_key_to_fussion_key(int key)
     case GLFW_KEY_MENU          : return Key::Menu;
     default                     : return Key::None;
     }
-    // clang-format on
-}
+        // clang-format on
+    }
 
-MouseButton glfw_button_mouse_button(int glfw_mouse_button)
-{
-    // clang-format off
+    MouseButton glfw_button_mouse_button(int glfw_mouse_button)
+    {
+        // clang-format off
     switch (glfw_mouse_button) {
         case GLFW_MOUSE_BUTTON_LEFT  : return MouseButton::Left;
         case GLFW_MOUSE_BUTTON_RIGHT : return MouseButton::Right;
@@ -311,5 +314,7 @@ MouseButton glfw_button_mouse_button(int glfw_mouse_button)
         case GLFW_MOUSE_BUTTON_8     : return MouseButton::Button8;
         default                      : return MouseButton::None;
     }
-    // clang-format on
-}
+        // clang-format on
+    }
+
+} // namespace Fussion

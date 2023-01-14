@@ -1,11 +1,10 @@
 #pragma once
 
-namespace fussion {
-
-struct VideoMode {
-    int Width;
-    int Height;
-    int RefreshRate;
-};
-
-}
+namespace Fussion
+{
+    struct VideoMode {
+        int Width;
+        int Height;
+        int RefreshRate;
+    };
+} // namespace Fussion

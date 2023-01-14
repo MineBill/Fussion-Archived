@@ -21,72 +21,71 @@
         return #name;                \
     }
 
-namespace fussion
+namespace Fussion
 {
 
-enum class EventType {
-    OnKeyPressed = 0,
-    OnKeyReleased,
-    OnKeyDown,
-    WindowClosed,
-    WindowResized,
-    WindowMoved,
-    WindowMinimized,
-    WindowMaximized,
-    WindowGainedFocus,
-    WindowLostFocus,
-    MouseMoved,
-    MouseButtonPressed,
-    MouseButtonReleased,
-    MouseButtonDown,
-    MouseWheelMoved,
-};
+    enum class EventType {
+        OnKeyPressed = 0,
+        OnKeyReleased,
+        OnKeyDown,
+        WindowClosed,
+        WindowResized,
+        WindowMoved,
+        WindowMinimized,
+        WindowMaximized,
+        WindowGainedFocus,
+        WindowLostFocus,
+        MouseMoved,
+        MouseButtonPressed,
+        MouseButtonReleased,
+        MouseButtonDown,
+        MouseWheelMoved,
+    };
 
-class Event
-{
-    friend class Dispatcher;
-
-protected:
-    bool handled { false };
-
-public:
-    virtual ~Event() = default;
-
-    mustuse virtual EventType Type() const = 0;
-    mustuse virtual String ToString() const = 0;
-};
-
-class Dispatcher
-{
-    Ref<Event> event;
-
-public:
-    template<typename T>
-    using EventFn = std::function<void(Ref<T>)>;
-
-    explicit Dispatcher(Ref<Event> e) :
-        event(std::move(e))
+    class Event
     {
-    }
+        friend class Dispatcher;
 
-    template<std::derived_from<Event> T>
-    void Dispatch(EventFn<T> fn)
+    protected:
+        bool handled{false};
+
+    public:
+        virtual ~Event() = default;
+
+        mustuse virtual EventType Type() const = 0;
+        mustuse virtual String ToString() const = 0;
+    };
+
+    class Dispatcher
     {
-        if (event->handled || event->Type() != T::StaticType())
-            return;
+        Ref<Event> event;
 
-        fn(std::dynamic_pointer_cast<T>(event));
-        event->handled = true;
-    }
+    public:
+        template<typename T>
+        using EventFn = std::function<void(Ref<T>)>;
 
-    template<std::derived_from<Event> T>
-    void DispatchNoConsume(EventFn<T> fn)
-    {
-        if (event->handled || event->Type() != T::StaticType())
-            return;
+        explicit Dispatcher(Ref<Event> e) : event(std::move(e))
+        {
+        }
 
-        fn(std::dynamic_pointer_cast<T>(event));
-    }
-};
+        template<std::derived_from<Event> T>
+        void Dispatch(EventFn<T> fn)
+        {
+            if (event->handled || event->Type() != T::StaticType())
+                return;
 
-}
+            fn(std::dynamic_pointer_cast<T>(event));
+            event->handled = true;
+        }
+
+        template<std::derived_from<Event> T>
+        void DispatchNoConsume(EventFn<T> fn)
+        {
+            if (event->handled || event->Type() != T::StaticType())
+                return;
+
+            fn(std::dynamic_pointer_cast<T>(event));
+        }
+    };
+
+} // namespace Fussion

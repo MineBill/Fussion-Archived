@@ -7,7 +7,7 @@
 #include <imgui.h>
 #include <iostream>
 
-using namespace fussion;
+using namespace Fussion;
 
 void ImGuiLayer::OnLoad()
 {
@@ -40,13 +40,12 @@ void ImGuiLayer::BeginFrame(f32)
 void ImGuiLayer::EndFrame()
 {
     ImGui::Render();
-//    ImGui::UpdatePlatformWindows();
+    //    ImGui::UpdatePlatformWindows();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-    auto& io = ImGui::GetIO();
-    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-    {
-        GLFWwindow* backup_current_context = glfwGetCurrentContext();
+    auto &io = ImGui::GetIO();
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+        GLFWwindow *backup_current_context = glfwGetCurrentContext();
         ImGui::UpdatePlatformWindows();
         ImGui::RenderPlatformWindowsDefault();
         glfwMakeContextCurrent(backup_current_context);
