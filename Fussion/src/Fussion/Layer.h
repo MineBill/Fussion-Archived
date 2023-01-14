@@ -1,6 +1,6 @@
 #pragma once
-#include "Fussion/Types.hpp"
-#include "Fussion/Events/Event.hpp"
+#include "Fussion/Events/Event.h"
+#include "Fussion/Types.h"
 
 namespace fussion {
 

@@ -1,4 +1,4 @@
-#include "Fussion/Rendering/VertexBuffer.hpp"
+#include "Fussion/Rendering/VertexBuffer.h"
 #include <assert.hpp>
 #include <glad/glad.h>
 

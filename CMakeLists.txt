@@ -9,5 +9,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 20)
 
 add_subdirectory(ThirdParty/imgui)
+add_subdirectory(ThirdParty/spdlog)
 add_subdirectory(Fussion)
 add_subdirectory(Editor)

@@ -1,4 +1,4 @@
-#include "Fussion/Rendering/IndexBuffer.hpp"
+#include "Fussion/Rendering/IndexBuffer.h"
 #include <assert.hpp>
 #include <glad/glad.h>
 

@@ -1,8 +1,8 @@
-#include "Fussion/Events/ApplicationEvents.hpp"
-#include "Fussion/Events/KeyboardEvents.hpp"
-#include "Fussion/Events/MouseEvents.hpp"
-#include "Fussion/Input/Keys.hpp"
-#include "Fussion/Windowing/Window.hpp"
+#include "Fussion/Events/ApplicationEvents.h"
+#include "Fussion/Events/KeyboardEvents.h"
+#include "Fussion/Events/MouseEvents.h"
+#include "Fussion/Input/Keys.h"
+#include "Fussion/Windowing/Window.h"
 #if 1
     #include <glad/glad.h>
 #endif

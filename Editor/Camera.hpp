@@ -1,6 +1,6 @@
 #pragma once
-#include "Fussion/Math/Matrix4.hpp"
-#include "Fussion/Math/Vector3.hpp"
+#include "Fussion/Math/Matrix4.h"
+#include "Fussion/Math/Vector3.h"
 
 namespace editor
 {

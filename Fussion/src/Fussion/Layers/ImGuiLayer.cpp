@@ -1,6 +1,6 @@
-#include "ImGuiLayer.hpp"
-#include "Fussion/Application.hpp"
-#include "Fussion/Events/ApplicationEvents.hpp"
+#include "ImGuiLayer.h"
+#include "Fussion/Application.h"
+#include "Fussion/Events/ApplicationEvents.h"
 #include <GLFW/glfw3.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>

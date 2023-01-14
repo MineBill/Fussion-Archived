@@ -1,8 +1,8 @@
 #pragma once
-#include "Fussion/Layer.hpp"
-#include "Fussion/Layers/ImGuiLayer.hpp"
-#include "Fussion/Math/Matrix4.hpp"
-#include "Fussion/Windowing/Window.hpp"
+#include "Fussion/Layer.h"
+#include "Fussion/Layers/ImGuiLayer.h"
+#include "Fussion/Math/Matrix4.h"
+#include "Fussion/Windowing/Window.h"
 #include <concepts>
 #include <vector>
 

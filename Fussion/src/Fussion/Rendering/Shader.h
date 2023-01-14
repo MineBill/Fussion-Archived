@@ -1,8 +1,8 @@
 #pragma once
-#include "Fussion/Math/Vector3.hpp"
-#include "Fussion/Math/Matrix4.hpp"
-#include "Fussion/Types.hpp"
-#include "Texture.hpp"
+#include "Fussion/Math/Matrix4.h"
+#include "Fussion/Math/Vector3.h"
+#include "Fussion/Types.h"
+#include "Texture.h"
 #include <filesystem>
 
 namespace fussion

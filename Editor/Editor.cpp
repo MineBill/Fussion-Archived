@@ -1,15 +1,15 @@
 #include "Editor.hpp"
 #include "CubeData.hpp"
 #include "Fussion/Components/Transform.hpp"
-#include "Fussion/GameObject.hpp"
-#include "Fussion/Rendering/Texture.hpp"
-#include "Fussion/Rendering/VertexBuffer.hpp"
-#include <Fussion/Events/ApplicationEvents.hpp>
-#include <Fussion/Events/KeyboardEvents.hpp>
-#include <Fussion/Math/Vector3.hpp>
+#include "Fussion/Rendering/Texture.h"
+#include "Fussion/Rendering/VertexBuffer.h"
+#include <Fussion/Events/ApplicationEvents.h>
+#include <Fussion/Events/KeyboardEvents.h>
+#include <Fussion/Math/Vector3.h>
 #include <glad/glad.h>
 #include <imgui.h>
 #include <iostream>
+#include <spdlog/spdlog.h>
 
 using namespace fussion;
 using namespace editor;
@@ -30,18 +30,9 @@ void Editor::OnLoad()
     glEnable(GL_DEBUG_OUTPUT);
     glClearColor(0.83f, 0.79f, 0.94f, 1.0f);
 
-//    camera = Transform {
-//        .position = fsn::Vector3(0.0f),
-//        .rotation = fsn::Vector3(0.f, 0.f, 0.f),
-//        .scale = fsn::Vector3(1.0f),
-//    };
-//    go.AddComponent<Transform>();
-//
-//    cube = Transform {
-//        .position = fsn::Vector3(1.0f),
-//        .rotation = fsn::Vector3(10.f, 0.f, 0.f),
-//        .scale = fsn::Vector3(1.0f),
-//    };
+    auto go = m_manager.Create();
+
+    go->AddComponent<Transform>();
 }
 
 void Editor::OnUpdate(float)
@@ -58,12 +49,12 @@ void Editor::OnUpdate(float)
     shader->SetUniform("uMaterial.shininess", 32.0f);
 
     shader->SetUniform("uProjectionMatrix", camera_perspective);
-//    shader->SetUniform("uCamaraPosition", camera.position);
-//    shader->SetUniform("uViewMatrix", camera.Model());
-//
-//    shader->SetUniform("uModelMatrix", cube.Model());
+    //    shader->SetUniform("uCamaraPosition", camera.position);
+    //    shader->SetUniform("uViewMatrix", camera.Model());
+    //
+    //    shader->SetUniform("uModelMatrix", cube.Model());
     glDrawArrays(GL_TRIANGLES, 0, 36);
-//    camera.position.x() += 0.01f;
+    //    camera.position.x() += 0.01f;
 
     Interface();
 }

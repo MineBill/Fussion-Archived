@@ -1,56 +1,43 @@
-find_package(glad 0.1.36 CONFIG REQUIRED)
-find_package(glfw3 3.3.8 CONFIG REQUIRED)
-
-FetchContent_Declare(
-        libassert
-        SYSTEM
-        GIT_REPOSITORY "https://github.com/jeremy-rifkin/libassert"
-        GIT_TAG "v1.1"
-)
-FetchContent_MakeAvailable(libassert)
-
 set(ENGINE_NAME Fussion)
 
+add_subdirectory(src/Platform)
 add_library(${ENGINE_NAME}
-        Platform/WindowGLFW.cpp
-        Platform/VertexArrayImpl.cpp
-        Platform/VertexBufferImpl.cpp
-        Platform/IndexBufferImpl.cpp
-        Platform/OpenGLShader.cpp
-        Platform/OpenGLTexture.cpp
-        Platform/StbImage.c
-        Platform/StbImage.hpp
-#        Platform/ImGuiImplFussion.cpp
+        src/Fussion/StbImage.cpp
+        src/Fussion/StbImage.h
 
-        src/Fussion/Types.hpp
-        src/Fussion/Layer.hpp
+        src/Fussion/Types.h
+        src/Fussion/Layer.h
         src/Fussion/Layers/ImGuiImpl.hpp
-        src/Fussion/Layers/ImGuiLayer.hpp
+        src/Fussion/Layers/ImGuiLayer.h
         src/Fussion/Layers/ImGuiLayer.cpp
-        src/Fussion/Application.hpp
+        src/Fussion/Application.h
         src/Fussion/Application.cpp
-        src/Fussion/Windowing/Window.hpp
-        src/Fussion/Windowing/VideoMode.hpp
+        src/Fussion/Windowing/Window.h
+        src/Fussion/Windowing/VideoMode.h
 
-        src/Fussion/Input/Keys.hpp
-        src/Fussion/Events/Event.hpp
-        src/Fussion/Events/MouseEvents.hpp
-        src/Fussion/Events/KeyboardEvents.hpp
-        src/Fussion/Events/ApplicationEvents.hpp
+        src/Fussion/Input/Keys.h
+        src/Fussion/Events/Event.h
+        src/Fussion/Events/MouseEvents.h
+        src/Fussion/Events/KeyboardEvents.h
+        src/Fussion/Events/ApplicationEvents.h
 
-        src/Fussion/Rendering/VertexArray.hpp
-        src/Fussion/Rendering/VertexBuffer.hpp
-        src/Fussion/Rendering/IndexBuffer.hpp
-        src/Fussion/Rendering/Texture.hpp
-        src/Fussion/Rendering/Shader.hpp
-        src/Fussion/GameObject.hpp
-        src/Fussion/GameObject.cpp
+        src/Fussion/Rendering/VertexArray.h
+        src/Fussion/Rendering/VertexBuffer.h
+        src/Fussion/Rendering/IndexBuffer.h
+        src/Fussion/Rendering/Texture.h
+        src/Fussion/Rendering/Shader.h
 
         src/Fussion/Math/Vector3.cpp
-        src/Fussion/Math/Vector3.hpp
+        src/Fussion/Math/Vector3.h
         src/Fussion/Math/Matrix4.cpp
-        src/Fussion/Math/Matrix4.hpp
-        src/Fussion/Components/Transform.cpp src/Fussion/Components/Transform.hpp src/Fussion/Components/IComponent.hpp src/Fussion/World.cpp src/Fussion/World.hpp)
+        src/Fussion/Math/Matrix4.h
+
+        src/Fussion/Components/IComponent.hpp
+        src/Fussion/Components/Transform.cpp
+        src/Fussion/Components/Transform.hpp
+        src/Fussion/EntityComponent.cpp
+        src/Fussion/EntityComponent.hpp
+)
 
 if (LINUX)
         set(debug_library dl)
@@ -58,7 +45,7 @@ elseif(WIN32)
         set(debug_library dbghelp)
 endif()
 
-target_link_libraries(${ENGINE_NAME} PUBLIC glfw glad::glad imgui assert ${debug_library})
+target_link_libraries(${ENGINE_NAME} PUBLIC glfw glad::glad imgui assert spdlog ${debug_library})
 
 target_include_directories(${ENGINE_NAME} PUBLIC src)
 

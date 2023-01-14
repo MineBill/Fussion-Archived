@@ -1,4 +1,4 @@
-#include "Fussion/Rendering/Shader.hpp"
+#include "Fussion/Rendering/Shader.h"
 #include <fstream>
 #include <glad/glad.h>
 #include <iostream>

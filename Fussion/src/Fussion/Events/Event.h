@@ -1,6 +1,6 @@
 #pragma once
-#include "Fussion/Input/Keys.hpp"
-#include "Fussion/Types.hpp"
+#include "Fussion/Input/Keys.h"
+#include "Fussion/Types.h"
 #include <concepts>
 #include <functional>
 #include <string>

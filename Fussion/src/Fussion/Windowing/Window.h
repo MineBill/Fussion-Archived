@@ -1,7 +1,7 @@
 #pragma once
-#include "Fussion/Events/Event.hpp"
-#include "Fussion/Types.hpp"
-#include "VideoMode.hpp"
+#include "Fussion/Events/Event.h"
+#include "Fussion/Types.h"
+#include "VideoMode.h"
 #include <functional>
 
 namespace fussion

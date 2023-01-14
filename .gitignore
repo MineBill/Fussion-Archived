@@ -1,4 +1,7 @@
 out/
 .idea/
 .vscode/
+.cache/
 CMakeUserPresets.json
+compile_commands.json
+imgui.ini

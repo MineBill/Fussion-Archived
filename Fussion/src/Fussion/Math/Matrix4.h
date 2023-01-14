@@ -1,6 +1,6 @@
 #pragma once
-#include "Fussion/Types.hpp"
-#include "Vector3.hpp"
+#include "Fussion/Types.h"
+#include "Vector3.h"
 #include <array>
 
 namespace fussion

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Fussion/Types.hpp"
+#include "Fussion/Types.h"
 #include <filesystem>
 
 namespace fussion
