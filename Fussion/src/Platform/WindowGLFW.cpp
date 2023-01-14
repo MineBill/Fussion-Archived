@@ -1,5 +1,3 @@
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "bugprone-lambda-function-name"
 #include "WindowGLFW.h"
 #include "Fussion/Core.h"
 #include "Fussion/Events/ApplicationEvents.h"
@@ -75,13 +73,13 @@ namespace Fussion
 
         glfwSetWindowSizeCallback(window_ptr, [](GLFWwindow *window, int width, int height) {
             auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
-            FSN_CORE_ASSERT(me != nullptr, "");
+            FSN_CORE_ASSERT(me != nullptr, "") // NOLINT(bugprone-lambda-function-name)
             me->event_callback(std::make_shared<WindowResized>(width, height));
         });
 
         glfwSetKeyCallback(window_ptr, [](GLFWwindow *window, int key, int, int action, int) {
             auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
-            FSN_CORE_ASSERT(me != nullptr, "");
+            FSN_CORE_ASSERT(me != nullptr, "") // NOLINT(bugprone-lambda-function-name)
 
             auto our_key = glfw_key_to_fussion_key(key);
             switch (action) {
@@ -95,13 +93,13 @@ namespace Fussion
                 me->event_callback(std::make_shared<OnKeyDown>(our_key));
                 break;
             default:
-                FSN_CORE_ASSERT(false, "Should never reach this assert");
+                FSN_CORE_ASSERT(false, "Should never reach this assert") // NOLINT(bugprone-lambda-function-name)
             }
         });
 
         glfwSetCursorPosCallback(window_ptr, [](GLFWwindow *window, f64 x, f64 y) {
             auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
-            FSN_CORE_ASSERT(me != nullptr, "");
+            FSN_CORE_ASSERT(me != nullptr, "") // NOLINT(bugprone-lambda-function-name)
 
             auto rel_x = x - me->old_mouse_x;
             auto rel_y = y - me->old_mouse_y;
@@ -112,7 +110,7 @@ namespace Fussion
 
         glfwSetMouseButtonCallback(window_ptr, [](GLFWwindow *window, int button, int action, int) {
             auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
-            FSN_CORE_ASSERT(me != nullptr, "");
+            FSN_CORE_ASSERT(me != nullptr, "") // NOLINT(bugprone-lambda-function-name)
 
             auto mouse_button = glfw_button_mouse_button(button);
             switch (action) {
@@ -126,13 +124,13 @@ namespace Fussion
                 me->event_callback(std::make_shared<MouseButtonDown>(mouse_button));
                 break;
             default:
-                FSN_CORE_ASSERT(false, "Should never reach this assert");
+                FSN_CORE_ASSERT(false, "Should never reach this assert") // NOLINT(bugprone-lambda-function-name)
             }
         });
 
         glfwSetWindowMaximizeCallback(window_ptr, [](GLFWwindow *window, int maximized) {
             auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
-            FSN_CORE_ASSERT(me != nullptr, "");
+            FSN_CORE_ASSERT(me != nullptr, "") // NOLINT(bugprone-lambda-function-name)
 
             if (maximized == 1) {
                 me->event_callback(std::make_shared<WindowMaximized>());
@@ -320,4 +318,3 @@ namespace Fussion
     }
 
 } // namespace Fussion
-#pragma clang diagnostic pop
