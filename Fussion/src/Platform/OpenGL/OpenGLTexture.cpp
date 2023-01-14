@@ -1,5 +1,5 @@
+#include "stb_image.h"
 #include "Fussion/Rendering/Texture.h"
-#include "Fussion/StbImage.h"
 #include <filesystem>
 #include <glad/glad.h>
 

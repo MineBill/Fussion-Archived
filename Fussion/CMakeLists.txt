@@ -2,9 +2,6 @@ set(ENGINE_NAME Fussion)
 
 add_library(
         ${ENGINE_NAME}
-        src/Fussion/StbImage.cpp
-        src/Fussion/StbImage.h
-
         src/Fussion/Types.h
         src/Fussion/Layer.h
         src/Fussion/Layers/ImGuiLayer.h
@@ -47,6 +44,7 @@ target_link_libraries(
         imgui
         assert
         spdlog
+        stb
         ${debug_library}
 )
 

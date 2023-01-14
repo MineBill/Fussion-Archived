@@ -1,6 +1,6 @@
-#include "Fussion/Rendering/IndexBuffer.hpp"
-#include "Fussion/Rendering/VertexArray.hpp"
-#include "Fussion/Rendering/VertexBuffer.hpp"
+#include "Fussion/Rendering/IndexBuffer.h"
+#include "Fussion/Rendering/VertexArray.h"
+#include "Fussion/Rendering/VertexBuffer.h"
 #include <glad/glad.h>
 
 namespace fussion

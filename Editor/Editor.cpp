@@ -1,6 +1,5 @@
 #include "Editor.hpp"
 #include "CubeData.hpp"
-#include "Fussion/Components/Transform.hpp"
 #include "Fussion/Rendering/Texture.h"
 #include "Fussion/Rendering/VertexBuffer.h"
 #include <Fussion/Events/ApplicationEvents.h>
@@ -23,16 +22,9 @@ void Editor::OnLoad()
     container = Texture::LoadFromFile("Resources/container2.png");
     container_specular = Texture::LoadFromFile("Resources/container2_specular.png");
 
-    auto size = GetWindow().Size();
-    camera_perspective = Matrix4::CreatePerspectiveFieldOfView(1.047198f, static_cast<f32>(size.first) / static_cast<f32>(size.second), 0.1f, 100.0f);
-
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_DEBUG_OUTPUT);
     glClearColor(0.83f, 0.79f, 0.94f, 1.0f);
-
-    auto go = m_manager.Create();
-
-    go->AddComponent<Transform>();
 }
 
 void Editor::OnUpdate(float)
@@ -48,13 +40,7 @@ void Editor::OnUpdate(float)
     shader->SetUniform("uMaterial.specular", 1);
     shader->SetUniform("uMaterial.shininess", 32.0f);
 
-    shader->SetUniform("uProjectionMatrix", camera_perspective);
-    //    shader->SetUniform("uCamaraPosition", camera.position);
-    //    shader->SetUniform("uViewMatrix", camera.Model());
-    //
-    //    shader->SetUniform("uModelMatrix", cube.Model());
     glDrawArrays(GL_TRIANGLES, 0, 36);
-    //    camera.position.x() += 0.01f;
 
     Interface();
 }

@@ -4,7 +4,7 @@ target_sources(
         WindowGLFW.cpp
 )
 
-if (${RENDER_API} EQUAL "OpenGL")
+if (${RENDER_API} STREQUAL "OpenGL")
     message("Using OpenGL")
     target_sources(
             ${ENGINE_NAME}
