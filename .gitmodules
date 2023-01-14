@@ -1,0 +1,12 @@
+[submodule "ThirdParty/libassert"]
+	path = ThirdParty/libassert
+	url = git@github.com:MineBill/libassert.git
+[submodule "ThirdParty/glfw"]
+	path = ThirdParty/glfw
+	url = git@github.com:MineBill/glfw.git
+[submodule "ThirdParty/imgui"]
+	path = ThirdParty/imgui
+	url = git@github.com:MineBill/imgui.git
+[submodule "ThirdParty/spdlog"]
+	path = ThirdParty/spdlog
+	url = git@github.com:MineBill/spdlog.git
