@@ -33,15 +33,6 @@ void Editor::OnUpdate(float)
 
     va->Use();
 
-    container->Use(0);
-    shader->SetUniform("uMaterial.diffuse", 0);
-
-    container_specular->Use(1);
-    shader->SetUniform("uMaterial.specular", 1);
-    shader->SetUniform("uMaterial.shininess", 32.0f);
-
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-
     Interface();
 }
 
@@ -50,7 +41,7 @@ void Editor::OnEvent(const Ref<Event> &event)
     fsn::Dispatcher dispatcher(event);
     dispatcher.DispatchNoConsume<WindowResized>([](const Ref<WindowResized> &window_resized) {
         glViewport(0, 0, window_resized->Width(), window_resized->Height());
-        std::cout << window_resized->ToString() << ':' << window_resized->Width() << '\n';
+        std::cout << window_resized->ToString() << '\n';
     });
 
     dispatcher.Dispatch<OnKeyPressed>([this](const Ref<OnKeyPressed> &key_pressed) {
@@ -64,7 +55,7 @@ void Editor::Interface()
 {
     auto flags = ImGuiDockNodeFlags_PassthruCentralNode;
     ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), flags);
-    ImGui::Begin("LOL");
-    ImGui::End();
     ImGui::ShowDemoWindow();
+    ImGui::Begin("BRE PEPEGA");
+    ImGui::End();
 }
