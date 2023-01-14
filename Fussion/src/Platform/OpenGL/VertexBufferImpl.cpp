@@ -28,7 +28,7 @@ namespace Fussion
     public:
         VertexBufferImpl(const std::vector<f32> &vertices, const std::vector<VertexType> &usage)
         {
-            glGenBuffers(1, &id);
+            glCreateBuffers(1, &id);
             glBindBuffer(GL_ARRAY_BUFFER, id);
 
             glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizei>(vertices.size() * sizeof(f32)), vertices.data(),
@@ -62,7 +62,7 @@ namespace Fussion
 
         VertexBufferImpl(i32 size, const std::vector<VertexType> &usage)
         {
-            glGenBuffers(1, &id);
+            glCreateBuffers(1, &id);
             glBindBuffer(GL_ARRAY_BUFFER, id);
 
             glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);

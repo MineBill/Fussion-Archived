@@ -15,6 +15,8 @@ namespace Fussion
         virtual ~VertexArray() = default;
 
         static Ptr<VertexArray> Create(std::vector<float> const &vertices, std::vector<VertexType> const &usage);
+        static Ptr<VertexArray> Create(std::vector<float> const &vertices, const std::vector<u32> &indices,
+                                       std::vector<VertexType> const &usage);
         static Ptr<VertexArray> WithSize(i32 vertex_size, i32 index_size, std::vector<VertexType> const &usage);
 
         virtual void Use() const = 0;

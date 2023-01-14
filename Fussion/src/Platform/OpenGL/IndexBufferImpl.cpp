@@ -10,18 +10,18 @@ namespace Fussion
         u32 id{0};
 
     public:
-        explicit IndexBufferImpl(const std::vector<i32> &indices)
+        explicit IndexBufferImpl(const std::vector<u32> &indices)
         {
-            glGenBuffers(1, &id);
+            glCreateBuffers(1, &id);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
 
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, static_cast<GLsizei>(indices.size() * sizeof(i32)), indices.data(),
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, static_cast<GLsizei>(indices.size() * sizeof(u32)), indices.data(),
                          GL_STATIC_DRAW);
         }
 
         explicit IndexBufferImpl(i32 size)
         {
-            glGenBuffers(1, &id);
+            glCreateBuffers(1, &id);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
 
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
@@ -47,7 +47,7 @@ namespace Fussion
         }
     };
 
-    Ptr<IndexBuffer> IndexBuffer::Create(const std::vector<i32> &indices)
+    Ptr<IndexBuffer> IndexBuffer::Create(const std::vector<u32> &indices)
     {
         return std::make_unique<IndexBufferImpl>(indices);
     }

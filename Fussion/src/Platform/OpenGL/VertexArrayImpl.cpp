@@ -23,18 +23,28 @@ namespace Fussion
         }
 
     public:
-        VertexArrayImpl(const std::vector<float> &vertices, const std::vector<VertexType> &usage)
+        VertexArrayImpl(const std::vector<f32> &vertices, const std::vector<VertexType> &usage)
         {
-            glGenVertexArrays(1, &id);
+            glCreateVertexArrays(1, &id);
             glBindVertexArray(id);
 
             vertex_buffer = VertexBuffer::Create(vertices, usage);
             index_buffer = IndexBuffer::Create({});
         }
 
+        VertexArrayImpl(const std::vector<f32> &vertices, const std::vector<u32> &indices,
+                        const std::vector<VertexType> &usage)
+        {
+            glCreateVertexArrays(1, &id);
+            glBindVertexArray(id);
+
+            vertex_buffer = VertexBuffer::Create(vertices, usage);
+            index_buffer = IndexBuffer::Create(indices);
+        }
+
         VertexArrayImpl(i32 vertex_size, i32 index_size, const std::vector<VertexType> &usage)
         {
-            glGenVertexArrays(1, &id);
+            glCreateVertexArrays(1, &id);
             glBindVertexArray(id);
 
             vertex_buffer = VertexBuffer::WithSize(vertex_size, usage);
@@ -69,6 +79,12 @@ namespace Fussion
     Ptr<VertexArray> VertexArray::Create(const std::vector<float> &vertices, const std::vector<VertexType> &usage)
     {
         return std::make_unique<VertexArrayImpl>(vertices, usage);
+    }
+
+    Ptr<VertexArray> VertexArray::Create(const std::vector<float> &vertices, const std::vector<u32> &indices,
+                                         const std::vector<VertexType> &usage)
+    {
+        return std::make_unique<VertexArrayImpl>(vertices, indices, usage);
     }
 
     Ptr<VertexArray> VertexArray::WithSize(i32 vertex_size, i32 index_size, const std::vector<VertexType> &usage)
