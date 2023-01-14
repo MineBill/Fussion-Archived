@@ -7,7 +7,6 @@
 #include <Fussion/Math/Vector3.h>
 #include <glad/glad.h>
 #include <imgui.h>
-#include <iostream>
 #include <spdlog/spdlog.h>
 
 using namespace fussion;
@@ -41,7 +40,7 @@ void Editor::OnEvent(const Ref<Event> &event)
     fsn::Dispatcher dispatcher(event);
     dispatcher.DispatchNoConsume<WindowResized>([](const Ref<WindowResized> &window_resized) {
         glViewport(0, 0, window_resized->Width(), window_resized->Height());
-        std::cout << window_resized->ToString() << '\n';
+        spdlog::info("{}", window_resized->ToString());
     });
 
     dispatcher.Dispatch<OnKeyPressed>([this](const Ref<OnKeyPressed> &key_pressed) {

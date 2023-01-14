@@ -1,6 +1,6 @@
 #pragma once
 #include "Event.h"
-#include <format>
+#include <spdlog/fmt/bundled/core.h>
 
 namespace fussion
 {
@@ -21,7 +21,7 @@ public:
 
     mustuse String ToString() const override
     {
-        return std::format("OnKeyDown({})", static_cast<i32>(m_key));
+        return fmt::format("OnKeyDown({})", static_cast<i32>(m_key));
     }
 };
 
@@ -41,7 +41,7 @@ public:
 
     mustuse String ToString() const override
     {
-        return std::format("OnKeyPressed({})", static_cast<i32>(m_key));
+        return fmt::format("OnKeyPressed({})", static_cast<i32>(m_key));
     }
 };
 
@@ -61,7 +61,7 @@ public:
 
     mustuse String ToString() const override
     {
-        return std::format("OnKeyReleased({})", static_cast<i32>(m_key));
+        return fmt::format("OnKeyReleased({})", static_cast<i32>(m_key));
     }
 };
 

@@ -1,7 +1,7 @@
 #pragma once
 #include "Event.h"
 #include "Fussion/Types.h"
-#include <format>
+#include <spdlog/fmt/bundled/core.h>
 
 namespace fussion
 {
@@ -30,7 +30,7 @@ public:
 
     mustuse String ToString() const override
     {
-        return std::format("WindowResized(width: {}, height: {})", width, height);
+        return fmt::format("WindowResized(width: {}, height: {})", width, height);
     }
 };
 
@@ -51,7 +51,7 @@ public:
 
     mustuse String ToString() const override
     {
-        return std::format("WindowMoved({}, {})", x, y);
+        return fmt::format("WindowMoved({}, {})", x, y);
     }
 };
 

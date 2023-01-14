@@ -1,5 +1,6 @@
 #include "Matrix4.h"
 #include <assert.hpp>
+#include <cmath>
 #include <numbers>
 
 using namespace fussion;

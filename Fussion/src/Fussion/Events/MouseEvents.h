@@ -1,7 +1,7 @@
 #pragma once
 #include "Event.h"
 #include "Fussion/Types.h"
-#include <format>
+#include <spdlog/fmt/bundled/core.h>
 
 namespace fussion
 {
@@ -29,7 +29,7 @@ public:
 
     mustuse String ToString() const override
     {
-        return std::format("MouseMoved(x: {}, y: {})", m_x, m_y);
+        return fmt::format("MouseMoved(x: {}, y: {})", m_x, m_y);
     }
 };
 
@@ -60,7 +60,7 @@ public:
 
     mustuse String ToString() const override
     {
-        return std::format("MouseButtonPressed({})", static_cast<i32>(m_button));
+        return fmt::format("MouseButtonPressed({})", static_cast<i32>(m_button));
     }
 };
 
@@ -79,7 +79,7 @@ public:
 
     mustuse String ToString() const override
     {
-        return std::format("MouseButtonReleased({})", static_cast<i32>(button));
+        return fmt::format("MouseButtonReleased({})", static_cast<i32>(button));
     }
 };
 
@@ -98,7 +98,7 @@ public:
 
     mustuse String ToString() const override
     {
-        return std::format("MouseButtonDown({})", static_cast<i32>(m_button));
+        return fmt::format("MouseButtonDown({})", static_cast<i32>(m_button));
     }
 };
 
@@ -118,7 +118,7 @@ public:
 
     mustuse String ToString() const override
     {
-        return std::format("MouseWheelMoved(x_offset: {}, y_offset: {})", m_x_offset, m_y_offset);
+        return fmt::format("MouseWheelMoved(x_offset: {}, y_offset: {})", m_x_offset, m_y_offset);
     }
 };
 

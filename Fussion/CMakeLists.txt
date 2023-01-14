@@ -43,7 +43,7 @@ target_link_libraries(
         glad
         imgui
         assert
-        spdlog
+        spdlog::spdlog
         stb
         ${debug_library}
 )
