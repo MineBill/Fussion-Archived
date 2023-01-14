@@ -1,6 +1,7 @@
 target_sources(
         ${ENGINE_NAME}
         PRIVATE
+        WindowGLFW.h
         WindowGLFW.cpp
 )
 
