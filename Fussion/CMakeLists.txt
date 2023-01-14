@@ -27,7 +27,7 @@ add_library(
         src/Fussion/Math/Vector3.h
         src/Fussion/Math/Matrix4.cpp
         src/Fussion/Math/Matrix4.h
-)
+        src/Fussion/Core.h)
 add_subdirectory(src/Platform)
 
 if (LINUX)
@@ -49,5 +49,11 @@ target_link_libraries(
 )
 
 target_include_directories(${ENGINE_NAME} PUBLIC src)
+
+target_precompile_headers(
+        ${ENGINE_NAME}
+        PUBLIC
+        src/Fussion/Core.h
+)
 
 set_project_warnings(${ENGINE_NAME} ON)

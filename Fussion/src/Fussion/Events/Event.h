@@ -1,11 +1,8 @@
 #pragma once
 #include "Fussion/Input/Keys.h"
-#include "Fussion/Types.h"
+#include "Fussion/Core.h"
 #include <concepts>
 #include <functional>
-#include <string>
-#include <utility>
-#include <vector>
 
 #define EVENT(name)                       \
     static EventType StaticType()         \
