@@ -2,8 +2,8 @@ add_executable(
         Editor
 
         main.cpp
-        Editor.hpp
-        Editor.cpp
+        EditorApplication.hpp
+        EditorApplication.cpp
         CubeData.hpp
 )
 

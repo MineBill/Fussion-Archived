@@ -7,9 +7,9 @@
 
 namespace fsn = Fussion;
 
-namespace editor
+namespace Editor
 {
-    class Editor final : public fsn::Application
+    class EditorApplication final : public fsn::Application
     {
         Ptr<fsn::VertexArray> va{};
         Ptr<fsn::Shader> shader{};
@@ -24,9 +24,9 @@ namespace editor
 
         void Interface();
 
-      public:
-        explicit Editor(const Fussion::WindowProps &props) : Application(props)
+    public:
+        explicit EditorApplication(const Fussion::WindowProps &props) : Application(props)
         {
         }
     };
-} // namespace editor
+} // namespace Editor
