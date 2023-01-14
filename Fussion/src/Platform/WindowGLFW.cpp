@@ -1,3 +1,5 @@
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "bugprone-lambda-function-name"
 #include "WindowGLFW.h"
 #include "Fussion/Core.h"
 #include "Fussion/Events/ApplicationEvents.h"
@@ -318,3 +320,4 @@ namespace Fussion
     }
 
 } // namespace Fussion
+#pragma clang diagnostic pop
