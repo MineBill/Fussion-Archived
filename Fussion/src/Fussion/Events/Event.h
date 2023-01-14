@@ -1,23 +1,24 @@
 #pragma once
-#include "Fussion/Input/Keys.h"
 #include "Fussion/Core.h"
+#include "Fussion/Input/Keys.h"
 #include <concepts>
 #include <functional>
 
-#define EVENT(name)                       \
-    static EventType StaticType()         \
-    {                                     \
-        return EventType::name;           \
-    }                                     \
-                                          \
-    EventType Type() const override       \
-    {                                     \
-        return StaticType();              \
-    }                                     \
-                                          \
-    std::string ToString() const override \
-    {                                     \
-        return #name;                     \
+#define EVENT(name)                 \
+    static EventType StaticType()   \
+    {                               \
+        return EventType::name;     \
+    }                               \
+                                    \
+    EventType Type() const override \
+    {                               \
+        return StaticType();        \
+    }
+
+#define EVENT_TOSTRING(name)         \
+    String ToString() const override \
+    {                                \
+        return #name;                \
     }
 
 namespace fussion
@@ -52,7 +53,7 @@ public:
     virtual ~Event() = default;
 
     mustuse virtual EventType Type() const = 0;
-    mustuse virtual std::string ToString() const = 0;
+    mustuse virtual String ToString() const = 0;
 };
 
 class Dispatcher

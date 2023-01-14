@@ -1,6 +1,7 @@
 #pragma once
 #include "Event.h"
 #include "Fussion/Types.h"
+#include <format>
 
 namespace fussion
 {
@@ -25,6 +26,11 @@ public:
 
     mustuse f64 RelX() const { return m_rel_x; }
     mustuse f64 RelY() const { return m_rel_y; }
+
+    mustuse String ToString() const override
+    {
+        return std::format("MouseMoved(x: {}, y: {})", m_x, m_y);
+    }
 };
 
 enum class MouseButton {
@@ -51,6 +57,11 @@ public:
     }
 
     mustuse MouseButton GetButton() const { return m_button; }
+
+    mustuse String ToString() const override
+    {
+        return std::format("MouseButtonPressed({})", static_cast<i32>(m_button));
+    }
 };
 
 class MouseButtonReleased : public Event
@@ -65,6 +76,11 @@ public:
     }
 
     mustuse MouseButton Button() const { return button; }
+
+    mustuse String ToString() const override
+    {
+        return std::format("MouseButtonReleased({})", static_cast<i32>(button));
+    }
 };
 
 class MouseButtonDown : public Event
@@ -79,6 +95,11 @@ public:
     }
 
     mustuse MouseButton Button() const { return m_button; }
+
+    mustuse String ToString() const override
+    {
+        return std::format("MouseButtonDown({})", static_cast<i32>(m_button));
+    }
 };
 
 class MouseWheelMoved : public Event
@@ -94,6 +115,11 @@ public:
     }
 
     mustuse std::pair<float, float> Offset() const { return { m_x_offset, m_y_offset }; }
+
+    mustuse String ToString() const override
+    {
+        return std::format("MouseWheelMoved(x_offset: {}, y_offset: {})", m_x_offset, m_y_offset);
+    }
 };
 
 }
