@@ -76,6 +76,6 @@ Application &Application::GetInstance()
 
 Window &Application::GetWindow()
 {
-    ASSERT(window != nullptr);
+    DEBUG_ASSERT(window != nullptr);
     return *window.get();
 }

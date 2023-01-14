@@ -84,13 +84,13 @@ public:
 
         glfwSetWindowSizeCallback(window_ptr, [](GLFWwindow *window, int width, int height) {
             auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
-            ASSERT(me != nullptr);
+            DEBUG_ASSERT(me != nullptr);
             me->event_callback(std::make_shared<WindowResized>(width, height));
         });
 
         glfwSetKeyCallback(window_ptr, [](GLFWwindow *window, int key, int, int action, int) {
             auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
-            ASSERT(me != nullptr);
+            DEBUG_ASSERT(me != nullptr);
 
             auto our_key = glfw_key_to_fussion_key(key);
             switch (action) {
@@ -108,7 +108,7 @@ public:
 
         glfwSetCursorPosCallback(window_ptr, [](GLFWwindow *window, f64 x, f64 y) {
             auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
-            ASSERT(me != nullptr);
+            DEBUG_ASSERT(me != nullptr);
 
             auto rel_x = x - me->old_mouse_x;
             auto rel_y = y - me->old_mouse_y;
@@ -119,7 +119,7 @@ public:
 
         glfwSetMouseButtonCallback(window_ptr, [](GLFWwindow *window, int button, int action, int) {
             auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
-            ASSERT(me != nullptr);
+            DEBUG_ASSERT(me != nullptr);
 
             auto mouse_button = glfw_button_mouse_button(button);
             switch (action) {

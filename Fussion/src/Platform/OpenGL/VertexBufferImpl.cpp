@@ -15,7 +15,7 @@ unsigned VertexTypeCount(VertexType vt)
     case Vector4:
         return 4;
     default:
-        ASSERT(false, "Forgot to handle switch case", vt);
+        DEBUG_ASSERT(false, "Forgot to handle switch case", vt);
     }
     return 0;
 }
