@@ -14,6 +14,7 @@ if (${RENDER_API} STREQUAL "OpenGL")
             OpenGL/OpenGLTexture.cpp
             OpenGL/VertexBufferImpl.cpp
             OpenGL/VertexArrayImpl.cpp
+            OpenGL/OpenGLRenderContext.h
             OpenGL/OpenGLRenderContext.cpp
     )
 endif ()

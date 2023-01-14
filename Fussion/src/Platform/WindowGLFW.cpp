@@ -3,6 +3,7 @@
 #include "Fussion/Events/MouseEvents.h"
 #include "Fussion/Input/Keys.h"
 #include "Fussion/Windowing/Window.h"
+#include "Platform/OpenGL/OpenGLRenderContext.h"
 #if 1
     // This is to make sure the formatter doesn't rearrange glad bellow glfw.
     #include <glad/glad.h>
@@ -24,6 +25,8 @@ namespace Fussion
         f64 old_mouse_x{}, old_mouse_y{};
         std::pair<f32, f32> m_size{0.0f, 0.0f};
 
+        Ptr<RenderContext> m_renderContext{};
+
     public:
         explicit WindowGLFW(WindowProps const &props) noexcept
         {
@@ -38,8 +41,8 @@ namespace Fussion
             glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
             window_ptr = glfwCreateWindow(props.width, props.height, props.title.c_str(), nullptr, nullptr);
 
-            glfwMakeContextCurrent(window_ptr);
-            gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
+            m_renderContext = std::make_unique<OpenGLRenderContext>(window_ptr);
+            m_renderContext->Init();
 
             SetupBindings();
         }
@@ -53,7 +56,7 @@ namespace Fussion
 
         void SwapBuffers() const override
         {
-            glfwSwapBuffers(window_ptr);
+            m_renderContext->SwapBuffers();
         }
 
         void OnEvent(const Window::EventCallback &callback) override
