@@ -6,11 +6,9 @@ namespace Fussion
 {
 
     enum class VertexType;
+
     class VertexArray
     {
-        virtual void UpdateVertexBufferSubDataRaw(i32 offset, const void *new_data, i32 size) = 0;
-        virtual void UpdateIndexBufferSubDataRaw(i32 offset, const void *new_data, i32 size) = 0;
-
     public:
         virtual ~VertexArray() = default;
 
@@ -23,6 +21,8 @@ namespace Fussion
 
         virtual void ResizeVertexBuffer(i32 new_size) = 0;
         virtual void ResizeIndexBuffer(i32 new_size) = 0;
+        virtual void UpdateVertexBufferSubDataRaw(i32 offset, const void *new_data, i32 size) = 0;
+        virtual void UpdateIndexBufferSubDataRaw(i32 offset, const void *new_data, i32 size) = 0;
 
         template<typename T>
         void UpdateVertexBufferSubData(i32 offset, T *data, i32 size)

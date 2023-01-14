@@ -1,0 +1,46 @@
+#include "OpenGLIndexBuffer.h"
+#include <glad/glad.h>
+
+namespace Fussion
+{
+
+    OpenGLIndexBuffer::OpenGLIndexBuffer(const std::vector<u32> &indices)
+    {
+        glCreateBuffers(1, &m_id);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_id);
+
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, static_cast<GLsizei>(indices.size() * sizeof(u32)), indices.data(),
+                     GL_STATIC_DRAW);
+    }
+
+    OpenGLIndexBuffer::OpenGLIndexBuffer(i32 size)
+    {
+        glCreateBuffers(1, &m_id);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_id);
+
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
+    }
+
+    OpenGLIndexBuffer::~OpenGLIndexBuffer()
+    {
+        glDeleteBuffers(1, &m_id);
+    }
+
+    void OpenGLIndexBuffer::Use() const
+    {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_id);
+    }
+
+    void OpenGLIndexBuffer::Resize(i32 new_size)
+    {
+        Use();
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, new_size, nullptr, GL_DYNAMIC_DRAW);
+    }
+
+    void OpenGLIndexBuffer::UpdateSubDataRawPtr(i32 offset, const void *data, i32 size)
+    {
+        Use();
+        glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, size, data);
+    }
+
+} // namespace Fussion

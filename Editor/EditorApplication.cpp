@@ -1,7 +1,7 @@
 #include "EditorApplication.hpp"
 #include "CubeData.hpp"
+#include "Fussion/Rendering/Buffers.h"
 #include "Fussion/Rendering/Texture.h"
-#include "Fussion/Rendering/VertexBuffer.h"
 #include <Fussion/Events/ApplicationEvents.h>
 #include <Fussion/Events/KeyboardEvents.h>
 #include <Fussion/Math/Vector3.h>
@@ -16,7 +16,16 @@ namespace Editor
     void EditorApplication::OnLoad()
     {
         using enum Fussion::VertexType;
-        va = VertexArray::Create(CUBE_DATA, {Vector3, Vector2, Vector3});
+        // clang-format off
+        auto triangleVertices = {
+            -0.5f, -0.5f, 0.0f,
+            0.5f, -0.5f, 0.0f,
+            0.0f, 0.5f, 0.0f
+        };
+
+        auto triangleIndices = {0u, 1u, 2u};
+        // clang-format on
+        va = VertexArray::Create(triangleVertices, triangleIndices, {Vector3});
 
         shader = Shader::Create("Resources/simple.vert", "Resources/simple.frag");
         container = Texture::LoadFromFile("Resources/container2.png");
@@ -32,6 +41,8 @@ namespace Editor
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         va->Use();
+
+        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 
         Interface();
     }
@@ -55,8 +66,5 @@ namespace Editor
     {
         auto flags = ImGuiDockNodeFlags_PassthruCentralNode;
         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), flags);
-        ImGui::ShowDemoWindow();
-        ImGui::Begin("BRE PEPEGA");
-        ImGui::End();
     }
 } // namespace Editor

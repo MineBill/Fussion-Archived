@@ -22,10 +22,13 @@ add_library(
 
         src/Fussion/Rendering/RenderContext.h
         src/Fussion/Rendering/VertexArray.h
-        src/Fussion/Rendering/VertexBuffer.h
-        src/Fussion/Rendering/IndexBuffer.h
+        src/Fussion/Rendering/VertexArray.cpp
         src/Fussion/Rendering/Texture.h
         src/Fussion/Rendering/Shader.h
+        src/Fussion/Rendering/Renderer.h
+        src/Fussion/Rendering/Renderer.cpp
+        src/Fussion/Rendering/Buffers.h
+        src/Fussion/Rendering/Buffers.cpp
 
         src/Fussion/Math/Vector3.cpp
         src/Fussion/Math/Vector3.h
@@ -55,7 +58,12 @@ target_include_directories(${ENGINE_NAME} PUBLIC src)
 target_precompile_headers(
         ${ENGINE_NAME}
         PUBLIC
-        src/Fussion/Core.h
+        src/Fussion/Types.h
+        <vector>
+        <bitset>
+        <array>
+        <string>
+        <functional>
 )
 
 set_project_warnings(${ENGINE_NAME} ON)

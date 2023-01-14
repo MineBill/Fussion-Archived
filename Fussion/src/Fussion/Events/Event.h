@@ -1,4 +1,5 @@
 #pragma once
+#include "Fussion/Types.h"
 #include "Fussion/Core.h"
 #include "Fussion/Input/Keys.h"
 #include <concepts>

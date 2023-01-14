@@ -10,11 +10,14 @@ if (${RENDER_API} STREQUAL "OpenGL")
     target_sources(
             ${ENGINE_NAME}
             PRIVATE
-            OpenGL/IndexBufferImpl.cpp
             OpenGL/OpenGLShader.cpp
             OpenGL/OpenGLTexture.cpp
-            OpenGL/VertexBufferImpl.cpp
-            OpenGL/VertexArrayImpl.cpp
+            OpenGL/OpenGLVertexBuffer.h
+            OpenGL/OpenGLVertexBuffer.cpp
+            OpenGL/OpenGLIndexBuffer.h
+            OpenGL/OpenGLIndexBuffer.cpp
+            OpenGL/OpenGLVertexArray.h
+            OpenGL/OpenGLVertexArray.cpp
             OpenGL/OpenGLRenderContext.h
             OpenGL/OpenGLRenderContext.cpp
     )
