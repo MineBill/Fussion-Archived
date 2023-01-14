@@ -8,7 +8,8 @@ include(CMake/Warnings.cmake)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 20)
 
-add_subdirectory(ThirdParty/imgui)
-add_subdirectory(ThirdParty/spdlog)
+set(RENDER_API "OpenGL")
+
+add_subdirectory(ThirdParty)
 add_subdirectory(Fussion)
 add_subdirectory(Editor)

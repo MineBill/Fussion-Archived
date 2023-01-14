@@ -1,13 +1,12 @@
 set(ENGINE_NAME Fussion)
 
-add_subdirectory(src/Platform)
-add_library(${ENGINE_NAME}
+add_library(
+        ${ENGINE_NAME}
         src/Fussion/StbImage.cpp
         src/Fussion/StbImage.h
 
         src/Fussion/Types.h
         src/Fussion/Layer.h
-        src/Fussion/Layers/ImGuiImpl.hpp
         src/Fussion/Layers/ImGuiLayer.h
         src/Fussion/Layers/ImGuiLayer.cpp
         src/Fussion/Application.h
@@ -31,21 +30,25 @@ add_library(${ENGINE_NAME}
         src/Fussion/Math/Vector3.h
         src/Fussion/Math/Matrix4.cpp
         src/Fussion/Math/Matrix4.h
-
-        src/Fussion/Components/IComponent.hpp
-        src/Fussion/Components/Transform.cpp
-        src/Fussion/Components/Transform.hpp
-        src/Fussion/EntityComponent.cpp
-        src/Fussion/EntityComponent.hpp
 )
+add_subdirectory(src/Platform)
 
 if (LINUX)
-        set(debug_library dl)
-elseif(WIN32)
-        set(debug_library dbghelp)
-endif()
+    set(debug_library dl)
+elseif (WIN32)
+    set(debug_library dbghelp)
+endif ()
 
-target_link_libraries(${ENGINE_NAME} PUBLIC glfw glad::glad imgui assert spdlog ${debug_library})
+target_link_libraries(
+        ${ENGINE_NAME}
+        PUBLIC
+        glfw
+        glad
+        imgui
+        assert
+        spdlog
+        ${debug_library}
+)
 
 target_include_directories(${ENGINE_NAME} PUBLIC src)
 
