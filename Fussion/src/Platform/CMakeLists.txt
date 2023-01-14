@@ -10,6 +10,7 @@ if (${RENDER_API} STREQUAL "OpenGL")
     target_sources(
             ${ENGINE_NAME}
             PRIVATE
+            OpenGL/OpenGLShader.h
             OpenGL/OpenGLShader.cpp
             OpenGL/OpenGLTexture.cpp
             OpenGL/OpenGLVertexBuffer.h
