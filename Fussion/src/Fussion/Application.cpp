@@ -2,7 +2,6 @@
 #include "Events/Event.h"
 #include "Events/KeyboardEvents.h"
 #include "Fussion/Events/ApplicationEvents.h"
-#include <assert.hpp>
 #include <chrono>
 #include <glad/glad.h>
 #include <iostream>
@@ -80,6 +79,6 @@ Application &Application::GetInstance()
 
 Window &Application::GetWindow()
 {
-    DEBUG_ASSERT(window != nullptr);
+    FSN_CORE_ASSERT(window != nullptr, "");
     return *window.get();
 }

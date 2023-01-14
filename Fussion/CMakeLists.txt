@@ -46,10 +46,8 @@ target_link_libraries(
         glfw
         glad
         imgui
-        assert
         spdlog::spdlog
         stb
-        ${debug_library}
 )
 
 target_include_directories(${ENGINE_NAME} PUBLIC src)

@@ -1,6 +1,3 @@
-[submodule "ThirdParty/libassert"]
-	path = ThirdParty/libassert
-	url = git@github.com:MineBill/libassert.git
 [submodule "ThirdParty/glfw"]
 	path = ThirdParty/glfw
 	url = git@github.com:MineBill/glfw.git

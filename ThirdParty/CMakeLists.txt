@@ -1,6 +1,5 @@
 add_subdirectory(glad)
 add_subdirectory(glfw)
-add_subdirectory(libassert)
 add_subdirectory(imgui)
 add_subdirectory(spdlog)
 add_subdirectory(stb)

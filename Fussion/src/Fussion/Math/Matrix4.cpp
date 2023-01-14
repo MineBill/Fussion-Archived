@@ -1,5 +1,5 @@
 #include "Matrix4.h"
-#include <assert.hpp>
+#include <Fussion/Core.h>
 #include <cmath>
 #include <numbers>
 
@@ -100,8 +100,8 @@ Matrix4 Matrix4::CreateScale(Vector3 scale)
 Matrix4 Matrix4::CreatePerspectiveOffCenter(float left, float right, float bottom, float top, float depth_near,
                                             float depth_far)
 {
-    DEBUG_ASSERT(depth_near > 0);
-    DEBUG_ASSERT(depth_far > 0);
+    FSN_CORE_ASSERT(depth_near > 0, "");
+    FSN_CORE_ASSERT(depth_far > 0, "");
 
     auto result = Matrix4();
 
@@ -132,10 +132,10 @@ Matrix4 Matrix4::CreatePerspectiveOffCenter(float left, float right, float botto
 
 Matrix4 Matrix4::CreatePerspectiveFieldOfView(f32 fov, f32 aspect, f32 depth_near, f32 depth_far)
 {
-    DEBUG_ASSERT(fov > 0 && fov <= std::numbers::pi_v<f32>, "Fov must be within range");
-    DEBUG_ASSERT(aspect > 0);
-    DEBUG_ASSERT(depth_near > 0);
-    DEBUG_ASSERT(depth_far > 0);
+    FSN_CORE_ASSERT(fov > 0 && fov <= std::numbers::pi_v<f32>, "Fov must be within range");
+    FSN_CORE_ASSERT(aspect > 0, "");
+    FSN_CORE_ASSERT(depth_near > 0, "");
+    FSN_CORE_ASSERT(depth_far > 0, "");
 
     auto max_y = depth_near * tanf(0.5f * fov);
     auto min_y = -max_y;
