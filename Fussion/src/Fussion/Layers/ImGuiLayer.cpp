@@ -19,6 +19,15 @@ void ImGuiLayer::OnLoad()
 
     ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow *>(Application::GetInstance().GetWindow().Raw()), true);
     ImGui_ImplOpenGL3_Init("#version 130");
+
+    auto &style = ImGui::GetStyle();
+    style.WindowRounding = 6;
+    style.ChildRounding = 6;
+    style.FrameRounding = 3;
+    style.TabRounding = 6;
+    style.GrabRounding = 3;
+    style.ScrollbarRounding = 6;
+    style.PopupRounding = 6;
 }
 
 void ImGuiLayer::OnUpdate(f32 elapsed)
