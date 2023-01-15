@@ -18,7 +18,7 @@ namespace Fussion
         glCreateBuffers(1, &m_id);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_id);
 
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, static_cast<GLsizei>(count * sizeof(u32)), nullptr, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * static_cast<i32>(sizeof(u32)), nullptr, GL_DYNAMIC_DRAW);
     }
 
     OpenGLIndexBuffer::~OpenGLIndexBuffer()
