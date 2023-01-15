@@ -25,16 +25,21 @@ add_library(
         src/Fussion/Rendering/VertexArray.cpp
         src/Fussion/Rendering/Texture.h
         src/Fussion/Rendering/Shader.h
+        src/Fussion/Rendering/Shader.cpp
         src/Fussion/Rendering/Renderer.h
         src/Fussion/Rendering/Renderer.cpp
         src/Fussion/Rendering/Buffers.h
         src/Fussion/Rendering/Buffers.cpp
+        src/Fussion/Rendering/RendererApi.cpp
+        src/Fussion/Rendering/RendererApi.h
+        src/Fussion/Rendering/RenderCommand.cpp
+        src/Fussion/Rendering/RenderCommand.h
 
         src/Fussion/Math/Vector3.cpp
         src/Fussion/Math/Vector3.h
         src/Fussion/Math/Matrix4.cpp
         src/Fussion/Math/Matrix4.h
-        src/Fussion/Rendering/Shader.cpp)
+)
 add_subdirectory(src/Platform)
 
 if (LINUX)

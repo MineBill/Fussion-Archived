@@ -1,21 +1,21 @@
 #pragma once
+#include "Fussion/Rendering/RenderCommand.h"
+#include "Fussion/Rendering/VertexArray.h"
 
 namespace Fussion
 {
 
-    enum class RenderAPI {
-        None = 0,
-        OpenGL,
-    };
-
     class Renderer final
     {
-        static RenderAPI s_renderApi;
     public:
+        static void BeginScene();
+        static void EndScene();
 
-        static RenderAPI GetAPI()
+        static void Submit(const Ref<VertexArray> &array);
+
+        inline static RendererAPI::API GetAPI()
         {
-            return s_renderApi;
+            return RendererAPI::GetAPI();
         }
     };
 

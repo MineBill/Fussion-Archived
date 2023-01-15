@@ -21,5 +21,7 @@ if (${RENDER_API} STREQUAL "OpenGL")
             OpenGL/OpenGLVertexArray.cpp
             OpenGL/OpenGLRenderContext.h
             OpenGL/OpenGLRenderContext.cpp
+            OpenGL/OpenGlRendererApi.h
+            OpenGL/OpenGlRendererApi.cpp
     )
 endif ()

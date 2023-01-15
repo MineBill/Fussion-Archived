@@ -45,7 +45,7 @@ namespace Fussion
 
     i32 OpenGLIndexBuffer::Count() const
     {
-        return 0;
+        return m_count;
     }
 
 } // namespace Fussion

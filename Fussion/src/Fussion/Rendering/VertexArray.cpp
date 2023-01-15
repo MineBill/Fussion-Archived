@@ -8,10 +8,10 @@ namespace Fussion
     Ref<VertexArray> VertexArray::Create()
     {
         switch (Renderer::GetAPI()) {
-        case RenderAPI::None:
+        case RendererAPI::API::None:
             FSN_CORE_ASSERT(false, "RenderAPI::None is not supported");
             return nullptr;
-        case RenderAPI::OpenGL:
+        case RendererAPI::API::OpenGL:
             return std::make_shared<OpenGLVertexArray>();
         }
 
