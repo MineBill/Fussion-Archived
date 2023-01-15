@@ -1,13 +1,11 @@
 #include "EditorApplication.hpp"
-#include "CubeData.hpp"
 #include "Fussion/Rendering/Buffers.h"
-#include "Fussion/Rendering/Texture.h"
 #include <Fussion/Events/ApplicationEvents.h>
 #include <Fussion/Events/KeyboardEvents.h>
 #include <Fussion/Math/Vector3.h>
+#include "Fussion/Rendering/Renderer.h"
 #include <glad/glad.h>
 #include <imgui.h>
-#include <spdlog/spdlog.h>
 
 namespace Editor
 {
@@ -67,21 +65,18 @@ void main() {
         )glsl";
 
         shader = Shader::FromStringLiterals(vertexSource, fragmentSource);
-
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_DEBUG_OUTPUT);
-        glClearColor(0.83f, 0.79f, 0.94f, 1.0f);
+        RenderCommand::SetClearColor(Vector3(0.72f, 0.63f, 0.86f));
     }
 
     void EditorApplication::OnUpdate(float)
     {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        RenderCommand::Clear();
+        Renderer::BeginScene();
 
-        va->Use();
         shader->Use();
+        Renderer::Submit(va);
 
-        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
-
+        Renderer::EndScene();
         Interface();
     }
 
@@ -104,5 +99,6 @@ void main() {
     {
         auto flags = ImGuiDockNodeFlags_PassthruCentralNode;
         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), flags);
+        ImGui::ShowDemoWindow();
     }
 } // namespace Editor
