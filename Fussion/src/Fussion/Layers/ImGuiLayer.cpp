@@ -15,7 +15,7 @@ void ImGuiLayer::OnLoad()
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     auto &io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable | ImGuiConfigFlags_ViewportsEnable;
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
     ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow *>(Application::GetInstance().GetWindow().Raw()), true);
     ImGui_ImplOpenGL3_Init("#version 130");
