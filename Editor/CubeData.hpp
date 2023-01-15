@@ -1,7 +1,7 @@
 #pragma once
 #include <initializer_list>
 
-constexpr const auto CUBE_DATA = {
+[[maybe_unused]] constexpr const auto CUBE_DATA = {
     -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f,
     0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f,
     0.5f, 0.5f, -0.5f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f,
