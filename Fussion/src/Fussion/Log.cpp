@@ -8,7 +8,7 @@ namespace Fussion
 
     void Log::Init()
     {
-        spdlog::set_pattern("%^[%H:%M:%S] [%l] [%!:%#]: %v%$");
+        spdlog::set_pattern("%^[%H:%M:%S] [%l] [%s:%#]: %v%$");
         s_coreLogger = spdlog::stdout_color_mt("Core");
         s_clientLogger = spdlog::stdout_color_mt("Client");
     }
