@@ -10,7 +10,7 @@ namespace Fussion
         i32 m_count{};
 
     public:
-        explicit OpenGLIndexBuffer(const std::vector<u32> &indices);
+        explicit OpenGLIndexBuffer(std::initializer_list<u32> indices);
         explicit OpenGLIndexBuffer(i32 size);
         ~OpenGLIndexBuffer() override;
 

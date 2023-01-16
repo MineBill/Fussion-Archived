@@ -25,12 +25,12 @@ namespace Fussion
         }
     }
 
-    OpenGLVertexBuffer::OpenGLVertexBuffer(const std::vector<f32> &vertices)
+    OpenGLVertexBuffer::OpenGLVertexBuffer(std::initializer_list<f32> vertices)
     {
         glCreateBuffers(1, &m_id);
         glBindBuffer(GL_ARRAY_BUFFER, m_id);
 
-        glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizei>(vertices.size() * sizeof(f32)), vertices.data(),
+        glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizei>(vertices.size() * sizeof(f32)), std::data(vertices),
                      GL_STATIC_DRAW);
     }
 

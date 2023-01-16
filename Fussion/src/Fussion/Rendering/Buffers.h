@@ -100,7 +100,7 @@ namespace Fussion
     class VertexBuffer
     {
     public:
-        static Ref<VertexBuffer> Create(std::vector<float> const &vertices);
+        static Ref<VertexBuffer> Create(std::initializer_list<f32> vertices);
         static Ref<VertexBuffer> WithSize(i32 size);
         virtual ~VertexBuffer() = default;
 
@@ -115,7 +115,7 @@ namespace Fussion
     class IndexBuffer
     {
     public:
-        static Ref<IndexBuffer> Create(std::vector<u32> const &indices);
+        static Ref<IndexBuffer> Create(std::initializer_list<u32> indices);
         static Ref<IndexBuffer> WithSize(i32 count);
         virtual ~IndexBuffer() = default;
 
