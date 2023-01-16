@@ -39,6 +39,11 @@ add_library(
         src/Fussion/Math/Vector3.h
         src/Fussion/Math/Matrix4.cpp
         src/Fussion/Math/Matrix4.h
+
+        src/Fussion/Rendering/Camera.cpp
+        src/Fussion/Rendering/Camera.h
+        src/Fussion/Math/Transform.cpp
+        src/Fussion/Math/Transform.h
 )
 add_subdirectory(src/Platform)
 
