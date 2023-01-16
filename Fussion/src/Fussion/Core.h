@@ -8,19 +8,29 @@
 #endif
 
 #ifdef FSN_USE_ASSERTIONS
-    #define FSN_ASSERT(expr, ...)                                 \
-        {                                                         \
-            if (!(expr)) {                                        \
-                FSN_CLIENT_ERR("Assertion hit: {}", __VA_ARGS__); \
-                BUILTIN_TRAP_FUNCTION();                          \
-            }                                                     \
+    #define FSN_ASSERT(expr, ...)                                                                    \
+        {                                                                                            \
+            if (!(expr)) {                                                                           \
+                FSN_CLIENT_ERR("ASSERTION HIT: ");                                                   \
+                if constexpr (std::tuple_size<decltype(std::make_tuple(__VA_ARGS__))>::value != 0) { \
+                    FSN_CLIENT_ERR("    " __VA_ARGS__);                                              \
+                } else {                                                                             \
+                    FSN_CLIENT_ERR("   No additional information provided");                         \
+                }                                                                                    \
+                BUILTIN_TRAP_FUNCTION();                                                             \
+            }                                                                                        \
         }
-    #define FSN_CORE_ASSERT(expr, ...)                          \
-        {                                                       \
-            if (!(expr)) {                                      \
-                FSN_CORE_ERR("Assertion hit: {}", __VA_ARGS__); \
-                BUILTIN_TRAP_FUNCTION();                        \
-            }                                                   \
+    #define FSN_CORE_ASSERT(expr, ...)                                                               \
+        {                                                                                            \
+            if (!(expr)) {                                                                           \
+                FSN_CORE_ERR("ASSERTION HIT: ");                                                     \
+                if constexpr (std::tuple_size<decltype(std::make_tuple(__VA_ARGS__))>::value != 0) { \
+                    FSN_CORE_ERR("    " __VA_ARGS__);                                                \
+                } else {                                                                             \
+                    FSN_CORE_ERR("   No additional information provided");                           \
+                }                                                                                    \
+                BUILTIN_TRAP_FUNCTION();                                                             \
+            }                                                                                        \
         }
 #else
     #define FSN_ASSERT(expr, ...)
