@@ -3,6 +3,7 @@
 #include "Fussion/Rendering/Shader.h"
 #include <fstream>
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Fussion
 {
@@ -117,12 +118,20 @@ namespace Fussion
         }
     }
 
+    void OpenGLShader::SetUniform(const StringView &name, const glm::mat4 &value)
+    {
+        if (auto loc = FindUniformLocation(name)) {
+            glUniformMatrix4fv(*loc, 1, GL_FALSE, glm::value_ptr(value));
+        }
+    }
+
     mustuse Optional<int> OpenGLShader::FindUniformLocation(const StringView &name) const
     {
         Use();
         if (auto loc = glGetUniformLocation(id, name.data()); loc != -1) {
             return loc;
         }
+        FSN_CORE_WARN("Uniform '{}' does not exist.", name);
         return {};
     }
 

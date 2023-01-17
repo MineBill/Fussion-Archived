@@ -26,6 +26,7 @@ namespace Fussion
         virtual void SetUniform(const StringView &name, u32 value) = 0;
         virtual void SetUniform(const StringView &name, Vector3 value) = 0;
         virtual void SetUniform(const StringView &name, Matrix4 value) = 0;
+        virtual void SetUniform(const StringView &name, const glm::mat4 &value) = 0;
     };
 
 } // namespace Fussion
