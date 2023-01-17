@@ -11,11 +11,11 @@
     #define FSN_ASSERT(expr, ...)                                                                    \
         {                                                                                            \
             if (!(expr)) {                                                                           \
-                FSN_CLIENT_ERR("ASSERTION HIT: ");                                                   \
+                FSN_ERR("ASSERTION HIT: ");                                                   \
                 if constexpr (std::tuple_size<decltype(std::make_tuple(__VA_ARGS__))>::value != 0) { \
-                    FSN_CLIENT_ERR("    " __VA_ARGS__);                                              \
+                    FSN_ERR("    " __VA_ARGS__);                                              \
                 } else {                                                                             \
-                    FSN_CLIENT_ERR("   No additional information provided");                         \
+                    FSN_ERR("   No additional information provided");                         \
                 }                                                                                    \
                 BUILTIN_TRAP_FUNCTION();                                                             \
             }                                                                                        \

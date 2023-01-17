@@ -40,12 +40,12 @@ namespace Fussion
             UpdateProjectionMatrix();
         }
 
-        mustuse const glm::vec3 &Position() const
+        mustuse const glm::vec3 &GetPosition() const
         {
             return m_position;
         }
 
-        mustuse f32 Rotation() const
+        mustuse f32 GetRotation() const
         {
             return m_rotation;
         }

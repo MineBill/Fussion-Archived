@@ -17,7 +17,7 @@ void ImGuiLayer::OnLoad()
     auto &io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
-    ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow *>(Application::GetInstance().GetWindow().Raw()), true);
+    ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow *>(Application::Get().GetWindow().Raw()), true);
     ImGui_ImplOpenGL3_Init("#version 130");
 
     auto &style = ImGui::GetStyle();
@@ -35,8 +35,9 @@ void ImGuiLayer::OnUpdate(f32 elapsed)
     (void)elapsed;
 }
 
-void ImGuiLayer::OnEvent(const Ref<Event> &)
+bool ImGuiLayer::OnEvent(Event &)
 {
+    return false;
 }
 
 void ImGuiLayer::BeginFrame(f32)

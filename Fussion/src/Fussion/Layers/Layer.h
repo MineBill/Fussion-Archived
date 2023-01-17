@@ -7,20 +7,14 @@ namespace Fussion
 
     class Layer
     {
-      public:
+    public:
         virtual ~Layer() = default;
 
-        virtual void OnLoad()
-        {
-        }
+        virtual void OnLoad() {}
 
-        virtual void OnUpdate(f32)
-        {
-        }
+        virtual void OnUpdate(f32) {}
 
-        virtual void OnEvent(const Ref<Event> &)
-        {
-        }
+        virtual bool OnEvent(Event &) { return false; }
     };
 
 } // namespace Fussion

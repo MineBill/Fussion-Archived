@@ -7,7 +7,6 @@
 #include <Fussion/Rendering/Renderer.h>
 #include <glad/glad.h>
 #include <imgui.h>
-#include <spdlog/fmt/fmt.h>
 
 #include <memory>
 
@@ -19,14 +18,14 @@ namespace Editor
     {
         using enum Fussion::VertexElementType;
         // clang-format off
-        auto triangleVertices = {
+        const auto triangleVertices = {
             -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
             0.5f, -0.5f, 0.0f,0.0f, 1.0f, 0.0f, 1.0f,
             0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f
         };
         // clang-format on
 
-        auto triangleIndices = {0u, 1u, 2u};
+        const auto triangleIndices = {0u, 1u, 2u};
 
         AttributeLayout layout = {
             {VertexElementType::Float3, "a_Position"},
@@ -42,7 +41,7 @@ namespace Editor
         va->SetIndexBuffer(ib);
 
         // clang-format off
-        auto cubeVertices = {
+        const auto cubeVertices = {
             -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
             0.5f, -0.5f, 0.0f,0.0f, 1.0f, 0.0f, 1.0f,
             0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
@@ -50,7 +49,7 @@ namespace Editor
         };
         // clang-format on
 
-        auto cubeIndices = {0u, 1u, 2u, 0u, 2u, 3u};
+        const auto cubeIndices = {0u, 1u, 2u, 0u, 2u, 3u};
         blueVA = VertexArray::Create();
         auto blueVB = VertexBuffer::Create(cubeVertices);
         blueVB->SetLayout(layout);
@@ -84,7 +83,7 @@ void main() {
         shader = Shader::FromStringLiterals(vertexSource, fragmentSource);
         blueShader = shader;
 
-        auto size = GetWindow().Size();
+        auto size = GetWindow().GetSize();
         m_camera = std::make_unique<Camera2D>(static_cast<f32>(size.first), static_cast<f32>(size.second));
 
         RenderCommand::SetClearColor(Vector3(0.72f, 0.63f, 0.86f));
@@ -94,9 +93,9 @@ void main() {
     void EditorApplication::OnUpdate(f32 elapsed)
     {
         auto input = Input::GetVector(Key::D, Key::A, Key::W, Key::S) * elapsed;
-        auto old = m_camera->Position();
+        auto old = m_camera->GetPosition();
         m_camera->SetPosition(old + glm::vec3(input.x, input.y, 0.0f));
-        m_camera->SetRotation(m_camera->Rotation() + elapsed * 2.f);
+        m_camera->SetRotation(m_camera->GetRotation() + elapsed * 2.f);
         if (Input::IsKeyJustPressed(Key::F)) {
             m_camera->SetPosition(glm::vec3(0.0f));
         }
@@ -111,18 +110,21 @@ void main() {
         Interface(elapsed);
     }
 
-    void EditorApplication::OnEvent(const Ref<Event> &event)
+    void EditorApplication::OnEvent(Fussion::Event &event)
     {
-        fsn::Dispatcher dispatcher(event);
-        dispatcher.DispatchNoConsume<WindowResized>([&](const Ref<WindowResized> &e) {
-            RenderCommand::ResizeViewport(0, 0, e->Width(), e->Height());
-            m_camera->Resize(static_cast<f32>(e->Width()) / static_cast<f32>(e->Height()));
+        Fussion::Dispatcher dispatcher(event);
+        dispatcher.Dispatch<WindowResized>([&](WindowResized &e) {
+            RenderCommand::ResizeViewport(0, 0, e.Width(), e.Height());
+            m_camera->Resize(static_cast<f32>(e.Width()) / static_cast<f32>(e.Height()));
+
+            return false;
         });
 
-        dispatcher.Dispatch<OnKeyPressed>([this](const Ref<OnKeyPressed> &key_pressed) {
-            if (key_pressed->GetKey() == Key::Escape) {
+        dispatcher.Dispatch<OnKeyPressed>([this](OnKeyPressed &key_pressed) {
+            if (key_pressed.GetKey() == Key::Escape) {
                 Quit();
             }
+            return true;
         });
     }
 

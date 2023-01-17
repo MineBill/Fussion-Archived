@@ -11,7 +11,7 @@ namespace Fussion
 
     bool GlfwInput::IsKeyDownImpl(Key key)
     {
-        auto window = static_cast<GLFWwindow *>(Application::GetInstance().GetWindow().Raw());
+        auto window = static_cast<GLFWwindow *>(Application::Get().GetWindow().Raw());
         FSN_CORE_ASSERT(window != nullptr)
 
         auto state = glfwGetKey(window, KeyToGLFWKey(key));
@@ -21,7 +21,7 @@ namespace Fussion
 
     bool GlfwInput::IsKeyUpImpl(Key key)
     {
-        auto window = static_cast<GLFWwindow *>(Application::GetInstance().GetWindow().Raw());
+        auto window = static_cast<GLFWwindow *>(Application::Get().GetWindow().Raw());
         FSN_CORE_ASSERT(window != nullptr)
 
         auto state = glfwGetKey(window, KeyToGLFWKey(key));

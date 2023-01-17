@@ -1,5 +1,5 @@
 #pragma once
-#include "Fussion/Layer.h"
+#include "Layer.h"
 
 namespace Fussion
 {
@@ -11,7 +11,7 @@ namespace Fussion
 
         void OnUpdate(f32 elapsed) override;
 
-        void OnEvent(const Ref<Fussion::Event> &event) override;
+        bool OnEvent(Fussion::Event &event) override;
 
         static void BeginFrame(f32 elapsed);
 

@@ -6,7 +6,7 @@ add_library(
         src/Fussion/Log.cpp
         src/Fussion/Log.h
         src/Fussion/Types.h
-        src/Fussion/Layer.h
+        src/Fussion/Layers/Layer.h
         src/Fussion/Layers/ImGuiLayer.h
         src/Fussion/Layers/ImGuiLayer.cpp
         src/Fussion/Application.h
@@ -45,7 +45,7 @@ add_library(
         src/Fussion/Rendering/Camera.h
         src/Fussion/Math/Transform.cpp
         src/Fussion/Math/Transform.h
-)
+        src/Fussion/Layers/LayerStack.h)
 add_subdirectory(src/Platform)
 
 if (LINUX)

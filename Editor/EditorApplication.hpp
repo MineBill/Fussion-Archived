@@ -6,31 +6,27 @@
 #include "Fussion/Rendering/Texture.h"
 #include "Fussion/Rendering/VertexArray.h"
 
-namespace fsn = Fussion;
-
 namespace Editor
 {
-    class EditorApplication final : public fsn::Application
+    class EditorApplication final : public Fussion::Application
     {
-        Ref<fsn::VertexArray> va{};
-        Ref<fsn::VertexArray> blueVA{};
+        Ref<Fussion::VertexArray> va{};
+        Ref<Fussion::VertexArray> blueVA{};
 
-        Ref<fsn::Shader> shader{};
-        Ref<fsn::Shader> blueShader{};
+        Ref<Fussion::Shader> shader{};
+        Ref<Fussion::Shader> blueShader{};
 
-        Ptr<fsn::Camera2D> m_camera;
+        Ptr<Fussion::Camera2D> m_camera;
 
         void OnLoad() override;
 
         void OnUpdate(f32 delta) override;
 
-        void OnEvent(const Ref<fsn::Event> &) override;
+        void OnEvent(Fussion::Event &) override;
 
         void Interface(f32);
 
     public:
-        explicit EditorApplication(const Fussion::WindowProps &props) : Application(props)
-        {
-        }
+        explicit EditorApplication(const Fussion::WindowProps &props) : Application(props) {}
     };
 } // namespace Editor

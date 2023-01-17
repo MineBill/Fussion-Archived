@@ -1,9 +1,11 @@
 #pragma once
-#include "Fussion/Types.h"
 #include "Fussion/Core.h"
 #include "Fussion/Input/Keys.h"
+#include "Fussion/Types.h"
 #include <concepts>
 #include <functional>
+
+#define FSN_BIND_FN(fn) [this](auto &&PH1) { return fn(std::forward<decltype(PH1)>(PH1)); }
 
 #define EVENT(name)                 \
     static EventType StaticType()   \
@@ -59,33 +61,21 @@ namespace Fussion
 
     class Dispatcher
     {
-        Ref<Event> event;
+        Event &event;
 
     public:
         template<typename T>
-        using EventFn = std::function<void(Ref<T>)>;
+        using EventFn = std::function<bool(T &)>;
 
-        explicit Dispatcher(Ref<Event> e) : event(std::move(e))
-        {
-        }
+        explicit Dispatcher(Event &e) : event(e) {}
 
         template<std::derived_from<Event> T>
         void Dispatch(EventFn<T> fn)
         {
-            if (event->handled || event->Type() != T::StaticType())
+            if (event.handled || event.Type() != T::StaticType())
                 return;
 
-            fn(std::dynamic_pointer_cast<T>(event));
-            event->handled = true;
-        }
-
-        template<std::derived_from<Event> T>
-        void DispatchNoConsume(EventFn<T> fn)
-        {
-            if (event->handled || event->Type() != T::StaticType())
-                return;
-
-            fn(std::dynamic_pointer_cast<T>(event));
+            event.handled = fn(dynamic_cast<T &>(event));
         }
     };
 

@@ -1,62 +1,55 @@
 #pragma once
-#include "Fussion/Layer.h"
 #include "Fussion/Layers/ImGuiLayer.h"
+#include "Fussion/Layers/Layer.h"
 #include "Fussion/Math/Matrix4.h"
 #include "Fussion/Windowing/Window.h"
+#include <Fussion/Layers/LayerStack.h>
 #include <concepts>
-#include <vector>
 
 namespace Fussion
 {
-
     class Application
     {
         static Application *s_instance;
 
-        Ptr<Window> window{};
-        Ptr<ImGuiLayer> m_imgui{};
-        bool running{true};
+        Ptr<Window> m_window{};
+        Ref<ImGuiLayer> m_imguiLayer{};
+        bool m_running{true};
 
-        std::vector<Ptr<Layer>> m_layers;
+        LayerStack m_layerStack{};
+
+        void HandleEvent(Ptr<Event> event);
 
     protected:
-        virtual void OnLoad()
-        {
-            // Default implementation
-        }
+        virtual void OnLoad() {}
 
-        virtual void OnUpdate(float)
-        {
-            // Default implementation
-        }
+        virtual void OnUpdate(float) {}
 
-        virtual void OnEvent(const Ref<Event> &)
-        {
-            // Default implementation
-        }
+        virtual void OnEvent(Event &) {}
 
-        virtual void OnShutdown()
-        {
-            // Default implementation
-        }
+        virtual void OnShutdown() {}
 
     public:
         explicit Application(const WindowProps &props);
         virtual ~Application() = default;
 
-        static Application &GetInstance();
+        static Application &Get();
 
         void Run();
         void Quit();
 
-        template<std::derived_from<Layer> T> void PushLayer()
+        template<std::derived_from<Layer> T, typename... Args>
+        [[maybe_unused]] Ref<T> PushLayer(Args &&...args)
         {
-            auto layer = std::make_unique<T>();
-            layer->OnLoad();
-            m_layers.push_back(std::move(layer));
+            return m_layerStack.PushLayer<T>(std::forward<Args>(args)...);
+        }
+
+        template<std::derived_from<Layer> T, typename... Args>
+        [[maybe_unused]] Ref<T> PushOverlay(Args &&...args)
+        {
+            return m_layerStack.PushOverlay<T>(std::forward<Args>(args)...);
         }
 
         mustuse Window &GetWindow();
     };
-
 } // namespace Fussion

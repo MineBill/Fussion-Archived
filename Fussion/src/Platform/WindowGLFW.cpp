@@ -25,9 +25,9 @@ namespace Fussion
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        window_ptr = glfwCreateWindow(props.width, props.height, props.title.c_str(), nullptr, nullptr);
+        m_windowPtr = glfwCreateWindow(props.width, props.height, props.title.c_str(), nullptr, nullptr);
 
-        m_renderContext = std::make_unique<OpenGLRenderContext>(window_ptr);
+        m_renderContext = std::make_unique<OpenGLRenderContext>(m_windowPtr);
         m_renderContext->Init();
 
         SetupBindings();
@@ -43,14 +43,14 @@ namespace Fussion
         m_renderContext->SwapBuffers();
     }
 
-    void WindowGLFW::OnEvent(const Window::EventCallback &callback)
+    void WindowGLFW::SetEventCallback(const Window::EventCallback &callback)
     {
-        event_callback = callback;
+        m_eventCallback = callback;
     }
 
     bool WindowGLFW::ShouldClose()
     {
-        return glfwWindowShouldClose(window_ptr);
+        return glfwWindowShouldClose(m_windowPtr);
     }
 
     void WindowGLFW::SetVSync(bool enabled)
@@ -64,83 +64,83 @@ namespace Fussion
 
     void WindowGLFW::SetShouldClose(bool enable)
     {
-        glfwSetWindowShouldClose(window_ptr, enable);
+        glfwSetWindowShouldClose(m_windowPtr, enable);
     }
 
     void WindowGLFW::SetupBindings()
     {
-        glfwSetWindowUserPointer(window_ptr, this);
+        glfwSetWindowUserPointer(m_windowPtr, this);
 
-        glfwSetWindowSizeCallback(window_ptr, [](GLFWwindow *window, int width, int height) {
+        glfwSetWindowSizeCallback(m_windowPtr, [](GLFWwindow *window, int width, int height) {
             auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
             FSN_CORE_ASSERT(me != nullptr, "") // NOLINT(bugprone-lambda-function-name)
-            me->event_callback(std::make_shared<WindowResized>(width, height));
+            me->m_eventCallback(std::make_unique<WindowResized>(width, height));
         });
 
-        glfwSetKeyCallback(window_ptr, [](GLFWwindow *window, int key, int, int action, int) {
+        glfwSetKeyCallback(m_windowPtr, [](GLFWwindow *window, int key, int, int action, int) {
             auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
             FSN_CORE_ASSERT(me != nullptr, "") // NOLINT(bugprone-lambda-function-name)
 
             auto our_key = glfw_key_to_fussion_key(key);
             switch (action) {
             case GLFW_RELEASE:
-                me->event_callback(std::make_shared<OnKeyReleased>(our_key));
+                me->m_eventCallback(std::make_unique<OnKeyReleased>(our_key));
                 break;
             case GLFW_PRESS:
-                me->event_callback(std::make_shared<OnKeyPressed>(our_key));
+                me->m_eventCallback(std::make_unique<OnKeyPressed>(our_key));
                 break;
             case GLFW_REPEAT:
-                me->event_callback(std::make_shared<OnKeyDown>(our_key));
+                me->m_eventCallback(std::make_unique<OnKeyDown>(our_key));
                 break;
             default:
                 FSN_CORE_ASSERT(false, "Should never reach this assert") // NOLINT(bugprone-lambda-function-name)
             }
         });
 
-        glfwSetCursorPosCallback(window_ptr, [](GLFWwindow *window, f64 x, f64 y) {
+        glfwSetCursorPosCallback(m_windowPtr, [](GLFWwindow *window, f64 x, f64 y) {
             auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
             FSN_CORE_ASSERT(me != nullptr, "") // NOLINT(bugprone-lambda-function-name)
 
-            auto rel_x = x - me->old_mouse_x;
-            auto rel_y = y - me->old_mouse_y;
-            me->old_mouse_x = x;
-            me->old_mouse_y = y;
-            me->event_callback(std::make_unique<MouseMoved>(x, y, rel_x, rel_y));
+            auto rel_x = x - me->m_oldMouseX;
+            auto rel_y = y - me->m_oldMouseY;
+            me->m_oldMouseX = x;
+            me->m_oldMouseY = y;
+            me->m_eventCallback(std::make_unique<MouseMoved>(x, y, rel_x, rel_y));
         });
 
-        glfwSetMouseButtonCallback(window_ptr, [](GLFWwindow *window, int button, int action, int) {
+        glfwSetMouseButtonCallback(m_windowPtr, [](GLFWwindow *window, int button, int action, int) {
             auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
             FSN_CORE_ASSERT(me != nullptr, "") // NOLINT(bugprone-lambda-function-name)
 
             auto mouse_button = glfw_button_mouse_button(button);
             switch (action) {
             case GLFW_RELEASE:
-                me->event_callback(std::make_shared<MouseButtonReleased>(mouse_button));
+                me->m_eventCallback(std::make_unique<MouseButtonReleased>(mouse_button));
                 break;
             case GLFW_PRESS:
-                me->event_callback(std::make_shared<MouseButtonPressed>(mouse_button));
+                me->m_eventCallback(std::make_unique<MouseButtonPressed>(mouse_button));
                 break;
             case GLFW_REPEAT:
-                me->event_callback(std::make_shared<MouseButtonDown>(mouse_button));
+                me->m_eventCallback(std::make_unique<MouseButtonDown>(mouse_button));
                 break;
             default:
                 FSN_CORE_ASSERT(false, "Should never reach this assert") // NOLINT(bugprone-lambda-function-name)
             }
         });
 
-        glfwSetWindowMaximizeCallback(window_ptr, [](GLFWwindow *window, int maximized) {
+        glfwSetWindowMaximizeCallback(m_windowPtr, [](GLFWwindow *window, int maximized) {
             auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
             FSN_CORE_ASSERT(me != nullptr, "") // NOLINT(bugprone-lambda-function-name)
 
             if (maximized == 1) {
-                me->event_callback(std::make_shared<WindowMaximized>());
+                me->m_eventCallback(std::make_unique<WindowMaximized>());
             } else {
-                me->event_callback(std::make_shared<WindowMinimized>());
+                me->m_eventCallback(std::make_unique<WindowMinimized>());
             }
         });
     }
 
-    mustuse std::vector<VideoMode> WindowGLFW::VideoModes() const
+    mustuse std::vector<VideoMode> WindowGLFW::GetVideoModes() const
     {
         int count = 0;
         const auto *video_modes = glfwGetVideoModes(glfwGetPrimaryMonitor(), &count);
@@ -154,19 +154,19 @@ namespace Fussion
         return retval;
     }
 
-    mustuse std::pair<i32, i32> WindowGLFW::Size() const
+    mustuse std::pair<i32, i32> WindowGLFW::GetSize() const
     {
         i32 width, height;
-        glfwGetWindowSize(window_ptr, &width, &height);
+        glfwGetWindowSize(m_windowPtr, &width, &height);
         return {width, height};
     }
 
     mustuse void *WindowGLFW::Raw()
     {
-        return static_cast<void *>(window_ptr);
+        return static_cast<void *>(m_windowPtr);
     }
 
-    Ptr<Window> Window::create(WindowProps const &props)
+    Ptr<Window> Window::Create(WindowProps const &props)
     {
         return std::make_unique<WindowGLFW>(props);
     }
