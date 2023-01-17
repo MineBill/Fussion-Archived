@@ -94,11 +94,8 @@ void main() {
         RenderCommand::Clear();
         Renderer::BeginScene(*m_camera.get());
 
-        Renderer::UseShader(shader);
-        Renderer::Submit(va);
-
-        Renderer::UseShader(blueShader);
-        Renderer::Submit(blueVA);
+        Renderer::Submit(blueVA, blueShader);
+        Renderer::Submit(va, shader);
 
         Renderer::EndScene();
         Interface();
@@ -107,8 +104,9 @@ void main() {
     void EditorApplication::OnEvent(const Ref<Event> &event)
     {
         fsn::Dispatcher dispatcher(event);
-        dispatcher.DispatchNoConsume<WindowResized>([&](const Ref<WindowResized> &window_resized) {
-            RenderCommand::ResizeViewport(0, 0, window_resized->Width(), window_resized->Height());
+        dispatcher.DispatchNoConsume<WindowResized>([&](const Ref<WindowResized> &e) {
+            RenderCommand::ResizeViewport(0, 0, e->Width(), e->Height());
+            m_camera->Resize(static_cast<f32>(e->Width()) / static_cast<f32>(e->Height()));
         });
 
         dispatcher.Dispatch<OnKeyPressed>([this](const Ref<OnKeyPressed> &key_pressed) {
