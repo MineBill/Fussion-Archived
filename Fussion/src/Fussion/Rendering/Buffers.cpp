@@ -4,6 +4,8 @@
 #include "Platform/OpenGL/OpenGLIndexBuffer.h"
 #include "Platform/OpenGL/OpenGLVertexBuffer.h"
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "UnreachableCode"
 namespace Fussion
 {
 
@@ -17,6 +19,7 @@ namespace Fussion
         }
 
         FSN_CORE_ASSERT(false, "Reached unreachable(huh) code");
+        return nullptr;
     }
 
     Ref<VertexBuffer> VertexBuffer::WithSize(i32 size)
@@ -29,6 +32,7 @@ namespace Fussion
         }
 
         FSN_CORE_ASSERT(false, "Reached unreachable(huh) code");
+        return nullptr;
     }
 
     Ref<IndexBuffer> IndexBuffer::Create(std::initializer_list<u32> indices)
@@ -41,6 +45,7 @@ namespace Fussion
         }
 
         FSN_CORE_ASSERT(false, "Reached unreachable(huh) code");
+        return nullptr;
     }
 
     Ref<IndexBuffer> IndexBuffer::WithSize(i32 count)
@@ -53,6 +58,8 @@ namespace Fussion
         }
 
         FSN_CORE_ASSERT(false, "Reached unreachable(huh) code");
+        return nullptr;
     }
 
 } // namespace Fussion
+#pragma clang diagnostic pop

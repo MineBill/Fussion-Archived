@@ -41,7 +41,7 @@ namespace Fussion
         }
 
     public:
-        Application(const WindowProps &props);
+        explicit Application(const WindowProps &props);
         virtual ~Application() = default;
 
         static Application &GetInstance();
