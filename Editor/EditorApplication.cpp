@@ -55,27 +55,24 @@ namespace Editor
         blueVA->AddVertexBuffer(blueVB);
         blueVA->SetIndexBuffer(IndexBuffer::Create(cubeIndices));
 
-        constexpr auto vertexSource = R"(
+        constexpr auto vertexSource = R"glsl(
 #version 460 core
 layout (location = 0) in vec3 a_Position;
 layout (location = 1) in vec4 a_Color;
 
 uniform mat4 u_ViewProjection;
-out vec3 s_Position;
 out vec4 s_Color;
 
 void main() {
     gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
-    s_Position = a_Position * 0.5 + 0.5;
     s_Color = a_Color;
 }
-        )";
+        )glsl";
 
         constexpr auto fragmentSource = R"glsl(
 #version 460 core
 out vec4 FragColor;
 
-in vec3 s_Position;
 in vec4 s_Color;
 
 void main() {
@@ -89,6 +86,7 @@ void main() {
         m_camera = std::make_unique<Camera2D>(size.first, size.second);
 
         RenderCommand::SetClearColor(Vector3(0.72f, 0.63f, 0.86f));
+        RenderCommand::ResizeViewport(0, 0, size.first, size.second);
     }
 
     void EditorApplication::OnUpdate(float)
@@ -110,7 +108,7 @@ void main() {
     {
         fsn::Dispatcher dispatcher(event);
         dispatcher.DispatchNoConsume<WindowResized>([&](const Ref<WindowResized> &window_resized) {
-            glViewport(0, 0, window_resized->Width(), window_resized->Height());
+            RenderCommand::ResizeViewport(0, 0, window_resized->Width(), window_resized->Height());
         });
 
         dispatcher.Dispatch<OnKeyPressed>([this](const Ref<OnKeyPressed> &key_pressed) {
@@ -120,10 +118,10 @@ void main() {
         });
     }
 
-    void EditorApplication::Interface()
+    void EditorApplication::Interface() // NOLINT
     {
         auto flags = ImGuiDockNodeFlags_PassthruCentralNode;
         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), flags);
-        ImGui::ShowDemoWindow();
+        //        ImGui::ShowDemoWindow();
     }
 } // namespace Editor
