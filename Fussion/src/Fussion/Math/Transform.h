@@ -1,18 +1,16 @@
 #pragma once
-#include "Fussion/Math/Matrix4.h"
-#include "Fussion/Math/Vector3.h"
 
 namespace Fussion
 {
     class Transform
     {
-        Matrix4 m_modelCache;
+        glm::mat4 m_modelCache;
 
     public:
-        Vector3 Position;
-        Vector3 Rotation;
-        Vector3 Scale;
+        glm::vec3 Position;
+        glm::vec3 Rotation;
+        glm::vec3 Scale;
 
-        Matrix4 ModelMatrix();
+        mustuse glm::mat4 ModelMatrix() const;
     };
 } // namespace Fussion
