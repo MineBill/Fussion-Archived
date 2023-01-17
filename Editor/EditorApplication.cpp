@@ -1,4 +1,5 @@
 #include "EditorApplication.hpp"
+#include "Fussion/Input/Input.h"
 #include <Fussion/Events/ApplicationEvents.h>
 #include <Fussion/Events/KeyboardEvents.h>
 #include <Fussion/Math/Vector3.h>
@@ -6,6 +7,7 @@
 #include <Fussion/Rendering/Renderer.h>
 #include <glad/glad.h>
 #include <imgui.h>
+#include <spdlog/fmt/fmt.h>
 
 #include <memory>
 
@@ -89,8 +91,16 @@ void main() {
         RenderCommand::ResizeViewport(0, 0, size.first, size.second);
     }
 
-    void EditorApplication::OnUpdate(float)
+    void EditorApplication::OnUpdate(f32 elapsed)
     {
+        auto input = Input::GetVector(Key::D, Key::A, Key::W, Key::S) * elapsed;
+        auto old = m_camera->Position();
+        m_camera->SetPosition(old + glm::vec3(input.x, input.y, 0.0f));
+        m_camera->SetRotation(m_camera->Rotation() + elapsed * 2.f);
+        if (Input::IsKeyJustPressed(Key::F)) {
+            m_camera->SetPosition(glm::vec3(0.0f));
+        }
+
         RenderCommand::Clear();
         Renderer::BeginScene(*m_camera.get());
 
@@ -98,7 +108,7 @@ void main() {
         Renderer::Submit(va, shader);
 
         Renderer::EndScene();
-        Interface();
+        Interface(elapsed);
     }
 
     void EditorApplication::OnEvent(const Ref<Event> &event)
@@ -116,10 +126,24 @@ void main() {
         });
     }
 
-    void EditorApplication::Interface() // NOLINT
+    void EditorApplication::Interface(f32 elapsed) // NOLINT
     {
+        static bool enabled_vsync = false;
         auto flags = ImGuiDockNodeFlags_PassthruCentralNode;
+        ImGui::BeginMainMenuBar();
+        f64 elapsed_in_ms = static_cast<f64>(elapsed) * 1000.0;
+        ImGui::Text("Elapsed: %fsec | %.2fms", static_cast<f64>(elapsed), elapsed_in_ms);
+        if (ImGui::Button("Toggle VSync")) {
+            enabled_vsync = !enabled_vsync;
+            GetWindow().SetVSync(enabled_vsync);
+        }
+        ImGui::EndMainMenuBar();
         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), flags);
         //        ImGui::ShowDemoWindow();
+        ImGui::Begin("Input Debug Window");
+        ImGui::Text("Is key down: %d", Input::IsKeyDown(Key::F));
+        ImGui::Text("Is key up: %d", Input::IsKeyUp(Key::F));
+
+        ImGui::End();
     }
 } // namespace Editor

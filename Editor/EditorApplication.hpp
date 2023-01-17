@@ -22,11 +22,11 @@ namespace Editor
 
         void OnLoad() override;
 
-        void OnUpdate(float delta) override;
+        void OnUpdate(f32 delta) override;
 
         void OnEvent(const Ref<fsn::Event> &) override;
 
-        void Interface();
+        void Interface(f32);
 
     public:
         explicit EditorApplication(const Fussion::WindowProps &props) : Application(props)
