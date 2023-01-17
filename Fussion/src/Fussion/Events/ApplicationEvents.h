@@ -15,8 +15,8 @@ namespace Fussion
 
     class WindowResized final : public Event
     {
-        int width{};
-        int height{};
+        i32 width{};
+        i32 height{};
 
     public:
         EVENT(WindowResized)
@@ -24,11 +24,11 @@ namespace Fussion
         {
         }
 
-        mustuse int Width() const
+        mustuse i32 Width() const
         {
             return width;
         }
-        mustuse int Height() const
+        mustuse i32 Height() const
         {
             return height;
         }
@@ -41,8 +41,8 @@ namespace Fussion
 
     class WindowMoved : public Event
     {
-        unsigned x{};
-        unsigned y{};
+        u32 x{};
+        u32 y{};
 
     public:
         EVENT(WindowMoved)
@@ -50,11 +50,11 @@ namespace Fussion
         {
         }
 
-        mustuse unsigned X() const
+        mustuse u32 X() const
         {
             return x;
         }
-        mustuse unsigned Y() const
+        mustuse u32 Y() const
         {
             return y;
         }
