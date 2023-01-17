@@ -10,7 +10,7 @@ namespace Fussion
         GLFWwindow *m_windowHandle{};
 
     public:
-        OpenGLRenderContext(GLFWwindow *windowHandle);
+        explicit OpenGLRenderContext(GLFWwindow *windowHandle);
         void Init() override;
 
         void SwapBuffers() override;
