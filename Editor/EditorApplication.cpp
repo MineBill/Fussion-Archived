@@ -85,7 +85,7 @@ void main() {
         blueShader = shader;
 
         auto size = GetWindow().Size();
-        m_camera = std::make_unique<Camera2D>(size.first, size.second);
+        m_camera = std::make_unique<Camera2D>(static_cast<f32>(size.first), static_cast<f32>(size.second));
 
         RenderCommand::SetClearColor(Vector3(0.72f, 0.63f, 0.86f));
         RenderCommand::ResizeViewport(0, 0, size.first, size.second);
