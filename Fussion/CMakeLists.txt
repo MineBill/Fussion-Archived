@@ -53,6 +53,8 @@ elseif (WIN32)
     set(debug_library dbghelp)
 endif ()
 
+target_compile_definitions(${ENGINE_NAME} PUBLIC GLM_FORCE_SILENT_WARNINGS)
+
 target_link_libraries(
         ${ENGINE_NAME}
         PUBLIC
@@ -61,6 +63,7 @@ target_link_libraries(
         imgui
         spdlog::spdlog
         stb
+        glm::glm
 )
 
 target_include_directories(${ENGINE_NAME} PUBLIC src)
@@ -74,6 +77,7 @@ target_precompile_headers(
         <array>
         <string>
         <functional>
+        <glm/glm.hpp>
 )
 
 set_project_warnings(${ENGINE_NAME} ON)
