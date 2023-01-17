@@ -1,0 +1,30 @@
+#pragma once
+#include "Fussion/Input/Input.h"
+
+namespace Fussion
+{
+    class GlfwInput final : public Input
+    {
+    public:
+        enum class KeyState {
+            None = 0,
+            Down,
+            Up,
+            JustReleased,
+        };
+
+    private:
+        std::unordered_map<Key, KeyState> m_key_cache{};
+        std::unordered_map<Key, KeyState> m_key_cache_previous{};
+
+    protected:
+        mustuse bool IsKeyDownImpl(Key key) override;
+        mustuse bool IsKeyUpImpl(Key key) override;
+        mustuse bool IsKeyJustPressedImpl(Key key) override;
+
+        void FlushImpl() override;
+
+    public:
+        ~GlfwInput() override = default;
+    };
+} // namespace Fussion

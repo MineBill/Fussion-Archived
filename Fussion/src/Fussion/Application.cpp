@@ -2,11 +2,12 @@
 #include "Events/Event.h"
 #include "Events/KeyboardEvents.h"
 #include "Fussion/Events/ApplicationEvents.h"
+#include "Fussion/Input/Input.h"
+#include "Fussion/Log.h"
 #include <chrono>
 #include <glad/glad.h>
 #include <iostream>
 #include <utility>
-#include "Fussion/Log.h"
 
 using namespace Fussion;
 
@@ -62,6 +63,7 @@ void Application::Run()
         m_imgui->EndFrame();
 
         window->SwapBuffers();
+        Input::Flush();
     }
 
     OnShutdown();

@@ -15,6 +15,7 @@ add_library(
         src/Fussion/Windowing/VideoMode.h
 
         src/Fussion/Input/Keys.h
+        src/Fussion/Input/Input.h
         src/Fussion/Events/Event.h
         src/Fussion/Events/MouseEvents.h
         src/Fussion/Events/KeyboardEvents.h
@@ -78,6 +79,7 @@ target_precompile_headers(
         <string>
         <functional>
         <glm/glm.hpp>
+        <unordered_map>
 )
 
 set_project_warnings(${ENGINE_NAME} ON)

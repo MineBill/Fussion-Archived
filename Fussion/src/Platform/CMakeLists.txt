@@ -3,6 +3,8 @@ target_sources(
         PRIVATE
         WindowGLFW.h
         WindowGLFW.cpp
+        GlfwInput.h
+        GlfwInput.cpp
 )
 
 if (${RENDER_API} STREQUAL "OpenGL")
