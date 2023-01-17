@@ -28,7 +28,7 @@ namespace Fussion
 #define FSN_CORE_DEBUG(...) SPDLOG_LOGGER_DEBUG(::Fussion::Log::GetCoreLogger(), __VA_ARGS__)
 #define FSN_CORE_TRACE(...) SPDLOG_LOGGER_TRACE(::Fussion::Log::GetCoreLogger(), __VA_ARGS__)
 #define FSN_CORE_LOG(...) SPDLOG_LOGGER_INFO(::Fussion::Log::GetCoreLogger(), __VA_ARGS__)
-#define FSN_CORE_WARN(...) SPDLOG_LOGGER_WARN(::Fussion::Log::GetCoreLogger(), _VA_ARGS__)
+#define FSN_CORE_WARN(...) SPDLOG_LOGGER_WARN(::Fussion::Log::GetCoreLogger(), __VA_ARGS__)
 #define FSN_CORE_ERR(...) SPDLOG_LOGGER_ERROR(::Fussion::Log::GetCoreLogger(), __VA_ARGS__)
 
 #define FSN_CLIENT_DEBUG(...) SPDLOG_LOGGER_DEBUG(::Fussion::Log::GetClientLogger(), __VA_ARGS__)
