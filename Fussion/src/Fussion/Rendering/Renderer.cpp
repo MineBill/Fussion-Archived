@@ -3,15 +3,20 @@
 
 namespace Fussion
 {
-    Matrix4 Renderer::s_projection;
+    glm::mat4 Renderer::s_projection;
+    bool Renderer::s_beganScene = false;
 
     void Renderer::BeginScene(const Camera2D &camera)
     {
-        s_projection = camera.GetProjection() * camera.GetProjection();
+        FSN_CORE_ASSERT(!s_beganScene, "Did you forget to call EndScene()?")
+
+        s_projection = camera.GetProjection() * glm::inverse(camera.GetView());
+        s_beganScene = true;
     }
 
     void Renderer::EndScene()
     {
+        s_beganScene = false;
     }
 
     void Renderer::UseShader(const Ref<Shader> &shader)
@@ -19,7 +24,7 @@ namespace Fussion
         shader->Use();
 
         // Set the per-scene data for the shader
-        shader->SetUniform("u_Projection", s_projection);
+        shader->SetUniform("u_ViewProjection", s_projection);
     }
 
     void Renderer::Submit(const Ref<VertexArray> &array)

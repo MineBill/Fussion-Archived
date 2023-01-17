@@ -8,7 +8,8 @@ namespace Fussion
 {
     class Renderer final
     {
-        static Matrix4 s_projection;
+        static glm::mat4 s_projection;
+        static bool s_beganScene;
 
     public:
         static void BeginScene(const Camera2D &camera);

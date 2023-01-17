@@ -10,7 +10,7 @@ namespace Fussion
         Optional<AttributeLayout> m_layout{};
 
     public:
-        explicit OpenGLVertexBuffer(std::initializer_list<f32> vertices);
+        OpenGLVertexBuffer(std::initializer_list<f32> vertices);
         explicit OpenGLVertexBuffer(i32 size);
         ~OpenGLVertexBuffer() override;
 

@@ -20,6 +20,7 @@ namespace Fussion
 
         virtual void SetClearColor(Vector3 color) = 0;
         virtual void Clear() = 0;
+        virtual void ResizeViewport(i32 x, i32 y, i32 width, i32 height) = 0;
 
         virtual void DrawIndexed(const Ref<VertexArray> &array) = 0;
 

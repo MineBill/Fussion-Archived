@@ -30,7 +30,7 @@ namespace Fussion
         for (u32 i = 0; const auto &attribute : layout.GetAttributes()) {
             glEnableVertexAttribArray(i);
             glVertexAttribPointer(i, attribute.Count, GL_FLOAT, GL_FALSE, layout.GetString(),
-                                  reinterpret_cast<const void *>(static_cast<intptr_t>(attribute.Offset)));
+                                  reinterpret_cast<const void *>(static_cast<intptr_t>(attribute.Offset))); // NOLINT
             i++;
         }
     }

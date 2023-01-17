@@ -18,6 +18,11 @@ namespace Fussion
             s_api->Clear();
         }
 
+        inline static void ResizeViewport(i32 x, i32 y, i32 width, i32 height)
+        {
+            s_api->ResizeViewport(x, y, width, height);
+        }
+
         inline static void DrawIndexed(const Ref<VertexArray> &array)
         {
             s_api->DrawIndexed(array);
