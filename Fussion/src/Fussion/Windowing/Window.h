@@ -1,6 +1,6 @@
 #pragma once
 #include "Fussion/Events/Event.h"
-#include "Fussion/Types.h"
+#include "Fussion/Core/Types.h"
 #include "VideoMode.h"
 #include <functional>
 

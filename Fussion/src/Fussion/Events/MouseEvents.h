@@ -1,6 +1,6 @@
 #pragma once
 #include "Event.h"
-#include "Fussion/Types.h"
+#include "Fussion/Core/Types.h"
 #include <spdlog/fmt/bundled/core.h>
 
 namespace Fussion

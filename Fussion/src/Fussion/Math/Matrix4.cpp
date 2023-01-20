@@ -1,5 +1,5 @@
 #include "Matrix4.h"
-#include <Fussion/Core.h>
+#include <Fussion/Core/Core.h>
 #include <cmath>
 #include <numbers>
 

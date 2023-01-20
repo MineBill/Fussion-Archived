@@ -1,5 +1,5 @@
 #pragma once
-#include "Fussion/Types.h"
+#include "Fussion/Core/Types.h"
 #include <spdlog/spdlog.h>
 
 namespace Fussion
@@ -31,8 +31,8 @@ namespace Fussion
 #define FSN_CORE_WARN(...) SPDLOG_LOGGER_WARN(::Fussion::Log::GetCoreLogger(), __VA_ARGS__)
 #define FSN_CORE_ERR(...) SPDLOG_LOGGER_ERROR(::Fussion::Log::GetCoreLogger(), __VA_ARGS__)
 
-#define FSN_CLIENT_DEBUG(...) SPDLOG_LOGGER_DEBUG(::Fussion::Log::GetClientLogger(), __VA_ARGS__)
-#define FSN_CLIENT_TRACE(...) SPDLOG_LOGGER_TRACE(::Fussion::Log::GetClientLogger(), __VA_ARGS__)
-#define FSN_CLIENT_LOG(...) SPDLOG_LOGGER_INFO(::Fussion::Log::GetClientLogger(), __VA_ARGS__)
-#define FSN_CLIENT_WARN(...) SPDLOG_LOGGER_WARN(::Fussion::Log::GetClientLogger(), __VA_ARGS__)
-#define FSN_CLIENT_ERR(...) SPDLOG_LOGGER_ERROR(::Fussion::Log::GetClientLogger(), __VA_ARGS__)
+#define FSN_DEBUG(...) SPDLOG_LOGGER_DEBUG(::Fussion::Log::GetClientLogger(), __VA_ARGS__)
+#define FSN_TRACE(...) SPDLOG_LOGGER_TRACE(::Fussion::Log::GetClientLogger(), __VA_ARGS__)
+#define FSN_LOG(...) SPDLOG_LOGGER_INFO(::Fussion::Log::GetClientLogger(), __VA_ARGS__)
+#define FSN_WARN(...) SPDLOG_LOGGER_WARN(::Fussion::Log::GetClientLogger(), __VA_ARGS__)
+#define FSN_ERR(...) SPDLOG_LOGGER_ERROR(::Fussion::Log::GetClientLogger(), __VA_ARGS__)

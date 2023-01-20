@@ -1,5 +1,5 @@
 #include "OpenGLVertexBuffer.h"
-#include <Fussion/Core.h>
+#include <Fussion/Core/Core.h>
 #include <glad/glad.h>
 
 namespace Fussion

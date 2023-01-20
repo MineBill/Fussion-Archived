@@ -1,73 +1,25 @@
 #include "Application.h"
-#include "Events/Event.h"
-#include "Events/KeyboardEvents.h"
+#include "Fussion/Core/Log.h"
 #include "Fussion/Events/ApplicationEvents.h"
+#include "Fussion/Events/Event.h"
+#include "Fussion/Events/KeyboardEvents.h"
 #include "Fussion/Input/Input.h"
-#include "Fussion/Log.h"
+#include "Fussion/Rendering/Renderer.h"
 #include <Fussion/Events/MouseEvents.h>
 #include <chrono>
 #include <glad/glad.h>
 #include <iostream>
 #include <ranges>
 #include <utility>
+#include "Fussion/Debug/Profiling.h"
 
 using namespace Fussion;
 
 Application *Application::s_instance = nullptr;
 
-class ExampleLayer1 : public Layer
-{
-public:
-    void OnLoad() override { FSN_CORE_LOG("I AM EXAMPLE LAYER 1"); }
-
-    bool OnEvent(Event &e) override
-    {
-        Dispatcher d(e);
-        d.Dispatch<MouseButtonPressed>([](MouseButtonPressed &mbp) {
-            FSN_CORE_LOG("LAYER 1 Caught: {}", mbp.ToString());
-            return false;
-        });
-        return false;
-    }
-};
-
-class ExampleLayer2 : public Layer
-{
-public:
-    void OnLoad() override { FSN_CORE_LOG("I AM EXAMPLE LAYER 2"); }
-
-    bool OnEvent(Event &e) override
-    {
-        Dispatcher d(e);
-        d.Dispatch<MouseButtonPressed>([](MouseButtonPressed &mbp) {
-            FSN_CORE_LOG("LAYER 2 Caught: {}", mbp.ToString());
-            return true;
-        });
-        return false;
-    }
-};
-
-class ExampleLayer3 : public Layer
-{
-public:
-    void OnLoad() override { FSN_CORE_LOG("I AM EXAMPLE LAYER 3"); }
-
-    bool OnEvent(Event &e) override
-    {
-        Dispatcher d(e);
-        d.Dispatch<MouseButtonPressed>(FSN_BIND_FN(OnMouseButtonPressed));
-        return false;
-    }
-
-    bool OnMouseButtonPressed(MouseButtonPressed &e)
-    {
-        FSN_CORE_LOG("LAYER 3 Caught: {}", e.ToString());
-        return e.GetButton() == Fussion::MouseButton::Middle;
-    }
-};
-
 Application::Application(const WindowProps &props)
 {
+    FSN_PROFILE_FUNCTION();
     FSN_CORE_ASSERT(s_instance == nullptr, "Cannot create more than one instance of Application");
     s_instance = this;
     Log::Init();
@@ -75,10 +27,13 @@ Application::Application(const WindowProps &props)
     m_window = Window::Create(props);
     m_window->SetVSync(false);
 
+    Renderer::Init();
+
     m_imguiLayer = PushOverlay<ImGuiLayer>();
 
     glDebugMessageCallback(
         [](u32, u32, u32, u32, i32, const char *message, const void *) {
+            FSN_PROFILE_FUNCTION();
             FSN_CORE_WARN("OpenGL Debug Message: {}", message); // NOLINT
         },
         nullptr);
@@ -86,16 +41,14 @@ Application::Application(const WindowProps &props)
 
 void Application::Run()
 {
+    FSN_PROFILE_FUNCTION();
     m_window->SetEventCallback([this](auto &&PH1) { HandleEvent(std::forward<decltype(PH1)>(PH1)); });
 
     OnLoad();
 
-    PushLayer<ExampleLayer1>();
-    PushLayer<ExampleLayer2>();
-    PushLayer<ExampleLayer3>();
-
     auto previousClock = std::chrono::steady_clock::now();
     while (!m_window->ShouldClose()) {
+        FSN_PROFILE_SCOPE("Main Loop");
         auto now = std::chrono::steady_clock::now();
         std::chrono::duration<f32> elapsed_duration = now - previousClock;
         previousClock = now;

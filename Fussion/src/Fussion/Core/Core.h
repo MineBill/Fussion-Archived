@@ -1,5 +1,5 @@
 #pragma once
-#include "Fussion/Log.h"
+#include "Fussion/Core/Log.h"
 
 #if defined(_MSC_VER)
     #define BUILTIN_TRAP_FUNCTION __debugbreak

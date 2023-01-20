@@ -1,6 +1,6 @@
 #pragma once
 #include "Buffers.h"
-#include "Fussion/Types.h"
+#include "Fussion/Core/Types.h"
 #include <vector>
 
 namespace Fussion
@@ -22,7 +22,7 @@ namespace Fussion
 
         mustuse virtual const std::vector<Ref<VertexBuffer>> &GetVertexBuffer() const = 0;
         mustuse virtual const Ref<IndexBuffer> &GetIndexBuffer() const = 0;
-        mustuse virtual i32 Count() const = 0;
+        mustuse virtual u32 Count() const = 0;
     };
 
 } // namespace Fussion

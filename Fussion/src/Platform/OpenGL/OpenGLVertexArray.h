@@ -29,7 +29,7 @@ namespace Fussion
             return m_indexBuffer;
         }
 
-        mustuse i32 Count() const override;
+        mustuse u32 Count() const override;
     };
 
 } // namespace Fussion

@@ -1,5 +1,5 @@
 #include "Buffers.h"
-#include "Fussion/Core.h"
+#include "Fussion/Core/Core.h"
 #include "Fussion/Rendering/Renderer.h"
 #include "Platform/OpenGL/OpenGLIndexBuffer.h"
 #include "Platform/OpenGL/OpenGLVertexBuffer.h"
@@ -48,7 +48,20 @@ namespace Fussion
         return nullptr;
     }
 
-    Ref<IndexBuffer> IndexBuffer::WithSize(i32 count)
+    Ref<IndexBuffer> IndexBuffer::FromSpan(std::span<u32> indices)
+    {
+        switch (Renderer::GetAPI()) {
+        case RendererAPI::API::None:
+            FSN_CORE_ASSERT(false, "RenderAPI None is not supported");
+        case RendererAPI::API::OpenGL:
+            return std::make_shared<OpenGLIndexBuffer>(indices);
+        }
+
+        FSN_CORE_ASSERT(false, "Reached unreachable(huh) code");
+        return nullptr;
+    }
+
+    Ref<IndexBuffer> IndexBuffer::WithCount(u32 count)
     {
         switch (Renderer::GetAPI()) {
         case RendererAPI::API::None:

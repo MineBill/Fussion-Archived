@@ -1,5 +1,5 @@
 #include "WindowGLFW.h"
-#include "Fussion/Core.h"
+#include "Fussion/Core/Core.h"
 #include "Fussion/Events/ApplicationEvents.h"
 #include "Fussion/Events/KeyboardEvents.h"
 #include "Fussion/Events/MouseEvents.h"
@@ -137,6 +137,13 @@ namespace Fussion
             } else {
                 me->m_eventCallback(std::make_unique<WindowMinimized>());
             }
+        });
+
+        glfwSetScrollCallback(m_windowPtr, [](GLFWwindow *window, f64 x, f64 y) {
+            auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
+            FSN_CORE_ASSERT(me != nullptr, "") // NOLINT(bugprone-lambda-function-name)
+
+            me->m_eventCallback(std::make_unique<MouseWheelMoved>(x, y));
         });
     }
 

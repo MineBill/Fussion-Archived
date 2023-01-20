@@ -3,7 +3,6 @@
 
 namespace Fussion
 {
-
     OpenGLVertexArray::OpenGLVertexArray()
     {
         glCreateVertexArrays(1, &id);
@@ -29,7 +28,7 @@ namespace Fussion
         auto layout = vertexBuffer->GetLayout();
         for (u32 i = 0; const auto &attribute : layout.GetAttributes()) {
             glEnableVertexAttribArray(i);
-            glVertexAttribPointer(i, attribute.Count, GL_FLOAT, GL_FALSE, layout.GetString(),
+            glVertexAttribPointer(i, attribute.Count, GL_FLOAT, GL_FALSE, layout.GetStride(),
                                   reinterpret_cast<const void *>(static_cast<intptr_t>(attribute.Offset))); // NOLINT
             i++;
         }
@@ -40,7 +39,7 @@ namespace Fussion
         m_indexBuffer = indexBuffer;
     }
 
-    mustuse i32 OpenGLVertexArray::Count() const
+    mustuse u32 OpenGLVertexArray::Count() const
     {
         return m_indexBuffer->Count();
     }

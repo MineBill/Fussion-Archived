@@ -10,6 +10,7 @@ namespace Fussion
         static Ptr<Input> s_input;
 
     protected:
+        mustuse virtual glm::vec2 GetMouseImpl() = 0;
         mustuse virtual bool IsKeyDownImpl(Key key) = 0;
         mustuse virtual bool IsKeyUpImpl(Key key) = 0;
         mustuse virtual bool IsKeyJustPressedImpl(Key key) = 0;
@@ -17,6 +18,11 @@ namespace Fussion
 
     public:
         virtual ~Input() = default;
+
+        mustuse static glm::vec2 GetMouse()
+        {
+            return s_input->GetMouseImpl();
+        }
 
         mustuse static bool IsKeyDown(Key key)
         {

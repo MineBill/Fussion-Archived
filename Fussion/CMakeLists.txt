@@ -2,15 +2,20 @@ set(ENGINE_NAME Fussion)
 
 add_library(
         ${ENGINE_NAME}
-        src/Fussion/Core.h
-        src/Fussion/Log.cpp
-        src/Fussion/Log.h
-        src/Fussion/Types.h
+        src/Fussion/Fussion.h
+
+        src/Fussion/Core/Core.h
+        src/Fussion/Core/Log.cpp
+        src/Fussion/Core/Log.h
+        src/Fussion/Core/Types.h
+        src/Fussion/Core/Application.h
+        src/Fussion/Core/Application.cpp
+
         src/Fussion/Layers/Layer.h
         src/Fussion/Layers/ImGuiLayer.h
         src/Fussion/Layers/ImGuiLayer.cpp
-        src/Fussion/Application.h
-        src/Fussion/Application.cpp
+        src/Fussion/Layers/LayerStack.h
+
         src/Fussion/Windowing/Window.h
         src/Fussion/Windowing/VideoMode.h
 
@@ -29,6 +34,8 @@ add_library(
         src/Fussion/Rendering/Shader.cpp
         src/Fussion/Rendering/Renderer.h
         src/Fussion/Rendering/Renderer.cpp
+        src/Fussion/Rendering/2D/Renderer2D.h
+        src/Fussion/Rendering/2D/Renderer2D.cpp
         src/Fussion/Rendering/Buffers.h
         src/Fussion/Rendering/Buffers.cpp
         src/Fussion/Rendering/RendererApi.cpp
@@ -41,11 +48,16 @@ add_library(
         src/Fussion/Math/Matrix4.cpp
         src/Fussion/Math/Matrix4.h
 
-        src/Fussion/Rendering/Camera.cpp
-        src/Fussion/Rendering/Camera.h
+        src/Fussion/Rendering/2D/Camera.cpp
+        src/Fussion/Rendering/2D/Camera.h
+        src/Fussion/Rendering/2D/Camera2DController.h
+        src/Fussion/Rendering/2D/Camera2DController.cpp
         src/Fussion/Math/Transform.cpp
         src/Fussion/Math/Transform.h
-        src/Fussion/Layers/LayerStack.h)
+
+        src/Fussion/Debug/Profiling.h
+        src/Fussion/Debug/Profiling.cpp
+        )
 add_subdirectory(src/Platform)
 
 if (LINUX)
@@ -72,7 +84,7 @@ target_include_directories(${ENGINE_NAME} PUBLIC src)
 target_precompile_headers(
         ${ENGINE_NAME}
         PUBLIC
-        src/Fussion/Types.h
+        src/Fussion/Core/Types.h
         <vector>
         <bitset>
         <array>
@@ -80,6 +92,7 @@ target_precompile_headers(
         <functional>
         <glm/glm.hpp>
         <unordered_map>
+        <span>
 )
 
 set_project_warnings(${ENGINE_NAME} ON)

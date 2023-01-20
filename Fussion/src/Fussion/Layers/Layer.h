@@ -1,10 +1,9 @@
 #pragma once
 #include "Fussion/Events/Event.h"
-#include "Fussion/Types.h"
+#include "Fussion/Core/Types.h"
 
 namespace Fussion
 {
-
     class Layer
     {
     public:
@@ -16,5 +15,4 @@ namespace Fussion
 
         virtual bool OnEvent(Event &) { return false; }
     };
-
 } // namespace Fussion

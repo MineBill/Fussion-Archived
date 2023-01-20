@@ -3,9 +3,9 @@
 
 namespace Fussion
 {
-    Ref<Shader> Shader::Create(const fs::path &vertexPath, const fs::path &fragmentPath)
+    Ref<Shader> Shader::LoadFromFile(const fs::path &shaderPath)
     {
-        return std::make_unique<OpenGLShader>(vertexPath, fragmentPath);
+        return std::make_unique<OpenGLShader>(shaderPath);
     }
 
     Ref<Shader> Shader::FromStringLiterals(const StringView &vertexSource, const StringView &fragmentSource)

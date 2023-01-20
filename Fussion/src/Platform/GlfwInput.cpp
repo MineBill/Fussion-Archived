@@ -1,5 +1,5 @@
 #include "GlfwInput.h"
-#include "Fussion/Application.h"
+#include "Fussion/Core/Application.h"
 #include <GLFW/glfw3.h>
 
 namespace Fussion
@@ -8,6 +8,15 @@ namespace Fussion
 
     i32 KeyToGLFWKey(Key key);
     GlfwInput::KeyState GlfwKeyStateToOurKeyState(i32 state);
+
+    glm::vec2 GlfwInput::GetMouseImpl()
+    {
+        auto window = static_cast<GLFWwindow *>(Application::Get().GetWindow().Raw());
+        f64 x, y;
+
+        glfwGetCursorPos(window, &x, &y);
+        return {x, y};
+    }
 
     bool GlfwInput::IsKeyDownImpl(Key key)
     {

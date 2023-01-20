@@ -1,5 +1,5 @@
 #pragma once
-#include <Fussion/Core.h>
+#include <Fussion/Core/Core.h>
 
 namespace Fussion
 {
@@ -86,7 +86,7 @@ namespace Fussion
             CalculateOffsetAndString();
         }
 
-        mustuse inline i32 GetString() const
+        mustuse inline i32 GetStride() const
         {
             return m_stride;
         }
@@ -116,13 +116,14 @@ namespace Fussion
     {
     public:
         static Ref<IndexBuffer> Create(std::initializer_list<u32> indices);
-        static Ref<IndexBuffer> WithSize(i32 count);
+        static Ref<IndexBuffer> FromSpan(std::span<u32> indices);
+        static Ref<IndexBuffer> WithCount(u32 count);
         virtual ~IndexBuffer() = default;
 
         virtual void Use() const = 0;
         virtual void Resize(i32 newSize) = 0;
         virtual void UpdateSubDataRawPtr(i32 offset, const void *data, i32 size) = 0;
 
-        mustuse virtual i32 Count() const = 0;
+        mustuse virtual u32 Count() const = 0;
     };
 } // namespace Fussion

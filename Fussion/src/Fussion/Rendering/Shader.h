@@ -1,7 +1,7 @@
 #pragma once
 #include "Fussion/Math/Matrix4.h"
 #include "Fussion/Math/Vector3.h"
-#include "Fussion/Types.h"
+#include "Fussion/Core/Types.h"
 #include "Texture.h"
 #include <filesystem>
 
@@ -15,7 +15,7 @@ namespace Fussion
     public:
         virtual ~Shader() = default;
 
-        static Ref<Shader> Create(const fs::path &vertex_path, const fs::path &fragment_path);
+        static Ref<Shader> LoadFromFile(const fs::path &shaderPath);
         static Ref<Shader> FromStringLiterals(const StringView &vertex_source, const StringView &fragment_source);
 
         virtual void Use() const = 0;
@@ -27,6 +27,7 @@ namespace Fussion
         virtual void SetUniform(const StringView &name, Vector3 value) = 0;
         virtual void SetUniform(const StringView &name, Matrix4 value) = 0;
         virtual void SetUniform(const StringView &name, const glm::mat4 &value) = 0;
+        virtual void SetUniform(const StringView &name, const glm::vec4 &value) = 0;
     };
 
 } // namespace Fussion

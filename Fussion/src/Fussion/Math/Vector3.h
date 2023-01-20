@@ -1,5 +1,5 @@
 #pragma once
-#include "Fussion/Types.h"
+#include "Fussion/Core/Types.h"
 #include <array>
 #include <string>
 

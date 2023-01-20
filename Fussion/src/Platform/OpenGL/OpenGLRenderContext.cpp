@@ -1,15 +1,16 @@
 #include "OpenGLRenderContext.h"
+#include "Fussion/Core/Core.h"
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>
 #include <spdlog/spdlog.h>
-#include "Fussion/Core.h"
 
-#define TO_STRING_VIEW(data) StringView{reinterpret_cast<const char*>(data)}
+#define TO_STRING_VIEW(data)                 \
+    StringView                               \
+    {                                        \
+        reinterpret_cast<const char *>(data) \
+    }
 
-Fussion::OpenGLRenderContext::OpenGLRenderContext(GLFWwindow *windowHandle) : m_windowHandle(windowHandle)
-{
-}
-
+Fussion::OpenGLRenderContext::OpenGLRenderContext(GLFWwindow *windowHandle) : m_windowHandle(windowHandle) {}
 
 void Fussion::OpenGLRenderContext::Init()
 {

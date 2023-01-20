@@ -1,5 +1,6 @@
 #include "OpenGLShader.h"
-#include "Fussion/Log.h"
+#include "Fussion/Core/Core.h"
+#include "Fussion/Core/Log.h"
 #include "Fussion/Rendering/Shader.h"
 #include <fstream>
 #include <glad/glad.h>
@@ -7,68 +8,84 @@
 
 namespace Fussion
 {
-
-    OpenGLShader::OpenGLShader(const fs::path &vertex_path, const fs::path &fragment_path)
+    String OpenGLShader::ReadEntireFile(const fs::path &filePath)
     {
-        std::ifstream vertex_file(vertex_path);
-        std::stringstream buffer;
-        buffer << vertex_file.rdbuf();
+        std::ifstream file(filePath);
+        FSN_CORE_ASSERT(file.is_open(), "Failed to open file: {}, CWD: {}", filePath.string(), fs::current_path().string())
+        std::stringstream ss;
+        ss << file.rdbuf();
+        return ss.str();
+    }
 
-        auto vertex = glCreateShader(GL_VERTEX_SHADER);
-        auto str = buffer.str();
-        auto c_str = str.c_str();
-        glShaderSource(vertex, 1, &c_str, nullptr);
-        glCompileShader(vertex);
-        ReportCompilationError(vertex);
-
-        std::ifstream fragment_file(fragment_path);
-        std::stringstream new_buffer_because_cpp_is_shit;
-        new_buffer_because_cpp_is_shit << fragment_file.rdbuf();
-
-        str = new_buffer_because_cpp_is_shit.str();
-        c_str = str.c_str();
-        auto fragment = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragment, 1, &c_str, nullptr);
-        glCompileShader(fragment);
-        ReportCompilationError(fragment);
-
-        id = glCreateProgram();
-        glAttachShader(id, vertex);
-        glAttachShader(id, fragment);
-        glLinkProgram(id);
-
-        glDeleteShader(vertex);
-        glDeleteShader(fragment);
+    OpenGLShader::OpenGLShader(const fs::path &shaderPath)
+    {
+        String sourceCode = ReadEntireFile(shaderPath);
+        auto sources = PreProcessPass(sourceCode);
+        CompileFromSources(sources);
     }
 
     OpenGLShader::OpenGLShader(const StringView &vertex_source, const StringView &fragment_source)
     {
-        auto vertex = glCreateShader(GL_VERTEX_SHADER);
-        auto c_str = vertex_source.data();
-        glShaderSource(vertex, 1, &c_str, nullptr);
-        glCompileShader(vertex);
-        ReportCompilationError(vertex);
-
-        c_str = fragment_source.data();
-        auto fragment = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragment, 1, &c_str, nullptr);
-        glCompileShader(fragment);
-        ReportCompilationError(fragment);
-
-        id = glCreateProgram();
-        glAttachShader(id, vertex);
-        glAttachShader(id, fragment);
-        glLinkProgram(id);
-
-        ReportLinkingError(id);
-
-        glDeleteShader(vertex);
-        glDeleteShader(fragment);
+        std::unordered_map<GLenum, StringView> sources(2);
+        sources[GL_VERTEX_SHADER] = vertex_source;
+        sources[GL_FRAGMENT_SHADER] = fragment_source;
+        CompileFromSources(sources);
     }
 
     OpenGLShader::~OpenGLShader()
     {
         glDeleteProgram(id);
+    }
+
+    void OpenGLShader::CompileFromSources(const std::unordered_map<GLenum, StringView> &sources)
+    {
+        std::array<GLenum, 2> shadersToDelete{};
+
+        id = glCreateProgram();
+        std::size_t index = 0;
+        for (const auto &[type, source] : sources) {
+            String str{source};
+            auto shader = glCreateShader(type);
+            auto c_str = str.c_str();
+            glShaderSource(shader, 1, &c_str, nullptr);
+            glCompileShader(shader);
+            ReportCompilationError(shader);
+            glAttachShader(id, shader);
+            shadersToDelete[index++] = shader;
+        }
+        glLinkProgram(id);
+        ReportLinkingError(id);
+
+        for (const auto shader : shadersToDelete) {
+            glDeleteShader(shader);
+        }
+    }
+
+    std::unordered_map<GLenum, StringView> OpenGLShader::PreProcessPass(StringView sourceCode)
+    {
+        const auto ShaderTypeFromString = [](StringView string) -> GLenum {
+            if (string == "vertex")
+                return GL_VERTEX_SHADER;
+            else if (string == "fragment")
+                return GL_FRAGMENT_SHADER;
+            FSN_CORE_ASSERT(false, "Unknown shader type: {}", string)
+        };
+        constexpr const auto *tokenIdent = "#type";
+        constexpr const auto tokenCount = 5;
+        std::unordered_map<GLenum, StringView> sources;
+        auto token = sourceCode.find(tokenIdent);
+        while (token != StringView::npos) {
+            auto lineEnd = sourceCode.find_first_of("\n\r", token);
+            auto start = token + tokenCount + 1;
+            auto type = sourceCode.substr(start, lineEnd - start);
+
+            token = sourceCode.find(tokenIdent, lineEnd);
+
+            auto end = token == StringView::npos ? sourceCode.size() : token - 1;
+
+            sources[ShaderTypeFromString(type)] = sourceCode.substr(lineEnd + 1, end - lineEnd);
+        }
+        return sources;
     }
 
     void OpenGLShader::Use() const
@@ -125,6 +142,13 @@ namespace Fussion
         }
     }
 
+    void OpenGLShader::SetUniform(const StringView &name, const glm::vec4 &value)
+    {
+        if (auto loc = FindUniformLocation(name)) {
+            glUniform4f(*loc, value.x, value.y, value.z, value.w);
+        }
+    }
+
     mustuse Optional<int> OpenGLShader::FindUniformLocation(const StringView &name) const
     {
         Use();
@@ -144,7 +168,7 @@ namespace Fussion
 
         char message[512];
         glGetShaderInfoLog(shader, 512, nullptr, message);
-        FSN_CORE_ERR("Shader compilation error: {}", message);
+        FSN_CORE_ASSERT(false, "Shader compilation error: {}", message);
     }
 
     void OpenGLShader::ReportLinkingError(u32 shader)
@@ -156,7 +180,7 @@ namespace Fussion
 
         char message[512];
         glGetProgramInfoLog(shader, 512, nullptr, message);
-        FSN_CORE_ERR("Shader linking error: {}", message);
+        FSN_CORE_ASSERT(false, "Shader linking error: {}", message);
     }
 
 } // namespace Fussion

@@ -8,10 +8,11 @@ namespace Fussion
     public:
         ~OpenGLRendererAPI() override = default;
 
-        void SetClearColor(Vector3 color) override;
+        void Init() override;
+        void SetClearColor(glm::vec3 color) override;
         void Clear() override;
         void ResizeViewport(i32 x, i32 y, i32 width, i32 height) override;
 
-        void DrawIndexed(const Ref<VertexArray> &array) override;
+        void DrawIndexed(const Ref<VertexArray> &array, u32 count) override;
     };
 } // namespace Fussion

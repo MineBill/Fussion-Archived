@@ -1,9 +1,10 @@
 #pragma once
-#include "Fussion/Core.h"
+#include "Fussion/Core/Core.h"
 #include "Fussion/Input/Keys.h"
-#include "Fussion/Types.h"
+#include "Fussion/Core/Types.h"
 #include <concepts>
 #include <functional>
+#include "Fussion/Debug/Profiling.h"
 
 #define FSN_BIND_FN(fn) [this](auto &&PH1) { return fn(std::forward<decltype(PH1)>(PH1)); }
 
@@ -72,6 +73,7 @@ namespace Fussion
         template<std::derived_from<Event> T>
         void Dispatch(EventFn<T> fn)
         {
+            FSN_PROFILE_FUNCTION();
             if (event.handled || event.Type() != T::StaticType())
                 return;
 

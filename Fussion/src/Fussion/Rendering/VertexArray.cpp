@@ -1,5 +1,5 @@
 #include "Fussion/Rendering/VertexArray.h"
-#include "Fussion/Core.h"
+#include "Fussion/Core/Core.h"
 #include "Fussion/Rendering/Renderer.h"
 #include "Platform/OpenGL/OpenGLVertexArray.h"
 

@@ -3,9 +3,16 @@
 
 namespace Fussion
 {
-    void OpenGLRendererAPI::SetClearColor(Vector3 color)
+    void OpenGLRendererAPI::Init()
     {
-        glClearColor(color.x(), color.y(), color.z(), 1.0f);
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+
+    void OpenGLRendererAPI::SetClearColor(glm::vec3 color)
+    {
+        glClearColor(color.x, color.y, color.z, 1.0f);
     }
 
     void OpenGLRendererAPI::Clear()
@@ -18,8 +25,9 @@ namespace Fussion
         glViewport(x, y, width, height);
     }
 
-    void OpenGLRendererAPI::DrawIndexed(const Ref<Fussion::VertexArray> &array)
+    void OpenGLRendererAPI::DrawIndexed(const Ref<Fussion::VertexArray> &array, u32 count)
     {
-        glDrawElements(GL_TRIANGLES, array->Count(), GL_UNSIGNED_INT, nullptr);
+        count = count ? count : array->GetIndexBuffer()->Count();
+        glDrawElements(GL_TRIANGLES, static_cast<i32>(count), GL_UNSIGNED_INT, nullptr);
     }
 } // namespace Fussion
