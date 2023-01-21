@@ -30,6 +30,8 @@ namespace Fussion
         void SetUniform(const StringView &name, const glm::mat4 &value) override;
         void SetUniform(const StringView &name, const glm::vec4 &value) override;
 
+        void SetArray(StringView name, i32 *array, i32 count) override;
+
         mustuse Optional<int> FindUniformLocation(const StringView &name) const;
         static void ReportCompilationError(u32 shader);
         static void ReportLinkingError(u32 shader);

@@ -28,8 +28,7 @@ namespace Fussion
 
     void Camera2D::UpdateViewMatrix()
     {
-        auto transform = glm::scale(glm::mat4(1.0f), glm::vec3(m_size, m_size, 1.0f));
-        transform = glm::rotate(transform, glm::radians(m_rotation), {0, 0, 1});
+        auto transform = glm::rotate(glm::mat4(1.0f), glm::radians(m_rotation), {0, 0, 1});
         transform = glm::translate(transform, m_position);
         m_viewMatrix = transform;
     }

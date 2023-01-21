@@ -11,7 +11,8 @@ namespace Fussion
     String OpenGLShader::ReadEntireFile(const fs::path &filePath)
     {
         std::ifstream file(filePath);
-        FSN_CORE_ASSERT(file.is_open(), "Failed to open file: {}, CWD: {}", filePath.string(), fs::current_path().string())
+        FSN_CORE_ASSERT(file.is_open(), "Failed to open file: {}, CWD: {}", filePath.string(),
+                        fs::current_path().string())
         std::stringstream ss;
         ss << file.rdbuf();
         return ss.str();
@@ -146,6 +147,13 @@ namespace Fussion
     {
         if (auto loc = FindUniformLocation(name)) {
             glUniform4f(*loc, value.x, value.y, value.z, value.w);
+        }
+    }
+
+    void OpenGLShader::SetArray(StringView name, i32 *array, i32 count)
+    {
+        if (auto loc = FindUniformLocation(name)) {
+            glUniform1iv(*loc, count, array);
         }
     }
 

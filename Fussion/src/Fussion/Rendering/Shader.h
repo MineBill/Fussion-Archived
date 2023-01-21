@@ -1,7 +1,7 @@
 #pragma once
+#include "Fussion/Core/Types.h"
 #include "Fussion/Math/Matrix4.h"
 #include "Fussion/Math/Vector3.h"
-#include "Fussion/Core/Types.h"
 #include "Texture.h"
 #include <filesystem>
 
@@ -28,6 +28,8 @@ namespace Fussion
         virtual void SetUniform(const StringView &name, Matrix4 value) = 0;
         virtual void SetUniform(const StringView &name, const glm::mat4 &value) = 0;
         virtual void SetUniform(const StringView &name, const glm::vec4 &value) = 0;
+
+        virtual void SetArray(StringView name, i32 *array, i32 count) = 0;
     };
 
 } // namespace Fussion

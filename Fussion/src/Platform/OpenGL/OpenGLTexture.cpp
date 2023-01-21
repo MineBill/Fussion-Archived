@@ -56,7 +56,8 @@ namespace Fussion
             LoadFromPixels(image);
         }
 
-        explicit OpenGLTexture(const u8 *pixels, i32 width, i32 height) : m_width(width), m_height(height)
+        explicit OpenGLTexture(const u8 *pixels, i32 width, i32 height, i32 channels)
+            : m_width(width), m_height(height), m_channels(channels)
         {
             LoadFromPixels(pixels);
         }
@@ -76,11 +77,25 @@ namespace Fussion
             //            glGenerateMipmap(GL_TEXTURE_2D);
         }
 
-        void Use(u32 unit) const override { glBindTextureUnit(unit, m_handle); }
+        void Use(u32 unit) const override
+        {
+            glBindTextureUnit(unit, m_handle);
+        }
 
-        mustuse u32 Handle() const override { return m_handle; }
-        mustuse i32 Width() const override { return m_width; }
-        mustuse i32 Height() const override { return m_height; }
+        mustuse u32 Handle() const override
+        {
+            return m_handle;
+        }
+
+        mustuse i32 Width() const override
+        {
+            return m_width;
+        }
+
+        mustuse i32 Height() const override
+        {
+            return m_height;
+        }
     };
 
     Ptr<Texture> Texture::LoadFromFile(const fs::path &path)
@@ -88,9 +103,9 @@ namespace Fussion
         return std::make_unique<OpenGLTexture>(path);
     }
 
-    Ptr<Texture> Texture::FromPixels(u8 *pixels, i32 width, i32 height)
+    Ptr<Texture> Texture::FromPixels(u8 *pixels, i32 width, i32 height, i32 channels)
     {
-        return std::make_unique<OpenGLTexture>(pixels, width, height);
+        return std::make_unique<OpenGLTexture>(pixels, width, height, channels);
     }
 
 } // namespace Fussion

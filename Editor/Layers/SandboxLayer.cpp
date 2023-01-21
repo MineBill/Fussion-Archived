@@ -17,6 +17,7 @@ void SandboxLayer::OnLoad()
     {
         Fussion::TimeStamp time17("Texture Load");
         m_texture = Fussion::Texture::LoadFromFile("Resources/container2.png");
+        m_second_texture = Fussion::Texture::LoadFromFile("Resources/Textures/watercolor.png");
     }
 
     Fussion::RenderCommand::ResizeViewport(0, 0, size.first, size.second);
@@ -26,12 +27,24 @@ void SandboxLayer::OnUpdate(f32 elapsed)
 {
     FSN_PROFILE_FUNCTION();
     m_camera->OnUpdate(elapsed);
+    static f32 time = 0;
+    time += elapsed;
 
     Fussion::RenderCommand::SetClearColor(m_clearColor);
     Fussion::RenderCommand::Clear();
+    Fussion::Renderer2D::ResetStats();
     Fussion::Renderer2D::BeginScene(m_camera->GetCamera());
 
-    Fussion::Renderer2D::DrawQuad(m_texture, m_second_position, 0.0f, {2, 2, 2}, {1, 1});
+    for (auto x = 0; x < 100; x++) {
+        for (auto y = 0; y < 100; y++) {
+            if (x % 2 == 0)
+                Fussion::Renderer2D::DrawQuadRotated(m_second_texture, {static_cast<f32>(x), static_cast<f32>(y), 0.0f},
+                                                     glm::radians(time), {1, 1, 1}, {1, 1});
+            else
+                Fussion::Renderer2D::DrawQuad(m_texture, {static_cast<f32>(x), static_cast<f32>(y), 0.0f}, {1, 1, 1},
+                                              {1, 1});
+        }
+    }
     // Fussion::Renderer2D::DrawQuad(m_texture, m_first_position);
 
     Fussion::Renderer2D::EndScene();
@@ -86,24 +99,36 @@ void SandboxLayer::Interface(f32 elapsed) // NOLINT
     ImGui::Begin("Profiler");
     bool isRecording = Fussion::Profiler::Get().IsEnabled();
     ImGui::Text("Recording: %d", isRecording);
-
-    ImGui::InputText("Output filename: ", &input);
-    ImGui::BeginDisabled(isRecording);
-    if (ImGui::Button("Start Recording")) {
-        if (!input.empty()) {
-            Fussion::Profiler::Get().BeginProfile(input);
-        }else {
+    {
+        ImGui::InputText("Output filename: ", &input);
+        ImGui::BeginDisabled(isRecording);
+        {
+            if (ImGui::Button("Start Recording")) {
+                if (!input.empty()) {
+                    Fussion::Profiler::Get().BeginProfile(input);
+                } else {
+                }
+            }
         }
-    }
-    ImGui::EndDisabled();
+        ImGui::EndDisabled();
 
-    ImGui::BeginDisabled(!isRecording);
-    if (ImGui::Button("Stop Recording")) {
-        Fussion::Profiler::Get().EndProfile();
-    }
-    ImGui::EndDisabled();
+        ImGui::BeginDisabled(!isRecording);
+        if (ImGui::Button("Stop Recording")) {
+            Fussion::Profiler::Get().EndProfile();
+        }
+        ImGui::EndDisabled();
 
+        ImGui::End();
+    }
     ImGui::End();
 
+    auto stats = Fussion::Renderer2D::GetDrawStats();
+    ImGui::Begin("Renderer2D Stats");
+    {
+        ImGui::Text("Drawcalls: %d", stats.Drawcalls);
+        ImGui::Text("Vertices : %d", stats.GetVertices());
+    }
+    auto id = m_texture->Handle();
+    ImGui::Image(reinterpret_cast<void *>(id), {200.0f, 200.0f}); // NOLINT
     ImGui::End();
 }

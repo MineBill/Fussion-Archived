@@ -57,7 +57,7 @@ void Application::Run()
         m_imguiLayer->BeginFrame(elapsed);
         m_window->PollEvents();
 
-        for (const auto &overlay : m_layerStack.GetOverlays() | std::ranges::views::reverse) {
+        for (const auto &overlay : m_layerStack.GetOverlays() | std::views::reverse) {
             overlay->OnUpdate(elapsed);
         }
         for (const auto &layer : m_layerStack) {
@@ -79,7 +79,7 @@ void Application::HandleEvent(Ptr<Event> event)
     OnEvent(*event.get());
 
     bool broke = false;
-    for (const auto &overlay : m_layerStack.GetOverlays() | std::ranges::views::reverse) {
+    for (const auto &overlay : m_layerStack.GetOverlays() | std::views::reverse) {
         if (overlay->OnEvent(*event.get())) {
             broke = true;
             break;
