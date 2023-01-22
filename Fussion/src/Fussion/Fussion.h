@@ -12,5 +12,7 @@
 #include "Fussion/Rendering/Renderer.h"
 #include "Fussion/Rendering/Texture.h"
 #include "Fussion/Rendering/VertexArray.h"
+#include "Fussion/Rendering/Framebuffer.h"
+
 #include "Fussion/Layers/Layer.h"
 #include "Fussion/Input/Input.h"

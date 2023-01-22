@@ -25,5 +25,7 @@ if (${RENDER_API} STREQUAL "OpenGL")
             OpenGL/OpenGLRenderContext.cpp
             OpenGL/OpenGlRendererApi.h
             OpenGL/OpenGlRendererApi.cpp
+            OpenGL/OpenGLFramebuffer.h
+            OpenGL/OpenGLFramebuffer.cpp
     )
 endif ()

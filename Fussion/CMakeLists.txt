@@ -42,6 +42,8 @@ add_library(
         src/Fussion/Rendering/RendererApi.h
         src/Fussion/Rendering/RenderCommand.cpp
         src/Fussion/Rendering/RenderCommand.h
+        src/Fussion/Rendering/Framebuffer.h
+        src/Fussion/Rendering/Framebuffer.cpp
 
         src/Fussion/Math/Vector3.cpp
         src/Fussion/Math/Vector3.h

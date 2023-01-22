@@ -15,7 +15,7 @@ namespace Fussion
         case RendererAPI::API::None:
             FSN_CORE_ASSERT(false, "RenderAPI None is not supported");
         case RendererAPI::API::OpenGL:
-            return std::make_shared<OpenGLVertexBuffer>(vertices);
+            return CreateRef<OpenGLVertexBuffer>(vertices);
         }
 
         FSN_CORE_ASSERT(false, "Reached unreachable(huh) code");
@@ -28,7 +28,7 @@ namespace Fussion
         case RendererAPI::API::None:
             FSN_CORE_ASSERT(false, "RenderAPI None is not supported");
         case RendererAPI::API::OpenGL:
-            return std::make_shared<OpenGLVertexBuffer>(size);
+            return CreateRef<OpenGLVertexBuffer>(size);
         }
 
         FSN_CORE_ASSERT(false, "Reached unreachable(huh) code");
@@ -41,7 +41,7 @@ namespace Fussion
         case RendererAPI::API::None:
             FSN_CORE_ASSERT(false, "RenderAPI None is not supported");
         case RendererAPI::API::OpenGL:
-            return std::make_shared<OpenGLIndexBuffer>(indices);
+            return CreateRef<OpenGLIndexBuffer>(indices);
         }
 
         FSN_CORE_ASSERT(false, "Reached unreachable(huh) code");
@@ -54,7 +54,7 @@ namespace Fussion
         case RendererAPI::API::None:
             FSN_CORE_ASSERT(false, "RenderAPI None is not supported");
         case RendererAPI::API::OpenGL:
-            return std::make_shared<OpenGLIndexBuffer>(indices);
+            return CreateRef<OpenGLIndexBuffer>(indices);
         }
 
         FSN_CORE_ASSERT(false, "Reached unreachable(huh) code");
@@ -67,7 +67,7 @@ namespace Fussion
         case RendererAPI::API::None:
             FSN_CORE_ASSERT(false, "RenderAPI None is not supported");
         case RendererAPI::API::OpenGL:
-            return std::make_shared<OpenGLIndexBuffer>(count);
+            return CreateRef<OpenGLIndexBuffer>(count);
         }
 
         FSN_CORE_ASSERT(false, "Reached unreachable(huh) code");
