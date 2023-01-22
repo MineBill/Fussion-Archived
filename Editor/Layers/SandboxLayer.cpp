@@ -5,6 +5,7 @@
 #include <Fussion/Events/KeyboardEvents.h>
 #include <filesystem>
 #include <imgui.h>
+#include <imgui_internal.h>
 #include <misc/cpp/imgui_stdlib.h>
 
 void SandboxLayer::OnLoad()
@@ -21,6 +22,8 @@ void SandboxLayer::OnLoad()
     }
 
     Fussion::RenderCommand::ResizeViewport(0, 0, size.first, size.second);
+
+    m_frameBuffer = Fussion::Framebuffer::WithSize(static_cast<u32>(size.first), static_cast<u32>(size.second));
 }
 
 void SandboxLayer::OnUpdate(f32 elapsed)
@@ -30,6 +33,7 @@ void SandboxLayer::OnUpdate(f32 elapsed)
     static f32 time = 0;
     time += elapsed;
 
+    m_frameBuffer->Bind();
     Fussion::RenderCommand::SetClearColor(m_clearColor);
     Fussion::RenderCommand::Clear();
     Fussion::Renderer2D::ResetStats();
@@ -48,6 +52,8 @@ void SandboxLayer::OnUpdate(f32 elapsed)
     // Fussion::Renderer2D::DrawQuad(m_texture, m_first_position);
 
     Fussion::Renderer2D::EndScene();
+    m_frameBuffer->UnBind();
+
     Interface(elapsed);
 }
 
@@ -127,8 +133,36 @@ void SandboxLayer::Interface(f32 elapsed) // NOLINT
     {
         ImGui::Text("Drawcalls: %d", stats.Drawcalls);
         ImGui::Text("Vertices : %d", stats.GetVertices());
+        ImGui::Text("Viewport Size: {%f, %f}", static_cast<f64>(m_viewportSize.x), static_cast<f64>(m_viewportSize.y));
     }
-    auto id = m_texture->Handle();
-    ImGui::Image(reinterpret_cast<void *>(id), {200.0f, 200.0f}); // NOLINT
     ImGui::End();
+
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {0, 0});
+    ImGui::Begin("Viewport");
+    {
+        // ImGui::Image(reinterpret_cast<void *>(id), ViewportSize, {0, 0}, {1, -1}); // NOLINT
+        // static ImVec2 ViewportSize = {200.0f, 200.0f};
+        auto id = m_frameBuffer->GetColorAttachment();
+        auto min = ImGui::GetWindowContentRegionMin();
+        auto max = ImGui::GetWindowContentRegionMax();
+
+        min.x += ImGui::GetWindowPos().x;
+        min.y += ImGui::GetWindowPos().y;
+        max.x += ImGui::GetWindowPos().x;
+        max.y += ImGui::GetWindowPos().y;
+
+        auto newViewportSize = glm::vec2{max.x - min.x, max.y - min.y};
+        if (newViewportSize != m_viewportSize) {
+            m_frameBuffer->Resize(static_cast<u32>(newViewportSize.x), static_cast<u32>(newViewportSize.y));
+            m_camera->GetCamera().Resize(newViewportSize.x, newViewportSize.y);
+        }
+        m_viewportSize = newViewportSize;
+
+        //ImGui::GetForegroundDrawList()AA
+        ImGui::Image(reinterpret_cast<ImTextureID>(id), {max.x - min.x, max.y - min.y}, {0, 0}, {1, -1}); // NOLINT
+        /* ImGui::GetForegroundDrawList()->AddImage(reinterpret_cast<ImTextureID>(id), min, max, {0, 0}, // NOLINT
+                                                 {1, -1}); */
+    }
+    ImGui::End();
+    ImGui::PopStyleVar();
 }
