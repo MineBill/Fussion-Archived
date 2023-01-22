@@ -5,8 +5,8 @@ namespace Fussion
 {
     class OpenGLFrameBuffer final : public Framebuffer
     {
-        u32 m_id{};
-        u32 m_colorTextureId{};
+        u32 m_id{0};
+        u32 m_colorTextureId{0};
         u32 m_size{};
         u32 m_height{}, m_width{};
 

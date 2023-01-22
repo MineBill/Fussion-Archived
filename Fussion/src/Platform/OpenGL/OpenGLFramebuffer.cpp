@@ -6,8 +6,6 @@ namespace Fussion
 {
     OpenGLFrameBuffer::OpenGLFrameBuffer(u32 width, u32 height)
     {
-        glCreateFramebuffers(1, &m_id);
-
         Resize(width, height);
     }
 
@@ -18,8 +16,13 @@ namespace Fussion
 
     void OpenGLFrameBuffer::Resize(u32 width, u32 height)
     {
+        if (m_id) {
+            glDeleteFramebuffers(1, &m_id);
+            glDeleteTextures(1, &m_colorTextureId);
+        }
         m_width = width;
         m_height = height;
+        glCreateFramebuffers(1, &m_id);
         glBindFramebuffer(GL_FRAMEBUFFER, m_id);
 
         glCreateTextures(GL_TEXTURE_2D, 1, &m_colorTextureId);
