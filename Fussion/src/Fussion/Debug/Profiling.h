@@ -5,8 +5,8 @@
 namespace Fussion
 {
     struct ProfileResult {
-        const char *Name;
-        std::chrono::system_clock::time_point TimeStamp;
+        const char *Name{};
+        std::chrono::steady_clock::time_point TimeStamp{};
     };
 
     class TimeStamp;
@@ -14,7 +14,7 @@ namespace Fussion
     {
         static Profiler s_instance;
         std::ofstream m_file{};
-        std::chrono::system_clock::time_point m_profileStartTime{};
+        std::chrono::steady_clock::time_point m_profileStartTime{};
         bool m_enabled{false};
 
     public:
@@ -78,7 +78,7 @@ namespace Fussion
             m_enabled = value;
         }
 
-        bool IsEnabled()
+        bool IsEnabled() const
         {
             return m_enabled;
         }
@@ -92,22 +92,28 @@ namespace Fussion
     class TimeStamp
     {
         const char *m_name{};
-        std::chrono::system_clock::time_point m_start;
+        std::chrono::steady_clock::time_point m_start;
 
     public:
-        TimeStamp(const char *name) : m_name(name)
+        explicit TimeStamp(const char *name) : m_name(name)
         {
             m_start = std::chrono::high_resolution_clock::now();
-            Profiler::Get().Begin({m_name, m_start});
+            Profiler::Get().Begin(ProfileResult{m_name, m_start});
         }
 
         ~TimeStamp()
         {
             auto end = std::chrono::high_resolution_clock::now();
-            Profiler::Get().End({m_name, end});
+            Profiler::Get().End(ProfileResult{m_name, end});
         }
     };
 } // namespace Fussion
+
+#if defined(_MSC_VER)
+    #define BUILTIN_FUNC_SIG __FUNCSIG__
+#elif defined(__clang__) || defined(__GNUC__)
+    #define BUILTIN_FUNC_SIG __PRETTY_FUNCTION__
+#endif
 
 #ifdef FSN_ENABLE_PROFILING
     #define FSN_TOKEN_PASTE(x, y) x##y
@@ -115,7 +121,7 @@ namespace Fussion
     #define FSN_BEGIN_PROFILE(name) ::Fussion::Profiler::Get().BeginProfile(name)
     #define FSN_END_PROFILE(name) ::Fussion::Profiler::Get().EndProfile(name)
     #define FSN_PROFILE_SCOPE(ScopeName) ::Fussion::TimeStamp FSN_TOKEN_CAT(timeStamp, __LINE__)(ScopeName)
-    #define FSN_PROFILE_FUNCTION() FSN_PROFILE_SCOPE(__PRETTY_FUNCTION__)
+    #define FSN_PROFILE_FUNCTION() FSN_PROFILE_SCOPE(BUILTIN_FUNC_SIG)
 #else
     #define FSN_BEGIN_PROFILE(name)
     #define FSN_END_PROFILE(name)

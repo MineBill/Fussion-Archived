@@ -143,7 +143,7 @@ namespace Fussion
             auto me = static_cast<WindowGLFW *>(glfwGetWindowUserPointer(window));
             FSN_CORE_ASSERT(me != nullptr, "") // NOLINT(bugprone-lambda-function-name)
 
-            me->m_eventCallback(std::make_unique<MouseWheelMoved>(x, y));
+            me->m_eventCallback(std::make_unique<MouseWheelMoved>(static_cast<f32>(x), static_cast<f32>(y)));
         });
     }
 

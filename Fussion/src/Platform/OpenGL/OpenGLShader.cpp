@@ -70,6 +70,7 @@ namespace Fussion
             else if (string == "fragment")
                 return GL_FRAGMENT_SHADER;
             FSN_CORE_ASSERT(false, "Unknown shader type: {}", string)
+            return 0;
         };
         constexpr const auto *tokenIdent = "#type";
         constexpr const auto tokenCount = 5;

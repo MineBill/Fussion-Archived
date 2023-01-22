@@ -15,10 +15,9 @@ namespace Fussion
         case 4:
             return GL_RGBA;
         default:
+            FSN_CORE_ASSERT(false, "Unsupported amount of channels: {}", channels)
             return 0;
         }
-        FSN_CORE_ASSERT(false, "Unsupported amount of channels: {}", channels)
-        return 0;
     }
 
     GLenum GetInternalTextureFormatFromChannels(i32 channels)
@@ -29,10 +28,9 @@ namespace Fussion
         case 4:
             return GL_RGBA8;
         default:
+            FSN_CORE_ASSERT(false, "Unsupported amount of channels: {}", channels)
             return 0;
         }
-        FSN_CORE_ASSERT(false, "Unsupported amount of channels: {}", channels)
-        return 0;
     }
 
     class OpenGLTexture final : public Texture

@@ -159,7 +159,7 @@ void SandboxLayer::Interface(f32 elapsed) // NOLINT
         m_viewportSize = newViewportSize;
 
         //ImGui::GetForegroundDrawList()AA
-        ImGui::Image(reinterpret_cast<ImTextureID>(id), {max.x - min.x, max.y - min.y}, {0, 0}, {1, -1}); // NOLINT
+        ImGui::Image(reinterpret_cast<ImTextureID>(static_cast<u64>(id)), {max.x - min.x, max.y - min.y}, {0, 0}, {1, -1}); // NOLINT
         /* ImGui::GetForegroundDrawList()->AddImage(reinterpret_cast<ImTextureID>(id), min, max, {0, 0}, // NOLINT
                                                  {1, -1}); */
     }
