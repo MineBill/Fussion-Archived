@@ -22,10 +22,10 @@ namespace Fussion
     {
         static glm::vec2 oldMouse = m_camera.ScreenToWorld(Input::GetMouse());
         Fussion::Dispatcher dispatcher(event);
-        dispatcher.Dispatch<WindowResized>([&](WindowResized &e) {
+        /* dispatcher.Dispatch<WindowResized>([&](WindowResized &e) {
             m_camera.Resize(static_cast<f32>(e.Width()), static_cast<f32>(e.Height()));
             return false;
-        });
+        }); */
 
         dispatcher.Dispatch<MouseMoved>([&](MouseMoved &) {
             if (m_panning) {
