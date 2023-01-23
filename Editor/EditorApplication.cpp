@@ -1,12 +1,12 @@
 #include "EditorApplication.hpp"
-#include "Layers/SandboxLayer.h"
+#include "Layers/EditorLayer.h"
 
 namespace Editor
 {
     void EditorApplication::OnLoad()
     {
         FSN_PROFILE_FUNCTION();
-        PushLayer<SandboxLayer>();
+        PushLayer<EditorLayer>();
     }
 
     void EditorApplication::OnUpdate(f32)

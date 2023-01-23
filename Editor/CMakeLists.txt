@@ -5,7 +5,11 @@ add_executable(
         EditorApplication.hpp
         EditorApplication.cpp
         CubeData.hpp
-        Layers/SandboxLayer.cpp Layers/SandboxLayer.h)
+        Layers/SandboxLayer.cpp
+        Layers/SandboxLayer.h
+        Layers/EditorLayer.cpp
+        Layers/EditorLayer.h
+        )
 
 target_link_libraries(Editor Fussion)
 
