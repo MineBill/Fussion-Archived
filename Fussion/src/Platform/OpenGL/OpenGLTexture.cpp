@@ -77,6 +77,7 @@ namespace Fussion
 
         void Use(u32 unit) const override
         {
+            FSN_CORE_ASSERT(m_handle != 0, "Texture handle is not valid. Possible not created at all.");
             glBindTextureUnit(unit, m_handle);
         }
 

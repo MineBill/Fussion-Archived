@@ -29,13 +29,19 @@ namespace Fussion
 
         dispatcher.Dispatch<MouseMoved>([&](MouseMoved &) {
             if (m_panning) {
-                auto mouse = m_camera.ScreenToWorld(Input::GetMouse());
+                /* auto mouse = m_camera.ScreenToWorld(Input::GetMouse());
                 auto offset = mouse - oldMouse;
                 oldMouse = mouse;
 
-                // auto vec = glm::vec3(-e.RelX() / 640.0, e.RelY() / 480.0, 0) * 2.0f;
                 auto pos = m_camera.GetPosition();
-                m_camera.SetPosition(pos + glm::vec3(offset, 0.0f));
+                m_camera.SetPosition(pos + glm::vec3(offset, 0.0f)); */
+                // auto relative = glm::vec3{mm.X(), mm.Y(), 0};
+                auto relative = Input::GetMouse();
+
+                auto pos = m_camera.GetPosition();
+                auto mouse = m_camera.ScreenToWorld(relative);
+
+                m_camera.SetPosition(pos + glm::vec3{mouse, 0.0f});
             }
             return false;
         });

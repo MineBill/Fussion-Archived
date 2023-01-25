@@ -12,13 +12,16 @@ namespace Editor
         glm::vec3 m_first_position, m_second_position;
         glm::vec3 m_clearColor{0.816f, 0.828f, 0.828f};
         glm::vec2 m_viewportSize{};
+        glm::vec2 m_viewportPosition{};
 
+        bool m_isViewportFocused{false};
         bool m_showRenderer{false};
 
         void EditorMainInterface(f32);
         void EditorMainMenuBar();
         void EditorInspector();
         void EditorScene();
+        void EditorViewport();
 
         void EditorRendererStatistics();
     public:

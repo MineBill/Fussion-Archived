@@ -23,6 +23,7 @@ namespace Fussion
         mustuse bool IsKeyUpImpl(Key key) override;
         mustuse bool IsKeyJustPressedImpl(Key key) override;
 
+        void SetMousePositionImpl(u32 x, u32 y) override;
         void FlushImpl() override;
 
     public:

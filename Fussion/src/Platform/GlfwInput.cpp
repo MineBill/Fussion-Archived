@@ -45,6 +45,14 @@ namespace Fussion
         return (m_key_cache_previous[key] == KeyState::Up) && (m_key_cache[key] == KeyState::Down);
     }
 
+    void GlfwInput::SetMousePositionImpl(u32 x, u32 y)
+    {
+        auto window = static_cast<GLFWwindow *>(Application::Get().GetWindow().Raw());
+        FSN_CORE_ASSERT(window != nullptr)
+
+        glfwSetCursorPos(window, static_cast<f64>(x), static_cast<f64>(y));
+    }
+
     void GlfwInput::FlushImpl()
     {
         m_key_cache_previous = m_key_cache;

@@ -62,8 +62,8 @@ bool SandboxLayer::OnEvent(Fussion::Event &event)
     FSN_PROFILE_FUNCTION();
     Fussion::Dispatcher dispatcher(event);
     m_camera->OnEvent(event);
-    dispatcher.Dispatch<Fussion::WindowResized>([&](Fussion::WindowResized &e) {
-        Fussion::RenderCommand::ResizeViewport(0, 0, e.Width(), e.Height());
+    dispatcher.Dispatch<Fussion::WindowResized>([&](Fussion::WindowResized &) {
+        // Fussion::RenderCommand::ResizeViewport(0, 0, e.Width(), e.Height());
 
         return false;
     });

@@ -16,6 +16,14 @@ namespace Fussion
         void OnUpdate(f32 elapsed);
         void OnEvent(Event &event);
 
-        mustuse Camera2D &GetCamera() { return m_camera; }
+        mustuse bool IsPanning() const
+        {
+            return m_panning;
+        }
+
+        mustuse Camera2D &GetCamera()
+        {
+            return m_camera;
+        }
     };
 } // namespace Fussion

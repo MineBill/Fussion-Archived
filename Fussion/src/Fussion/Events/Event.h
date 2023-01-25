@@ -1,10 +1,10 @@
 #pragma once
 #include "Fussion/Core/Core.h"
-#include "Fussion/Input/Keys.h"
 #include "Fussion/Core/Types.h"
+#include "Fussion/Debug/Profiling.h"
+#include "Fussion/Input/Keys.h"
 #include <concepts>
 #include <functional>
-#include "Fussion/Debug/Profiling.h"
 
 #define FSN_BIND_FN(fn) [this](auto &&PH1) { return fn(std::forward<decltype(PH1)>(PH1)); }
 
@@ -50,10 +50,9 @@ namespace Fussion
     {
         friend class Dispatcher;
 
-    protected:
-        bool handled{false};
-
     public:
+        bool Handled{false};
+
         virtual ~Event() = default;
 
         mustuse virtual EventType Type() const = 0;
@@ -68,16 +67,18 @@ namespace Fussion
         template<typename T>
         using EventFn = std::function<bool(T &)>;
 
-        explicit Dispatcher(Event &e) : event(e) {}
+        explicit Dispatcher(Event &e) : event(e)
+        {
+        }
 
         template<std::derived_from<Event> T>
         void Dispatch(EventFn<T> fn)
         {
             FSN_PROFILE_FUNCTION();
-            if (event.handled || event.Type() != T::StaticType())
+            if (event.Handled || event.Type() != T::StaticType())
                 return;
 
-            event.handled = fn(dynamic_cast<T &>(event));
+            event.Handled = fn(dynamic_cast<T &>(event));
         }
     };
 

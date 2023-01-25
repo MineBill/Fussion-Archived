@@ -14,6 +14,7 @@ namespace Fussion
         mustuse virtual bool IsKeyDownImpl(Key key) = 0;
         mustuse virtual bool IsKeyUpImpl(Key key) = 0;
         mustuse virtual bool IsKeyJustPressedImpl(Key key) = 0;
+        virtual void SetMousePositionImpl(u32 x, u32 y) = 0;
         virtual void FlushImpl() = 0;
 
     public:
@@ -51,6 +52,11 @@ namespace Fussion
                 GetAxis(x_positive, x_negative),
                 GetAxis(y_positive, y_negative),
             };
+        }
+
+        static void SetMousePosition(u32 x, u32 y)
+        {
+            s_input->SetMousePositionImpl(x, y);
         }
 
     private:
