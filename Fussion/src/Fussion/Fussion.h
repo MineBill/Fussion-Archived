@@ -11,6 +11,7 @@
 #include "Fussion/Rendering/Buffers.h"
 #include "Fussion/Rendering/Renderer.h"
 #include "Fussion/Rendering/Texture.h"
+#include "Fussion/Rendering/Bitmap.h"
 #include "Fussion/Rendering/VertexArray.h"
 #include "Fussion/Rendering/Framebuffer.h"
 

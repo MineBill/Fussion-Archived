@@ -59,7 +59,7 @@ add_library(
 
         src/Fussion/Debug/Profiling.h
         src/Fussion/Debug/Profiling.cpp
-        )
+        src/Fussion/Rendering/Bitmap.cpp src/Fussion/Rendering/Bitmap.h)
 add_subdirectory(src/Platform)
 
 if (LINUX)

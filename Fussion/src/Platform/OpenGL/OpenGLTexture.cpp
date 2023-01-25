@@ -68,7 +68,7 @@ namespace Fussion
             glTextureParameteri(m_handle, GL_TEXTURE_WRAP_S, GL_REPEAT);
             glTextureParameteri(m_handle, GL_TEXTURE_WRAP_T, GL_REPEAT);
             glTextureParameteri(m_handle, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-            glTextureParameteri(m_handle, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTextureParameteri(m_handle, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
             glTextureSubImage2D(m_handle, 0, 0, 0, m_width, m_height, GetTextureFormatFromChannels(m_channels),
                                 GL_UNSIGNED_BYTE, pixels);
@@ -102,7 +102,7 @@ namespace Fussion
         return std::make_unique<OpenGLTexture>(path);
     }
 
-    Ptr<Texture> Texture::FromPixels(u8 *pixels, i32 width, i32 height, i32 channels)
+    Ptr<Texture> Texture::FromPixels(u8 *pixels, u32 width, u32 height, u32 channels)
     {
         return std::make_unique<OpenGLTexture>(pixels, width, height, channels);
     }
