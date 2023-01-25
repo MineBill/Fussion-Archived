@@ -6,7 +6,7 @@ namespace Fussion
 {
     struct ProfileResult {
         const char *Name{};
-        std::chrono::system_clock::time_point TimeStamp{};
+        std::chrono::high_resolution_clock::time_point TimeStamp{};
     };
 
     class TimeStamp;
@@ -14,7 +14,7 @@ namespace Fussion
     {
         static Profiler s_instance;
         std::ofstream m_file{};
-        std::chrono::system_clock::time_point m_profileStartTime{};
+        std::chrono::high_resolution_clock::time_point m_profileStartTime{};
         bool m_enabled{false};
 
     public:
@@ -92,7 +92,7 @@ namespace Fussion
     class TimeStamp
     {
         const char *m_name{};
-        std::chrono::system_clock::time_point m_start;
+        std::chrono::high_resolution_clock::time_point m_start;
 
     public:
         explicit TimeStamp(const char *name) : m_name(name)
