@@ -44,6 +44,8 @@ add_library(
         src/Fussion/Rendering/RenderCommand.h
         src/Fussion/Rendering/Framebuffer.h
         src/Fussion/Rendering/Framebuffer.cpp
+        src/Fussion/Rendering/Bitmap.cpp
+        src/Fussion/Rendering/Bitmap.h
 
         src/Fussion/Math/Vector3.cpp
         src/Fussion/Math/Vector3.h
@@ -54,12 +56,18 @@ add_library(
         src/Fussion/Rendering/2D/Camera.h
         src/Fussion/Rendering/2D/Camera2DController.h
         src/Fussion/Rendering/2D/Camera2DController.cpp
-        src/Fussion/Math/Transform.cpp
-        src/Fussion/Math/Transform.h
+
+        src/Fussion/GCS/GameObject.cpp
+        src/Fussion/GCS/GameObject.h
+        src/Fussion/GCS/Registry.cpp
+        src/Fussion/GCS/Registry.h
+        src/Fussion/GCS/Component.h
+        src/Fussion/GCS/Transform.cpp
+        src/Fussion/GCS/Transform.h
 
         src/Fussion/Debug/Profiling.h
         src/Fussion/Debug/Profiling.cpp
-        src/Fussion/Rendering/Bitmap.cpp src/Fussion/Rendering/Bitmap.h)
+)
 add_subdirectory(src/Platform)
 
 if (LINUX)

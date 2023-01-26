@@ -10,6 +10,8 @@ namespace Fussion
         u32 m_width{}, m_height{};
 
     public:
+        static Bitmap GridPattern(u32 width, u32 height, u32 gridSize = 10, u32 firstColor = 0x000000FF,
+                                  u32 secondColor = 0xFFFFFFFF);
         Bitmap(u32 width, u32 height);
 
         void Resize(u32 width, u32 height);

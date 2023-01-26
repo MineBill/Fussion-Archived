@@ -3,6 +3,22 @@
 
 namespace Fussion
 {
+    Bitmap Bitmap::GridPattern(u32 width, u32 height, u32 gridSize, u32 firstColor, u32 secondColor)
+    {
+        Bitmap b(width, height);
+
+        for (u32 x = 0; x < b.GetWidth(); x++) {
+            for (u32 y = 0; y < b.GetHeight(); y++) {
+                if ((x * gridSize / width) % 2 == (y * gridSize / height) % 2)
+                    b.SetPixel(x, y, firstColor);
+                else
+                    b.SetPixel(x, y, secondColor);
+            }
+        }
+
+        return b;
+    }
+
     Bitmap::Bitmap(u32 width, u32 height)
     {
         Resize(width, height);

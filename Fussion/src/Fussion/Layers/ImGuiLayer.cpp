@@ -21,13 +21,14 @@ void ImGuiLayer::OnLoad()
     ImGui_ImplOpenGL3_Init("#version 130");
 
     auto &style = ImGui::GetStyle();
-    style.WindowRounding = 6;
-    style.ChildRounding = 6;
-    style.FrameRounding = 3;
-    style.TabRounding = 6;
-    style.GrabRounding = 3;
-    style.ScrollbarRounding = 6;
-    style.PopupRounding = 6;
+    style.WindowRounding = 4;
+    style.ChildRounding = 4;
+    style.FrameRounding = 4;
+    style.TabRounding = 4;
+    style.GrabRounding = 4;
+    style.ScrollbarRounding = 4;
+    style.PopupRounding = 4;
+    style.FramePadding = {3, 3};
 }
 
 void ImGuiLayer::OnUpdate(f32 elapsed)

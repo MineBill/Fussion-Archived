@@ -6,7 +6,6 @@
 #include <string_view>
 
 #define mustuse [[nodiscard]]
-#define unused (void)
 
 using u8 = uint8_t;
 using u16 = uint16_t;
@@ -47,4 +46,7 @@ namespace Fussion
     {
         return std::make_shared<T>(std::forward<Args>(args)...);
     }
+
+    template<typename T, typename... Args>
+    using WeakRef = std::weak_ptr<T>;
 } // namespace Fussion

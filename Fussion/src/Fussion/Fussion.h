@@ -15,5 +15,8 @@
 #include "Fussion/Rendering/VertexArray.h"
 #include "Fussion/Rendering/Framebuffer.h"
 
+#include "Fussion/GCS/GameObject.h"
+#include "Fussion/GCS/Registry.h"
+
 #include "Fussion/Layers/Layer.h"
 #include "Fussion/Input/Input.h"

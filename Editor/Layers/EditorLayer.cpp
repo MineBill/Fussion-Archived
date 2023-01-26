@@ -1,22 +1,45 @@
 #include "EditorLayer.h"
 #include "Fussion/Events/KeyboardEvents.h"
 #include "Fussion/Events/MouseEvents.h"
+#include "Fussion/GCS/Transform.h"
+#include "glm/gtc/type_ptr.hpp"
 #include <imgui.h>
 #include <imgui_internal.h>
 
 namespace Editor
 {
+    struct Test {
+
+    };
+
     void EditorLayer::OnLoad()
     {
+        auto &io = ImGui::GetIO();
+        io.Fonts->AddFontFromFileTTF("Resources/Inter-Regular.ttf", 16);
         Fussion::RenderCommand::SetClearColor({0.56, 0.56, 0.56});
         m_camera = Fussion::CreatePtr<Fussion::Camera2DController>(100, 100);
-        m_texture = Fussion::Texture::LoadFromFile("Resources/Textures/dev_texture.png");
+
+        m_texture = Fussion::Bitmap::GridPattern(100, 100, 2, 0xAAAAAAFF).ToTexture();
 
         m_frameBuffer = Fussion::Framebuffer::WithSize(100, 100);
+
+        auto gameObject1 = m_registry.Create("GameObject 1");
+        auto sub = m_registry.Create("sub");
+        auto sub2 = m_registry.Create("sub2");
+        gameObject1->AddChild(sub);
+        gameObject1->AddChild(sub2);
+        auto subsub1 = m_registry.Create("subsub1");
+        sub2->AddChild(subsub1);
+        auto lol = m_registry.Create("lol");
+        gameObject1->AddChild(lol);
+        auto LOL = m_registry.Create("LOL@");
+        auto Ppeegas = m_registry.Create("Ppeegas");
+        LOL->AddChild(Ppeegas);
     }
 
     void EditorLayer::OnUpdate(f32 delta)
     {
+        m_registry.Update(delta);
         using namespace Fussion;
         m_camera->OnUpdate(delta);
 
@@ -24,7 +47,7 @@ namespace Editor
         RenderCommand::Clear();
         Renderer2D::ResetStats();
         Renderer2D::BeginScene(m_camera->GetCamera());
-        Renderer2D::DrawQuad(m_texture, m_first_position);
+        Renderer2D::DrawQuad(m_texture, m_first_position, {100, 100, 1}, {500, 500});
         Renderer2D::EndScene();
         m_frameBuffer->UnBind();
 
@@ -33,6 +56,7 @@ namespace Editor
 
     bool EditorLayer::OnEvent(Fussion::Event &e)
     {
+        m_registry.OnEvent(e);
         if (m_isViewportFocused) {
             m_camera->OnEvent(e);
         }
@@ -65,11 +89,12 @@ namespace Editor
 
     void EditorLayer::EditorMainInterface(f32 delta)
     {
-        unused delta;
+        (void)delta;
         EditorMainMenuBar();
 
         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
 
+        ImGui::ShowStyleEditor();
         // Inspector
         EditorInspector();
         EditorScene();
@@ -102,13 +127,55 @@ namespace Editor
     void EditorLayer::EditorInspector()
     {
         ImGui::Begin("Inspector");
+        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, {4, 4});
+        if (!m_selectedGameObject.expired()) {
+            auto go = m_selectedGameObject.lock();
+            for (const auto &component : go->GetAllComponents()) {
+                auto name = component->GetName();
 
+                if (ImGui::TreeNode(name.data())) {
+                    component->OnEditorGUI();
+                    ImGui::TreePop();
+                }
+            }
+        }
+        ImGui::PopStyleVar();
         ImGui::End();
+    }
+
+    void EditorLayer::RenderGameObject(const Fussion::Ref<Fussion::GameObject> &go)
+    {
+        auto i = 0;
+        for (const auto &child : go->GetChildren()) {
+            ImGuiTreeNodeFlags flags =
+                ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_OpenOnArrow;
+            if (child->GetChildren().size() == 0) {
+                flags |= ImGuiTreeNodeFlags_Leaf;
+            }
+
+            ImGui::PushID(i++);
+            bool opened = ImGui::TreeNodeEx(child->GetName().c_str(), flags, "%s", child->GetName().c_str());
+            ImGui::PopID();
+
+            if (ImGui::IsItemClicked()) {
+                m_selectedGameObject = child;
+            }
+
+            if (opened) {
+                RenderGameObject(child);
+                ImGui::TreePop();
+            }
+        }
     }
 
     void EditorLayer::EditorScene()
     {
         ImGui::Begin("Scene");
+
+        auto gameObjects = m_registry.GetAllGameObjects();
+        ImGui::Text("GameObjects: Total of %d", static_cast<i32>(gameObjects.size()));
+        ImGui::Separator();
+        RenderGameObject(m_registry.GetRoot());
 
         ImGui::End();
     }

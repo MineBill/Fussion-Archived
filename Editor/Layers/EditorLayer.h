@@ -13,6 +13,8 @@ namespace Editor
         glm::vec3 m_clearColor{0.816f, 0.828f, 0.828f};
         glm::vec2 m_viewportSize{};
         glm::vec2 m_viewportPosition{};
+        Fussion::Registry m_registry{};
+        Fussion::WeakRef<Fussion::GameObject> m_selectedGameObject{};
 
         bool m_isViewportFocused{false};
         bool m_showRenderer{false};
@@ -22,8 +24,10 @@ namespace Editor
         void EditorInspector();
         void EditorScene();
         void EditorViewport();
+        void RenderGameObject(const Fussion::Ref<Fussion::GameObject> &go);
 
         void EditorRendererStatistics();
+
     public:
         EditorLayer() = default;
         ~EditorLayer() override = default;

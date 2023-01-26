@@ -1,5 +1,4 @@
 #pragma once
-#include "Fussion/Math/Transform.h"
 #include <glm/ext/matrix_clip_space.hpp>
 
 namespace Fussion
