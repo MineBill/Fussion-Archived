@@ -14,12 +14,12 @@ namespace Fussion
         explicit OpenGLVertexBuffer(i32 size);
         ~OpenGLVertexBuffer() override;
 
-        void Use() const override;
-        void Resize(i32 new_size) override;
-        void UpdateSubDataRawPtr(i32 offset, const void *data, i32 size) override;
+        void bind() const override;
+        void resize(i32 new_size) override;
+        void update_sub_data(i32 offset, const void *data, i32 size) override;
 
-        void SetLayout(const AttributeLayout &layout) override;
-        mustuse const AttributeLayout &GetLayout() const override;
+        void set_layout(const AttributeLayout &layout) override;
+        mustuse const AttributeLayout &layout() const override;
     };
 
 } // namespace Fussion

@@ -13,15 +13,15 @@ namespace Fussion
     public:
         Camera2DController(f32 width, f32 height);
 
-        void OnUpdate(f32 elapsed);
-        void OnEvent(Event &event);
+        void update(f32 elapsed);
+        void on_event(Event &event);
 
-        mustuse bool IsPanning() const
+        mustuse bool is_panning() const
         {
             return m_panning;
         }
 
-        mustuse Camera2D &GetCamera()
+        mustuse Camera2D &camera()
         {
             return m_camera;
         }

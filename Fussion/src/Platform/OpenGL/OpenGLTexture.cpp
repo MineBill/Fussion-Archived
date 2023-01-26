@@ -7,7 +7,7 @@
 namespace Fussion
 {
 
-    GLenum GetTextureFormatFromChannels(i32 channels)
+    GLenum texture_format_from_channels(i32 channels)
     {
         switch (channels) {
         case 3:
@@ -20,7 +20,7 @@ namespace Fussion
         }
     }
 
-    GLenum GetInternalTextureFormatFromChannels(i32 channels)
+    GLenum internal_texture_format_from_channels(i32 channels)
     {
         switch (channels) {
         case 3:
@@ -63,35 +63,35 @@ namespace Fussion
         void LoadFromPixels(const u8 *pixels)
         {
             glCreateTextures(GL_TEXTURE_2D, 1, &m_handle);
-            glTextureStorage2D(m_handle, 1, GetInternalTextureFormatFromChannels(m_channels), m_width, m_height);
+            glTextureStorage2D(m_handle, 1, internal_texture_format_from_channels(m_channels), m_width, m_height);
 
             glTextureParameteri(m_handle, GL_TEXTURE_WRAP_S, GL_REPEAT);
             glTextureParameteri(m_handle, GL_TEXTURE_WRAP_T, GL_REPEAT);
             glTextureParameteri(m_handle, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
             glTextureParameteri(m_handle, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-            glTextureSubImage2D(m_handle, 0, 0, 0, m_width, m_height, GetTextureFormatFromChannels(m_channels),
+            glTextureSubImage2D(m_handle, 0, 0, 0, m_width, m_height, texture_format_from_channels(m_channels),
                                 GL_UNSIGNED_BYTE, pixels);
             //            glGenerateMipmap(GL_TEXTURE_2D);
         }
 
-        void Use(u32 unit) const override
+        void bind(u32 unit) const override
         {
             FSN_CORE_ASSERT(m_handle != 0, "Texture handle is not valid. Possible not created at all.");
             glBindTextureUnit(unit, m_handle);
         }
 
-        mustuse u32 Handle() const override
+        mustuse u32 renderer_handle() const override
         {
             return m_handle;
         }
 
-        mustuse i32 Width() const override
+        mustuse i32 width() const override
         {
             return m_width;
         }
 
-        mustuse i32 Height() const override
+        mustuse i32 height() const override
         {
             return m_height;
         }

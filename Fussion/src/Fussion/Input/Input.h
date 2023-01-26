@@ -10,59 +10,59 @@ namespace Fussion
         static Ptr<Input> s_input;
 
     protected:
-        mustuse virtual glm::vec2 GetMouseImpl() = 0;
-        mustuse virtual bool IsKeyDownImpl(Key key) = 0;
-        mustuse virtual bool IsKeyUpImpl(Key key) = 0;
-        mustuse virtual bool IsKeyJustPressedImpl(Key key) = 0;
-        virtual void SetMousePositionImpl(u32 x, u32 y) = 0;
-        virtual void FlushImpl() = 0;
+        mustuse virtual glm::vec2 mouse_impl() = 0;
+        mustuse virtual bool is_key_down_impl(Key key) = 0;
+        mustuse virtual bool is_key_up_impl(Key key) = 0;
+        mustuse virtual bool is_key_just_pressed_impl(Key key) = 0;
+        virtual void set_mouse_impl(u32 x, u32 y) = 0;
+        virtual void flush_impl() = 0;
 
     public:
         virtual ~Input() = default;
 
-        mustuse static glm::vec2 GetMouse()
+        mustuse static glm::vec2 mouse()
         {
-            return s_input->GetMouseImpl();
+            return s_input->mouse_impl();
         }
 
-        mustuse static bool IsKeyDown(Key key)
+        mustuse static bool is_key_down(Key key)
         {
-            return s_input->IsKeyDownImpl(key);
+            return s_input->is_key_down_impl(key);
         }
 
-        mustuse static bool IsKeyUp(Key key)
+        mustuse static bool is_key_up(Key key)
         {
-            return s_input->IsKeyUpImpl(key);
+            return s_input->is_key_up_impl(key);
         }
 
-        mustuse static bool IsKeyJustPressed(Key key)
+        mustuse static bool is_key_just_pressed(Key key)
         {
-            return s_input->IsKeyJustPressedImpl(key);
+            return s_input->is_key_just_pressed_impl(key);
         }
 
-        mustuse static f32 GetAxis(Key positive, Key negative)
+        mustuse static f32 axis(Key positive, Key negative)
         {
-            return static_cast<f32>(s_input->IsKeyDownImpl(positive)) -
-                   static_cast<f32>(s_input->IsKeyDownImpl(negative));
+            return static_cast<f32>(s_input->is_key_down_impl(positive)) -
+                   static_cast<f32>(s_input->is_key_down_impl(negative));
         }
 
-        mustuse static glm::vec2 GetVector(Key x_positive, Key x_negative, Key y_positive, Key y_negative)
+        mustuse static glm::vec2 vector(Key x_positive, Key x_negative, Key y_positive, Key y_negative)
         {
             return {
-                GetAxis(x_positive, x_negative),
-                GetAxis(y_positive, y_negative),
+                axis(x_positive, x_negative),
+                axis(y_positive, y_negative),
             };
         }
 
-        static void SetMousePosition(u32 x, u32 y)
+        static void set_mouse(u32 x, u32 y)
         {
-            s_input->SetMousePositionImpl(x, y);
+            s_input->set_mouse_impl(x, y);
         }
 
     private:
-        static void Flush()
+        static void flush()
         {
-            s_input->FlushImpl();
+            s_input->flush_impl();
         }
     };
 } // namespace Fussion

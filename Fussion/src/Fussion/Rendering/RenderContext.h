@@ -8,9 +8,9 @@ namespace Fussion
     public:
         virtual ~RenderContext() = default;
 
-        virtual void Init() = 0;
+        virtual void init() = 0;
 
-        virtual void SwapBuffers() = 0;
+        virtual void swap_buffers() = 0;
     };
 
 } // namespace Fussion

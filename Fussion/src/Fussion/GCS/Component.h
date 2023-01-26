@@ -2,7 +2,7 @@
 #include "Fussion/Events/Event.h"
 
 #define FSN_COMPONENT(T)          \
-    StringView GetName() override \
+    StringView name() override \
     {                             \
         return #T;                \
     }
@@ -14,22 +14,22 @@ namespace Fussion
     public:
         virtual ~Component() = default;
 
-        virtual void OnStart()
+        virtual void on_start()
         {
         }
 
-        virtual void OnUpdate(f32)
+        virtual void on_update(f32)
         {
         }
 
-        virtual void OnEvent(Event &)
+        virtual void on_event(Event &)
         {
         }
 
-        virtual void OnEditorGUI()
+        virtual void on_editor_gui()
         {
         }
 
-        virtual StringView GetName() = 0;
+        virtual StringView name() = 0;
     };
 } // namespace Fussion

@@ -5,13 +5,13 @@ namespace Fussion
 {
     class Transform : public Fussion::Component
     {
+        glm::vec3 m_position{};
+        glm::vec3 m_scale{};
+        f32 m_rotation{};
+
     public:
         FSN_COMPONENT(Transform)
 
-        glm::vec3 Position{};
-        glm::vec3 Scale{};
-        f32 Rotation{};
-
-        void OnEditorGUI() override;
+        void on_editor_gui() override;
     };
 } // namespace Fussion

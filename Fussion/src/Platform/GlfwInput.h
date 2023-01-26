@@ -18,13 +18,13 @@ namespace Fussion
         std::unordered_map<Key, KeyState> m_key_cache_previous{};
 
     protected:
-        mustuse glm::vec2 GetMouseImpl() override;
-        mustuse bool IsKeyDownImpl(Key key) override;
-        mustuse bool IsKeyUpImpl(Key key) override;
-        mustuse bool IsKeyJustPressedImpl(Key key) override;
+        mustuse glm::vec2 mouse_impl() override;
+        mustuse bool is_key_down_impl(Key key) override;
+        mustuse bool is_key_up_impl(Key key) override;
+        mustuse bool is_key_just_pressed_impl(Key key) override;
 
-        void SetMousePositionImpl(u32 x, u32 y) override;
-        void FlushImpl() override;
+        void set_mouse_impl(u32 x, u32 y) override;
+        void flush_impl() override;
 
     public:
         ~GlfwInput() override = default;

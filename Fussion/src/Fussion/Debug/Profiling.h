@@ -18,7 +18,7 @@ namespace Fussion
         bool m_enabled{false};
 
     public:
-        void BeginProfile(const String &fileName)
+        void begin_profile(const String &fileName)
         {
             m_enabled = true;
             m_profileStartTime = std::chrono::high_resolution_clock::now();
@@ -31,7 +31,7 @@ namespace Fussion
             m_file << "[\n";
         }
 
-        void Begin(const ProfileResult &result)
+        void begin(const ProfileResult &result)
         {
             if (!m_enabled || !m_file.is_open())
                 return;
@@ -48,7 +48,7 @@ namespace Fussion
             m_file.flush();
         }
 
-        void End(const ProfileResult &result)
+        void end(const ProfileResult &result)
         {
             if (!m_enabled || !m_file.is_open())
                 return;
@@ -65,7 +65,7 @@ namespace Fussion
             m_file.flush();
         }
 
-        void EndProfile()
+        void end_profile()
         {
             m_enabled = false;
             m_file << "]\n";
@@ -73,17 +73,17 @@ namespace Fussion
             m_file.close();
         }
 
-        void SetEnabled(bool value)
+        void set_enabled(bool value)
         {
             m_enabled = value;
         }
 
-        bool IsEnabled() const
+        bool is_enabled() const
         {
             return m_enabled;
         }
 
-        static Profiler &Get()
+        static Profiler &get()
         {
             return s_instance;
         }
@@ -98,13 +98,13 @@ namespace Fussion
         explicit TimeStamp(const char *name) : m_name(name)
         {
             m_start = std::chrono::high_resolution_clock::now();
-            Profiler::Get().Begin(ProfileResult{m_name, m_start});
+            Profiler::get().begin(ProfileResult{m_name, m_start});
         }
 
         ~TimeStamp()
         {
             auto end = std::chrono::high_resolution_clock::now();
-            Profiler::Get().End(ProfileResult{m_name, end});
+            Profiler::get().end(ProfileResult{m_name, end});
         }
     };
 } // namespace Fussion
@@ -118,8 +118,8 @@ namespace Fussion
 #ifdef FSN_ENABLE_PROFILING
     #define FSN_TOKEN_PASTE(x, y) x##y
     #define FSN_TOKEN_CAT(x, y) FSN_TOKEN_PASTE(x, y)
-    #define FSN_BEGIN_PROFILE(name) ::Fussion::Profiler::Get().BeginProfile(name)
-    #define FSN_END_PROFILE(name) ::Fussion::Profiler::Get().EndProfile(name)
+    #define FSN_BEGIN_PROFILE(name) ::Fussion::Profiler::get().begin_profile(name)
+    #define FSN_END_PROFILE(name) ::Fussion::Profiler::get().end_profile(name)
     #define FSN_PROFILE_SCOPE(ScopeName) ::Fussion::TimeStamp FSN_TOKEN_CAT(timeStamp, __LINE__)(ScopeName)
     #define FSN_PROFILE_FUNCTION() FSN_PROFILE_SCOPE(BUILTIN_FUNC_SIG)
 #else

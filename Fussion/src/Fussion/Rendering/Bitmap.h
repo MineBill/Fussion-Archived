@@ -14,17 +14,17 @@ namespace Fussion
                                   u32 secondColor = 0xFFFFFFFF);
         Bitmap(u32 width, u32 height);
 
-        void Resize(u32 width, u32 height);
-        void SetPixel(u32 x, u32 y, u32 value);
+        void resize(u32 width, u32 height);
+        void set_pixel(u32 x, u32 y, u32 value);
 
-        mustuse Ref<Texture> ToTexture() const;
+        mustuse Ref<Texture> to_texture() const;
 
-        mustuse u32 GetWidth() const
+        mustuse u32 width() const
         {
             return m_width;
         }
 
-        mustuse u32 GetHeight() const
+        mustuse u32 height() const
         {
             return m_height;
         }

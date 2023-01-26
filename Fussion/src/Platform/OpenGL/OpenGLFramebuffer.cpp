@@ -6,7 +6,7 @@ namespace Fussion
 {
     OpenGLFrameBuffer::OpenGLFrameBuffer(u32 width, u32 height)
     {
-        Resize(width, height);
+        resize(width, height);
     }
 
     OpenGLFrameBuffer::~OpenGLFrameBuffer()
@@ -14,7 +14,7 @@ namespace Fussion
         glDeleteFramebuffers(1, &m_id);
     }
 
-    void OpenGLFrameBuffer::Resize(u32 width, u32 height)
+    void OpenGLFrameBuffer::resize(u32 width, u32 height)
     {
         if (m_id) {
             glDeleteFramebuffers(1, &m_id);
@@ -41,13 +41,13 @@ namespace Fussion
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
-    void OpenGLFrameBuffer::Bind()
+    void OpenGLFrameBuffer::bind()
     {
         glBindFramebuffer(GL_FRAMEBUFFER, m_id);
         glViewport(0, 0, static_cast<i32>(m_width), static_cast<i32>(m_height));
     }
 
-    void OpenGLFrameBuffer::UnBind()
+    void OpenGLFrameBuffer::unbind()
     {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }

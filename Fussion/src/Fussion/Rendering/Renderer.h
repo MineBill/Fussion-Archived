@@ -11,22 +11,22 @@ namespace Fussion
         struct SceneData {
             glm::mat4 Projection{};
         };
-        static Ptr<SceneData> s_sceneData;
+        static Ptr<SceneData> s_scene_data;
 
-        static bool s_beganScene;
+        static bool s_began_scene;
 
     public:
-        static void Init();
+        static void init();
 
-        static void BeginScene(const Camera2D &camera);
-        static void EndScene();
+        static void begin_scene(const Camera2D &camera);
+        static void end_scene();
 
-        static void Submit(const Ref<VertexArray> &array, const Ref<Shader> &shader,
+        static void submit(const Ref<VertexArray> &array, const Ref<Shader> &shader,
                            const glm::mat4 &matrix = glm::mat4(1.0f));
 
-        inline static RendererAPI::API GetAPI()
+        inline static RendererAPI::API api()
         {
-            return RendererAPI::GetAPI();
+            return RendererAPI::api();
         }
     };
 } // namespace Fussion

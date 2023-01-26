@@ -15,44 +15,62 @@ namespace Fussion
         f32 m_min_clip{}, m_max_clip{};
         f32 m_screenWidth, m_screenHeight;
 
-        void UpdateProjectionMatrix();
-        void UpdateViewMatrix();
+        void update_projection_matrix();
+        void update_view_matrix();
 
     public:
         Camera2D(f32 width, f32 height, f32 minClip = -1.0f, f32 maxClip = 1.0f);
 
-        void Resize(f32 width, f32 height);
+        void resize(f32 width, f32 height);
 
-        void SetPosition(const glm::vec3 &position)
+        void set_position(const glm::vec3 &position)
         {
             m_position = position;
-            UpdateViewMatrix();
+            update_view_matrix();
         }
 
-        void SetRotation(f32 rotation)
+        void set_rotation(f32 rotation)
         {
             m_rotation = rotation;
-            UpdateViewMatrix();
+            update_view_matrix();
         }
 
-        void SetSize(f32 size)
+        void set_size(f32 size)
         {
             if (size <= 0.2f)
                 size = 0.2f;
 
             m_size = size;
-            UpdateProjectionMatrix();
-            UpdateViewMatrix();
+            update_projection_matrix();
+            update_view_matrix();
         }
 
-        mustuse f32 GetRotation() const { return m_rotation; }
-        mustuse f32 GetSize() const { return m_size; }
-        mustuse const glm::vec3 &GetPosition() const { return m_position; }
-        mustuse const glm::mat4 &GetProjection() const { return m_projectionMatrix; }
-        mustuse const glm::mat4 &GetView() const { return m_viewMatrix; }
-        mustuse glm::mat4 GetViewProjection() const { return m_projectionMatrix * glm::inverse(m_viewMatrix); }
+        mustuse f32 rotation() const
+        {
+            return m_rotation;
+        }
+        mustuse f32 size() const
+        {
+            return m_size;
+        }
+        mustuse const glm::vec3 &position() const
+        {
+            return m_position;
+        }
+        mustuse const glm::mat4 &projection() const
+        {
+            return m_projectionMatrix;
+        }
+        mustuse const glm::mat4 &view() const
+        {
+            return m_viewMatrix;
+        }
+        mustuse glm::mat4 view_projection() const
+        {
+            return m_projectionMatrix * glm::inverse(m_viewMatrix);
+        }
 
-        mustuse glm::vec2 ScreenToWorld(const glm::vec2 &screen);
-        mustuse glm::vec3 WorldToScreen(const glm::vec3 &world);
+        mustuse glm::vec2 screen_to_world(const glm::vec2 &screen);
+        mustuse glm::vec3 world_to_screen(const glm::vec3 &world);
     };
 } // namespace Fussion

@@ -14,26 +14,35 @@ namespace Fussion
 
     public:
         template<std::derived_from<Layer> T, typename... Args>
-        Ref<T> PushLayer(Args &&...args)
+        Ref<T> push_layer(Args &&...args)
         {
             auto layer = std::make_shared<T>(std::forward<Args>(args)...);
-            layer->OnLoad();
+            layer->on_load();
             m_layers.push_back(layer);
             return layer;
         }
 
         template<std::derived_from<Layer> T, typename... Args>
-        Ref<T> PushOverlay(Args &&...args)
+        Ref<T> push_overlay(Args &&...args)
         {
             auto layer = std::make_shared<T>(std::forward<Args>(args)...);
-            layer->OnLoad();
+            layer->on_load();
             m_layers.push_back(layer);
             return layer;
         }
 
-        mustuse const std::vector<Ref<Layer>> &GetOverlays() const { return m_overlays; }
+        mustuse const std::vector<Ref<Layer>> &overlays() const
+        {
+            return m_overlays;
+        }
 
-        auto begin() { return std::reverse_iterator(m_layers.end()); }
-        auto end() { return std::reverse_iterator(m_layers.begin()); }
+        auto begin()
+        {
+            return std::reverse_iterator(m_layers.end());
+        }
+        auto end()
+        {
+            return std::reverse_iterator(m_layers.begin());
+        }
     };
 } // namespace Fussion

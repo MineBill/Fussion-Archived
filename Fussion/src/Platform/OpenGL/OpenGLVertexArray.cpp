@@ -13,34 +13,34 @@ namespace Fussion
         glDeleteVertexArrays(1, &id);
     }
 
-    void OpenGLVertexArray::Use() const
+    void OpenGLVertexArray::bind() const
     {
         glBindVertexArray(id);
     }
 
-    void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer> &vertexBuffer)
+    void OpenGLVertexArray::add_vertex_buffer(const Ref<VertexBuffer> &vertexBuffer)
     {
-        FSN_CORE_ASSERT(!vertexBuffer->GetLayout().GetAttributes().empty(), "")
+        FSN_CORE_ASSERT(!vertexBuffer->layout().attributes().empty(), "")
 
         glBindVertexArray(id);
         m_vertexBuffers.push_back(vertexBuffer);
 
-        auto layout = vertexBuffer->GetLayout();
-        for (u32 i = 0; const auto &attribute : layout.GetAttributes()) {
+        auto layout = vertexBuffer->layout();
+        for (u32 i = 0; const auto &attribute : layout.attributes()) {
             glEnableVertexAttribArray(i);
-            glVertexAttribPointer(i, attribute.Count, GL_FLOAT, GL_FALSE, layout.GetStride(),
+            glVertexAttribPointer(i, attribute.Count, GL_FLOAT, GL_FALSE, layout.stride(),
                                   reinterpret_cast<const void *>(static_cast<intptr_t>(attribute.Offset))); // NOLINT
             i++;
         }
     }
 
-    void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer> &indexBuffer)
+    void OpenGLVertexArray::set_index_buffer(const Ref<IndexBuffer> &indexBuffer)
     {
         m_indexBuffer = indexBuffer;
     }
 
-    mustuse u32 OpenGLVertexArray::Count() const
+    mustuse u32 OpenGLVertexArray::count() const
     {
-        return m_indexBuffer->Count();
+        return m_indexBuffer->count();
     }
 } // namespace Fussion

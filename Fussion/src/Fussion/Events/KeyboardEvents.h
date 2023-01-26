@@ -16,12 +16,12 @@ namespace Fussion
         {
         }
 
-        mustuse Key GetKey() const
+        mustuse Key key() const
         {
             return m_key;
         }
 
-        mustuse String ToString() const override
+        mustuse String to_string() const override
         {
             return fmt::format("OnKeyDown({})", static_cast<i32>(m_key));
         }
@@ -38,12 +38,12 @@ namespace Fussion
         {
         }
 
-        mustuse Key GetKey() const
+        mustuse Key key() const
         {
             return m_key;
         }
 
-        mustuse String ToString() const override
+        mustuse String to_string() const override
         {
             return fmt::format("OnKeyPressed({})", static_cast<i32>(m_key));
         }
@@ -60,12 +60,12 @@ namespace Fussion
         {
         }
 
-        mustuse Key GetKey() const
+        mustuse Key key() const
         {
             return m_key;
         }
 
-        mustuse String ToString() const override
+        mustuse String to_string() const override
         {
             return fmt::format("OnKeyReleased({})", static_cast<i32>(m_key));
         }

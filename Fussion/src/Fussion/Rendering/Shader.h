@@ -18,18 +18,18 @@ namespace Fussion
         static Ref<Shader> LoadFromFile(const fs::path &shaderPath);
         static Ref<Shader> FromStringLiterals(const StringView &vertex_source, const StringView &fragment_source);
 
-        virtual void Use() const = 0;
+        virtual void bind() const = 0;
 
-        virtual void SetUniform(const StringView &name, f32 value) = 0;
-        virtual void SetUniform(const StringView &name, f64 value) = 0;
-        virtual void SetUniform(const StringView &name, i32 value) = 0;
-        virtual void SetUniform(const StringView &name, u32 value) = 0;
-        virtual void SetUniform(const StringView &name, Vector3 value) = 0;
-        virtual void SetUniform(const StringView &name, Matrix4 value) = 0;
-        virtual void SetUniform(const StringView &name, const glm::mat4 &value) = 0;
-        virtual void SetUniform(const StringView &name, const glm::vec4 &value) = 0;
+        virtual void set_uniform(const StringView &name, f32 value) = 0;
+        virtual void set_uniform(const StringView &name, f64 value) = 0;
+        virtual void set_uniform(const StringView &name, i32 value) = 0;
+        virtual void set_uniform(const StringView &name, u32 value) = 0;
+        virtual void set_uniform(const StringView &name, Vector3 value) = 0;
+        virtual void set_uniform(const StringView &name, Matrix4 value) = 0;
+        virtual void set_uniform(const StringView &name, const glm::mat4 &value) = 0;
+        virtual void set_uniform(const StringView &name, const glm::vec4 &value) = 0;
 
-        virtual void SetArray(StringView name, i32 *array, i32 count) = 0;
+        virtual void set_array(StringView name, i32 *array, i32 count) = 0;
     };
 
 } // namespace Fussion

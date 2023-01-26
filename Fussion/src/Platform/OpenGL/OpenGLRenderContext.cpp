@@ -12,7 +12,7 @@
 
 Fussion::OpenGLRenderContext::OpenGLRenderContext(GLFWwindow *windowHandle) : m_windowHandle(windowHandle) {}
 
-void Fussion::OpenGLRenderContext::Init()
+void Fussion::OpenGLRenderContext::init()
 {
     glfwMakeContextCurrent(m_windowHandle);
     auto status = gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
@@ -24,7 +24,7 @@ void Fussion::OpenGLRenderContext::Init()
     FSN_CORE_LOG("   OpenGL Version : {}", TO_STRING_VIEW(glGetString(GL_VERSION)));
 }
 
-void Fussion::OpenGLRenderContext::SwapBuffers()
+void Fussion::OpenGLRenderContext::swap_buffers()
 {
     glfwSwapBuffers(m_windowHandle);
 }

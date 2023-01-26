@@ -7,15 +7,15 @@ namespace Fussion
     class ImGuiLayer : public Fussion::Layer
     {
     public:
-        void OnLoad() override;
+        void on_load() override;
 
-        void OnUpdate(f32 elapsed) override;
+        void on_update(f32 elapsed) override;
 
-        bool OnEvent(Fussion::Event &event) override;
+        bool on_event(Fussion::Event &event) override;
 
-        static void BeginFrame(f32 elapsed);
+        static void begin_frame(f32 elapsed);
 
-        void EndFrame();
+        void end_frame();
     };
 
 } // namespace Fussion

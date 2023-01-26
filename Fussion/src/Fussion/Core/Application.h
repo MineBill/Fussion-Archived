@@ -13,43 +13,43 @@ namespace Fussion
         static Application *s_instance;
 
         Ptr<Window> m_window{};
-        Ref<ImGuiLayer> m_imguiLayer{};
+        Ref<ImGuiLayer> m_imgui_layer{};
         bool m_running{true};
 
-        LayerStack m_layerStack{};
+        LayerStack m_layer_stack{};
 
-        void HandleEvent(Ptr<Event> event);
+        void handle_event(Ptr<Event> event);
 
     protected:
-        virtual void OnLoad() {}
+        virtual void on_load() {}
 
-        virtual void OnUpdate(float) {}
+        virtual void on_update(float) {}
 
-        virtual void OnEvent(Event &) {}
+        virtual void on_event(Event &) {}
 
-        virtual void OnShutdown() {}
+        virtual void on_shutdown() {}
 
     public:
         explicit Application(const WindowProps &props);
         virtual ~Application() = default;
 
-        static Application &Get();
+        static Application &get();
 
-        void Run();
-        void Quit();
+        void run();
+        void quit();
 
         template<std::derived_from<Layer> T, typename... Args>
-        [[maybe_unused]] Ref<T> PushLayer(Args &&...args)
+        [[maybe_unused]] Ref<T> push_layer(Args &&...args)
         {
-            return m_layerStack.PushLayer<T>(std::forward<Args>(args)...);
+            return m_layer_stack.push_layer<T>(std::forward<Args>(args)...);
         }
 
         template<std::derived_from<Layer> T, typename... Args>
-        [[maybe_unused]] Ref<T> PushOverlay(Args &&...args)
+        [[maybe_unused]] Ref<T> push_overlay(Args &&...args)
         {
-            return m_layerStack.PushOverlay<T>(std::forward<Args>(args)...);
+            return m_layer_stack.push_overlay<T>(std::forward<Args>(args)...);
         }
 
-        mustuse Window &GetWindow();
+        mustuse Window &window();
     };
 } // namespace Fussion

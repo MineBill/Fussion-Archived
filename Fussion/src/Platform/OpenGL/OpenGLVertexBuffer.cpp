@@ -47,29 +47,29 @@ namespace Fussion
         glDeleteBuffers(1, &m_id);
     }
 
-    void OpenGLVertexBuffer::Use() const
+    void OpenGLVertexBuffer::bind() const
     {
         glBindBuffer(GL_ARRAY_BUFFER, m_id);
     }
 
-    void OpenGLVertexBuffer::Resize(i32 new_size)
+    void OpenGLVertexBuffer::resize(i32 new_size)
     {
-        Use();
+        bind();
         glBufferData(GL_ARRAY_BUFFER, new_size, nullptr, GL_DYNAMIC_DRAW);
     }
 
-    void OpenGLVertexBuffer::UpdateSubDataRawPtr(i32 offset, const void *data, i32 size)
+    void OpenGLVertexBuffer::update_sub_data(i32 offset, const void *data, i32 size)
     {
-        Use();
+        bind();
         glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
     }
 
-    void OpenGLVertexBuffer::SetLayout(const AttributeLayout &layout)
+    void OpenGLVertexBuffer::set_layout(const AttributeLayout &layout)
     {
         m_layout = layout;
     }
 
-    const AttributeLayout &OpenGLVertexBuffer::GetLayout() const
+    const AttributeLayout &OpenGLVertexBuffer::layout() const
     {
         FSN_CORE_ASSERT(m_layout.has_value(), "Layout is not set already");
         return *m_layout;

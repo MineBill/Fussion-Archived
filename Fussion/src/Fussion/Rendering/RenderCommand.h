@@ -8,16 +8,28 @@ namespace Fussion
         static RendererAPI *s_api;
 
     public:
-        inline static void Init() { s_api->Init(); }
-        inline static void SetClearColor(glm::vec3 color) { s_api->SetClearColor(color); }
-
-        inline static void Clear() { s_api->Clear(); }
-
-        inline static void ResizeViewport(i32 x, i32 y, i32 width, i32 height)
+        inline static void inti()
         {
-            s_api->ResizeViewport(x, y, width, height);
+            s_api->init();
+        }
+        inline static void set_clear_color(glm::vec3 color)
+        {
+            s_api->set_clear_color(color);
         }
 
-        inline static void DrawIndexed(const Ref<VertexArray> &array, u32 count = 0) { s_api->DrawIndexed(array, count); }
+        inline static void clear()
+        {
+            s_api->clear();
+        }
+
+        inline static void resize_viewport(i32 x, i32 y, i32 width, i32 height)
+        {
+            s_api->resize_viewport(x, y, width, height);
+        }
+
+        inline static void draw_indexed(const Ref<VertexArray> &array, u32 count = 0)
+        {
+            s_api->draw_indexed(array, count);
+        }
     };
 } // namespace Fussion

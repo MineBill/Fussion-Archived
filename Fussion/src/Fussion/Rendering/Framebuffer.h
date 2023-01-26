@@ -9,12 +9,12 @@ namespace Fussion
 
         static Ref<Framebuffer> WithSize(u32 width, u32 height);
 
-        virtual void Resize(u32 width, u32 height) = 0;
+        virtual void resize(u32 width, u32 height) = 0;
 
-        virtual void Bind() = 0;
-        virtual void UnBind() = 0;
+        virtual void bind() = 0;
+        virtual void unbind() = 0;
 
-        virtual u32 GetRendererHandle() const = 0;
-        virtual u32 GetColorAttachment() const = 0;
+        mustuse virtual u32 renderer_handle() const = 0;
+        mustuse virtual u32 color_attachment() const = 0;
     };
 } // namespace Fussion

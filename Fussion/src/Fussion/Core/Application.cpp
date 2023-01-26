@@ -25,11 +25,11 @@ Application::Application(const WindowProps &props)
     Log::Init();
 
     m_window = Window::Create(props);
-    m_window->SetVSync(false);
+    m_window->set_vsync(false);
 
-    Renderer::Init();
+    Renderer::init();
 
-    m_imguiLayer = PushOverlay<ImGuiLayer>();
+    m_imgui_layer = push_overlay<ImGuiLayer>();
 
     glDebugMessageCallback(
         [](u32, u32, u32, u32, i32, const char *message, const void *) {
@@ -39,71 +39,71 @@ Application::Application(const WindowProps &props)
         nullptr);
 }
 
-void Application::Run()
+void Application::run()
 {
     FSN_PROFILE_FUNCTION();
-    m_window->SetEventCallback([this](auto &&PH1) { HandleEvent(std::forward<decltype(PH1)>(PH1)); });
+    m_window->set_event_callback([this](auto &&PH1) { handle_event(std::forward<decltype(PH1)>(PH1)); });
 
-    OnLoad();
+    on_load();
 
     auto previousClock = std::chrono::steady_clock::now();
-    while (!m_window->ShouldClose()) {
+    while (!m_window->should_close()) {
         FSN_PROFILE_SCOPE("Main Loop");
         auto now = std::chrono::steady_clock::now();
         std::chrono::duration<f32> elapsed_duration = now - previousClock;
         previousClock = now;
         f32 elapsed = elapsed_duration.count();
 
-        m_imguiLayer->BeginFrame(elapsed);
-        m_window->PollEvents();
+        m_imgui_layer->begin_frame(elapsed);
+        m_window->poll_events();
 
-        for (const auto &overlay : m_layerStack.GetOverlays() | std::views::reverse) {
-            overlay->OnUpdate(elapsed);
+        for (const auto &overlay : m_layer_stack.overlays() | std::views::reverse) {
+            overlay->on_update(elapsed);
         }
-        for (const auto &layer : m_layerStack) {
-            layer->OnUpdate(elapsed);
+        for (const auto &layer : m_layer_stack) {
+            layer->on_update(elapsed);
         }
 
-        OnUpdate(elapsed);
-        m_imguiLayer->EndFrame();
+        on_update(elapsed);
+        m_imgui_layer->end_frame();
 
-        m_window->SwapBuffers();
-        Input::Flush();
+        m_window->swap_buffers();
+        Input::flush();
     }
 
-    OnShutdown();
+    on_shutdown();
 }
 
-void Application::HandleEvent(Ptr<Event> event)
+void Application::handle_event(Ptr<Event> event)
 {
-    OnEvent(*event.get());
+    on_event(*event.get());
 
     bool broke = false;
-    for (const auto &overlay : m_layerStack.GetOverlays() | std::views::reverse) {
-        if (overlay->OnEvent(*event.get())) {
+    for (const auto &overlay : m_layer_stack.overlays() | std::views::reverse) {
+        if (overlay->on_event(*event.get())) {
             broke = true;
             break;
         }
     }
     if (!broke) {
-        for (const auto &layer : m_layerStack) {
-            if (layer->OnEvent(*event.get()))
+        for (const auto &layer : m_layer_stack) {
+            if (layer->on_event(*event.get()))
                 break;
         }
     }
 }
 
-void Application::Quit()
+void Application::quit()
 {
-    m_window->SetShouldClose(true);
+    m_window->set_should_close(true);
 }
 
-Application &Application::Get()
+Application &Application::get()
 {
     return *s_instance;
 }
 
-Window &Application::GetWindow()
+Window &Application::window()
 {
     FSN_CORE_ASSERT(m_window != nullptr);
     return *m_window.get();

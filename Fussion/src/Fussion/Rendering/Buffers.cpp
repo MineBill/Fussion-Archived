@@ -11,11 +11,11 @@ namespace Fussion
 
     Ref<VertexBuffer> VertexBuffer::Create(std::initializer_list<f32> vertices)
     {
-        switch (Renderer::GetAPI()) {
+        switch (Renderer::api()) {
         case RendererAPI::API::None:
             FSN_CORE_ASSERT(false, "RenderAPI None is not supported");
         case RendererAPI::API::OpenGL:
-            return CreateRef<OpenGLVertexBuffer>(vertices);
+            return make_ref<OpenGLVertexBuffer>(vertices);
         }
 
         FSN_CORE_ASSERT(false, "Reached unreachable(huh) code");
@@ -24,11 +24,11 @@ namespace Fussion
 
     Ref<VertexBuffer> VertexBuffer::WithSize(i32 size)
     {
-        switch (Renderer::GetAPI()) {
+        switch (Renderer::api()) {
         case RendererAPI::API::None:
             FSN_CORE_ASSERT(false, "RenderAPI None is not supported");
         case RendererAPI::API::OpenGL:
-            return CreateRef<OpenGLVertexBuffer>(size);
+            return make_ref<OpenGLVertexBuffer>(size);
         }
 
         FSN_CORE_ASSERT(false, "Reached unreachable(huh) code");
@@ -37,11 +37,11 @@ namespace Fussion
 
     Ref<IndexBuffer> IndexBuffer::Create(std::initializer_list<u32> indices)
     {
-        switch (Renderer::GetAPI()) {
+        switch (Renderer::api()) {
         case RendererAPI::API::None:
             FSN_CORE_ASSERT(false, "RenderAPI None is not supported");
         case RendererAPI::API::OpenGL:
-            return CreateRef<OpenGLIndexBuffer>(indices);
+            return make_ref<OpenGLIndexBuffer>(indices);
         }
 
         FSN_CORE_ASSERT(false, "Reached unreachable(huh) code");
@@ -50,11 +50,11 @@ namespace Fussion
 
     Ref<IndexBuffer> IndexBuffer::FromSpan(std::span<u32> indices)
     {
-        switch (Renderer::GetAPI()) {
+        switch (Renderer::api()) {
         case RendererAPI::API::None:
             FSN_CORE_ASSERT(false, "RenderAPI None is not supported");
         case RendererAPI::API::OpenGL:
-            return CreateRef<OpenGLIndexBuffer>(indices);
+            return make_ref<OpenGLIndexBuffer>(indices);
         }
 
         FSN_CORE_ASSERT(false, "Reached unreachable(huh) code");
@@ -63,11 +63,11 @@ namespace Fussion
 
     Ref<IndexBuffer> IndexBuffer::WithCount(u32 count)
     {
-        switch (Renderer::GetAPI()) {
+        switch (Renderer::api()) {
         case RendererAPI::API::None:
             FSN_CORE_ASSERT(false, "RenderAPI None is not supported");
         case RendererAPI::API::OpenGL:
-            return CreateRef<OpenGLIndexBuffer>(count);
+            return make_ref<OpenGLIndexBuffer>(count);
         }
 
         FSN_CORE_ASSERT(false, "Reached unreachable(huh) code");

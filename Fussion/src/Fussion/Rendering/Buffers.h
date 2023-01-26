@@ -16,7 +16,7 @@ namespace Fussion
         Mat4,
     };
 
-    static i32 VertexElementTypeSize(VertexElementType type)
+    static i32 vertex_element_type_size(VertexElementType type)
     {
         using enum VertexElementType;
         // clang-format off
@@ -35,7 +35,7 @@ namespace Fussion
         // clang-format on
     }
 
-    static i32 VertexElementTypeCount(VertexElementType type)
+    static i32 vertex_element_type_count(VertexElementType type)
     {
         using enum VertexElementType;
         // clang-format off
@@ -62,7 +62,8 @@ namespace Fussion
         i32 Offset;
 
         Attribute(VertexElementType type, StringView name)
-            : Type(type), Name(name), Size(VertexElementTypeSize(type)), Count(VertexElementTypeCount(type)), Offset(0)
+            : Type(type), Name(name), Size(vertex_element_type_size(type)), Count(vertex_element_type_count(type)),
+              Offset(0)
         {
         }
     };
@@ -72,7 +73,7 @@ namespace Fussion
         std::vector<Attribute> m_attributes{};
         i32 m_stride{0};
 
-        void CalculateOffsetAndString()
+        void calculate_offset_and_stride()
         {
             for (auto &attribute : m_attributes) {
                 attribute.Offset = m_stride;
@@ -83,15 +84,15 @@ namespace Fussion
     public:
         AttributeLayout(const std::initializer_list<Attribute> &attributes) : m_attributes(attributes)
         {
-            CalculateOffsetAndString();
+            calculate_offset_and_stride();
         }
 
-        mustuse inline i32 GetStride() const
+        mustuse inline i32 stride() const
         {
             return m_stride;
         }
 
-        mustuse inline const std::vector<Attribute> &GetAttributes() const
+        mustuse inline const std::vector<Attribute> &attributes() const
         {
             return m_attributes;
         }
@@ -104,12 +105,12 @@ namespace Fussion
         static Ref<VertexBuffer> WithSize(i32 size);
         virtual ~VertexBuffer() = default;
 
-        virtual void Use() const = 0;
-        virtual void Resize(i32 newSize) = 0;
-        virtual void UpdateSubDataRawPtr(i32 offset, const void *data, i32 size) = 0;
+        virtual void bind() const = 0;
+        virtual void resize(i32 newSize) = 0;
+        virtual void update_sub_data(i32 offset, const void *data, i32 size) = 0;
 
-        virtual void SetLayout(const AttributeLayout &layout) = 0;
-        mustuse virtual const AttributeLayout &GetLayout() const = 0;
+        virtual void set_layout(const AttributeLayout &layout) = 0;
+        mustuse virtual const AttributeLayout &layout() const = 0;
     };
 
     class IndexBuffer
@@ -120,10 +121,10 @@ namespace Fussion
         static Ref<IndexBuffer> WithCount(u32 count);
         virtual ~IndexBuffer() = default;
 
-        virtual void Use() const = 0;
-        virtual void Resize(i32 newSize) = 0;
-        virtual void UpdateSubDataRawPtr(i32 offset, const void *data, i32 size) = 0;
+        virtual void bind() const = 0;
+        virtual void resize(i32 newSize) = 0;
+        virtual void update_sub_data(i32 offset, const void *data, i32 size) = 0;
 
-        mustuse virtual u32 Count() const = 0;
+        mustuse virtual u32 count() const = 0;
     };
 } // namespace Fussion

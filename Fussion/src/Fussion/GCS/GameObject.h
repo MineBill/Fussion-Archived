@@ -7,23 +7,23 @@
 
 namespace Fussion
 {
-    constexpr u32 MaxCompnents = 32;
+    constexpr u32 MAX_COMPONENTS = 32;
 
     class Registry;
 
     using GameObjectID = std::size_t;
     using ComponentID = std::size_t;
 
-    static ComponentID GetNewComponentID()
+    static ComponentID generate_new_component_id()
     {
         static ComponentID Last = 0;
         return Last++;
     }
 
     template<std::derived_from<Component> T>
-    static ComponentID GetUniqueComponentID()
+    static ComponentID get_component_id()
     {
-        static ComponentID Last = GetNewComponentID();
+        static ComponentID Last = generate_new_component_id();
         return Last++;
     }
 
@@ -31,14 +31,14 @@ namespace Fussion
     {
         friend Registry;
 
-        using ComponentArray = std::array<Ptr<Component>, MaxCompnents>;
-        using ComponentBitset = std::bitset<MaxCompnents>;
+        using ComponentArray = std::array<Ptr<Component>, MAX_COMPONENTS>;
+        using ComponentBitset = std::bitset<MAX_COMPONENTS>;
 
         String m_name{};
         GameObjectID m_id{};
 
-        ComponentArray m_componentArray{};
-        ComponentBitset m_componentBitset{};
+        ComponentArray m_component_array{};
+        ComponentBitset m_component_bitset{};
         std::vector<Component *> m_components{};
 
         std::vector<Ref<GameObject>> m_children{};
@@ -46,100 +46,100 @@ namespace Fussion
         Ref<Transform> m_transform;
 
     protected:
-        void Initialize();
-        void Update(f32);
-        void OnEvent(Event &);
+        void initialize();
+        void update(f32);
+        void on_event(Event &);
 
     public:
-        void AddChild(const Ref<GameObject> &child);
-        void RemoveChild(const Ref<GameObject> &child);
+        void add_child(const Ref<GameObject> &child);
+        void remove_child(const Ref<GameObject> &child);
 
         template<std::derived_from<Component> T, typename... Args>
-        void AddComponent(Args &&...args)
+        void add_component(Args &&...args)
         {
-            auto t = CreatePtr<T>(std::forward<Args>(args)...);
+            auto t = make_ptr<T>(std::forward<Args>(args)...);
 
-            auto id = GetUniqueComponentID<T>();
-            m_componentBitset.set(id);
+            auto id = get_component_id<T>();
+            m_component_bitset.set(id);
             m_components.push_back(t.get());
-            m_componentArray[id] = std::move(t);
+            m_component_array[id] = std::move(t);
         }
 
         template<std::derived_from<Component> T>
-        mustuse Ptr<T> &GetComponent()
+        mustuse Ptr<T> &get_component()
         {
-            auto id = GetUniqueComponentID<T>();
-            if (m_componentBitset[id]) {
+            auto id = get_component_id<T>();
+            if (m_component_bitset[id]) {
                 return nullptr;
             }
 
-            return m_componentArray[id];
+            return m_component_array[id];
         }
 
         template<std::derived_from<Component> T>
-        void RemoveComponent()
+        void remove_component()
         {
-            auto id = GetUniqueComponentID<T>();
-            if (!m_componentBitset[id]) {
+            auto id = get_component_id<T>();
+            if (!m_component_bitset[id]) {
                 return;
             }
 
-            auto component = m_componentArray[id];
+            auto component = m_component_array[id];
             std::remove(m_components, component);
-            m_componentArray[id] = nullptr;
+            m_component_array[id] = nullptr;
         }
 
-        mustuse const std::vector<Component *> &GetAllComponents() const
+        mustuse const std::vector<Component *> &get_all_components() const
         {
             return m_components;
         }
 
-        mustuse std::vector<Component *> &GetAllComponents()
+        mustuse std::vector<Component *> &get_all_components()
         {
             return m_components;
         }
 
         template<std::derived_from<Component> T>
-        bool HasComponent()
+        bool has_components()
         {
-            return m_componentBitset[GetUniqueComponentID<T>()];
+            return m_component_bitset[get_component_id<T>()];
         }
 
-        bool Equals(const GameObject &other) const
+        bool equals(const GameObject &other) const
         {
             return m_id == other.m_id;
         }
 
-        mustuse Ref<Transform> &GetTransform()
+        mustuse Ref<Transform> &transform()
         {
             return m_transform;
         }
 
-        mustuse const std::vector<Ref<GameObject>> GetChildren() const
+        mustuse const std::vector<Ref<GameObject>> children() const
         {
             return m_children;
         }
 
-        void SetParent(const Ref<GameObject> &go)
+        void set_parent(const Ref<GameObject> &go)
         {
             if (m_parent) {
                 // TODO: NOTIFY PARENT
-                m_parent->RemoveChild(shared_from_this());
+                m_parent->remove_child(shared_from_this());
             }
             m_parent = go;
         }
 
-        mustuse Ref<GameObject> &GetParent()
+        mustuse Ref<GameObject> &parent()
         {
             return m_parent;
         }
 
-        mustuse const String &GetName() const
+        mustuse const String &name() const
         {
             return m_name;
         }
 
-        mustuse GameObjectID GetID() const
+        mustuse GameObjectID id() const
         {
             return m_id;
         }

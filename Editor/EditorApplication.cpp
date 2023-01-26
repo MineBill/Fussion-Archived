@@ -3,18 +3,18 @@
 
 namespace Editor
 {
-    void EditorApplication::OnLoad()
+    void EditorApplication::on_load()
     {
         FSN_PROFILE_FUNCTION();
-        PushLayer<EditorLayer>();
+        push_layer<EditorLayer>();
     }
 
-    void EditorApplication::OnUpdate(f32)
+    void EditorApplication::on_update(f32)
     {
         FSN_PROFILE_FUNCTION();
     }
 
-    void EditorApplication::OnEvent(Fussion::Event &)
+    void EditorApplication::on_event(Fussion::Event &)
     {
 
         FSN_PROFILE_FUNCTION();

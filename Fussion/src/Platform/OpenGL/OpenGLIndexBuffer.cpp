@@ -35,24 +35,24 @@ namespace Fussion
         glDeleteBuffers(1, &m_id);
     }
 
-    void OpenGLIndexBuffer::Use() const
+    void OpenGLIndexBuffer::bind() const
     {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_id);
     }
 
-    void OpenGLIndexBuffer::Resize(i32 new_size)
+    void OpenGLIndexBuffer::resize(i32 new_size)
     {
-        Use();
+        bind();
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, new_size, nullptr, GL_DYNAMIC_DRAW);
     }
 
-    void OpenGLIndexBuffer::UpdateSubDataRawPtr(i32 offset, const void *data, i32 size)
+    void OpenGLIndexBuffer::update_sub_data(i32 offset, const void *data, i32 size)
     {
-        Use();
+        bind();
         glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, size, data);
     }
 
-    u32 OpenGLIndexBuffer::Count() const
+    u32 OpenGLIndexBuffer::count() const
     {
         return m_count;
     }

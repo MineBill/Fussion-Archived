@@ -20,25 +20,25 @@ namespace Fussion
         {
         }
 
-        mustuse f64 X() const
+        mustuse f64 x() const
         {
             return m_x;
         }
-        mustuse f64 Y() const
+        mustuse f64 y() const
         {
             return m_y;
         }
 
-        mustuse f64 RelX() const
+        mustuse f64 rel_x() const
         {
             return m_rel_x;
         }
-        mustuse f64 RelY() const
+        mustuse f64 rel_y() const
         {
             return m_rel_y;
         }
 
-        mustuse String ToString() const override
+        mustuse String to_string() const override
         {
             return fmt::format("MouseMoved(x: {}, y: {})", m_x, m_y);
         }
@@ -66,12 +66,12 @@ namespace Fussion
         {
         }
 
-        mustuse MouseButton GetButton() const
+        mustuse MouseButton button() const
         {
             return m_button;
         }
 
-        mustuse String ToString() const override
+        mustuse String to_string() const override
         {
             return fmt::format("MouseButtonPressed({})", static_cast<i32>(m_button));
         }
@@ -79,22 +79,22 @@ namespace Fussion
 
     class MouseButtonReleased : public Event
     {
-        MouseButton button{};
+        MouseButton m_button{};
 
     public:
         EVENT(MouseButtonReleased)
-        explicit MouseButtonReleased(MouseButton b) : button(b)
+        explicit MouseButtonReleased(MouseButton b) : m_button(b)
         {
         }
 
-        mustuse MouseButton Button() const
+        mustuse MouseButton button() const
         {
-            return button;
+            return m_button;
         }
 
-        mustuse String ToString() const override
+        mustuse String to_string() const override
         {
-            return fmt::format("MouseButtonReleased({})", static_cast<i32>(button));
+            return fmt::format("MouseButtonReleased({})", static_cast<i32>(m_button));
         }
     };
 
@@ -108,12 +108,12 @@ namespace Fussion
         {
         }
 
-        mustuse MouseButton Button() const
+        mustuse MouseButton button() const
         {
             return m_button;
         }
 
-        mustuse String ToString() const override
+        mustuse String to_string() const override
         {
             return fmt::format("MouseButtonDown({})", static_cast<i32>(m_button));
         }
@@ -130,12 +130,12 @@ namespace Fussion
         {
         }
 
-        mustuse std::pair<float, float> Offset() const
+        mustuse std::pair<float, float> offset() const
         {
             return {m_x_offset, m_y_offset};
         }
 
-        mustuse String ToString() const override
+        mustuse String to_string() const override
         {
             return fmt::format("MouseWheelMoved(x_offset: {}, y_offset: {})", m_x_offset, m_y_offset);
         }

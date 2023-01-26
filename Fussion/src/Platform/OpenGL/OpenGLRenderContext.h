@@ -11,8 +11,8 @@ namespace Fussion
 
     public:
         explicit OpenGLRenderContext(GLFWwindow *windowHandle);
-        void Init() override;
+        void init() override;
 
-        void SwapBuffers() override;
+        void swap_buffers() override;
     };
 } // namespace Fussion

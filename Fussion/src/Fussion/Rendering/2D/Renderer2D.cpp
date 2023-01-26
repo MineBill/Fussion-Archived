@@ -39,7 +39,7 @@ namespace Fussion::Renderer2D
 
     static RendererData s_data;
 
-    void Init()
+    void init()
     {
         u8 pixels[3] = {0xff, 0xff, 0xff};
         s_data.WhiteTexture = Texture::FromPixels(pixels, 1, 1, 3);
@@ -51,10 +51,10 @@ namespace Fussion::Renderer2D
         for (u32 i = 0; i < MaxTextureSlots; i++)
             textures[i] = static_cast<i32>(i);
 
-        s_data.TextureShader->SetArray("u_Textures", textures, MaxTextureSlots);
+        s_data.TextureShader->set_array("u_Textures", textures, MaxTextureSlots);
 
         s_data.QuadVertexArray = VertexArray::Create();
-        s_data.QuadVertexArray->Use();
+        s_data.QuadVertexArray->bind();
 
         Fussion::AttributeLayout layout = {
             {Fussion::VertexElementType::Float3, "a_Position"},
@@ -64,7 +64,7 @@ namespace Fussion::Renderer2D
         };
 
         s_data.QuadVertexBuffer = VertexBuffer::WithSize(MaxVertices * sizeof(Vertex));
-        s_data.QuadVertexBuffer->SetLayout(layout);
+        s_data.QuadVertexBuffer->set_layout(layout);
         s_data.VertexBufferDataBase = new Vertex[MaxVertices];
         s_data.VertexBufferDataPtr = s_data.VertexBufferDataBase;
 
@@ -84,44 +84,44 @@ namespace Fussion::Renderer2D
         }
 
         auto ib = IndexBuffer::FromSpan({indices, MaxIndices});
-        s_data.QuadVertexArray->SetIndexBuffer(ib);
+        s_data.QuadVertexArray->set_index_buffer(ib);
         delete[] indices;
 
-        s_data.QuadVertexArray->AddVertexBuffer(s_data.QuadVertexBuffer);
+        s_data.QuadVertexArray->add_vertex_buffer(s_data.QuadVertexBuffer);
     }
 
-    void Shutdown()
+    void shutdown()
     {
         delete[] s_data.VertexBufferDataBase;
     }
 
-    void BeginScene(const Camera2D &camera)
+    void begin_scene(const Camera2D &camera)
     {
-        s_data.TextureShader->Use();
-        s_data.TextureShader->SetUniform("u_ViewProjection", camera.GetViewProjection());
+        s_data.TextureShader->bind();
+        s_data.TextureShader->set_uniform("u_ViewProjection", camera.view_projection());
 
-        StartBatch();
+        start_batch();
     }
 
-    void EndScene()
+    void end_scene()
     {
-        Flush();
+        flush();
     }
 
-    void Flush()
+    void flush()
     {
         FSN_PROFILE_FUNCTION();
         for (u32 i = 0; i < s_data.CurrentTextureIndex; i++) {
-            s_data.TextureSlots[i]->Use(i);
+            s_data.TextureSlots[i]->bind(i);
         }
         auto size = reinterpret_cast<uint8_t *>(s_data.VertexBufferDataPtr) -
                     reinterpret_cast<uint8_t *>(s_data.VertexBufferDataBase);
-        s_data.QuadVertexBuffer->UpdateSubDataRawPtr(0, s_data.VertexBufferDataBase, static_cast<i32>(size));
+        s_data.QuadVertexBuffer->update_sub_data(0, s_data.VertexBufferDataBase, static_cast<i32>(size));
 
-        RenderCommand::DrawIndexed(s_data.QuadVertexArray, s_data.IndexBufferCount);
+        RenderCommand::draw_indexed(s_data.QuadVertexArray, s_data.IndexBufferCount);
     }
 
-    void StartBatch()
+    void start_batch()
     {
         s_data.IndexBufferCount = 0;
         s_data.VertexBufferDataPtr = s_data.VertexBufferDataBase;
@@ -130,27 +130,27 @@ namespace Fussion::Renderer2D
         s_data.Stats.Drawcalls++;
     }
 
-    void DrawQuad(const Ref<Texture> &texture, const glm::vec3 &position, const glm::vec3 &scale,
+    void draw_quad(const Ref<Texture> &texture, const glm::vec3 &position, const glm::vec3 &scale,
                   const glm::vec2 &uvScale)
     {
         FSN_PROFILE_FUNCTION();
 
         if (s_data.IndexBufferCount >= MaxIndices) {
-            EndScene();
-            StartBatch();
+            end_scene();
+            start_batch();
         }
 
         // Check if texture is already used
         f32 textureIndex = 0.0f;
         for (u32 i = 1; i < s_data.CurrentTextureIndex; i++) {
-            if (s_data.TextureSlots[i]->Handle() == texture->Handle()) {
+            if (s_data.TextureSlots[i]->renderer_handle() == texture->renderer_handle()) {
                 textureIndex = static_cast<f32>(i);
             }
         }
 
         if (textureIndex == 0.0f) {
             if (s_data.CurrentTextureIndex >= MaxTextureSlots) {
-                FSN_CORE_ERR("Cannot use more texture slots. Max is: {}", MaxTextureSlots);
+                FSN_CORE_ERR("Cannot use more to_texture slots. Max is: {}", MaxTextureSlots);
             } else {
 
                 s_data.TextureSlots[s_data.CurrentTextureIndex] = texture;
@@ -188,31 +188,31 @@ namespace Fussion::Renderer2D
         s_data.Stats.QuadCount++;
     }
 
-    void DrawQuadRotated(const Ref<Texture> &texture, const glm::vec3 &position, f32 rotation, const glm::vec3 &scale,
+    void draw_quad_rotated(const Ref<Texture> &texture, const glm::vec3 &position, f32 rotation, const glm::vec3 &scale,
                          const glm::vec2 &uvScale)
     {
         FSN_PROFILE_FUNCTION();
         if (rotation == 0.0f) {
-            DrawQuad(texture, position, scale, uvScale);
+            draw_quad(texture, position, scale, uvScale);
             return;
         }
 
         if (s_data.IndexBufferCount >= MaxIndices) {
-            EndScene();
-            StartBatch();
+            end_scene();
+            start_batch();
         }
 
         // Check if texture is already used
         f32 textureIndex = 0.0f;
         for (u32 i = 1; i < s_data.CurrentTextureIndex; i++) {
-            if (s_data.TextureSlots[i]->Handle() == texture->Handle()) {
+            if (s_data.TextureSlots[i]->renderer_handle() == texture->renderer_handle()) {
                 textureIndex = static_cast<f32>(i);
             }
         }
 
         if (textureIndex == 0.0f) {
             if (s_data.CurrentTextureIndex >= MaxTextureSlots) {
-                FSN_CORE_ERR("Cannot use more texture slots. Max is: {}", MaxTextureSlots);
+                FSN_CORE_ERR("Cannot use more to_texture slots. Max is: {}", MaxTextureSlots);
             } else {
 
                 s_data.TextureSlots[s_data.CurrentTextureIndex] = texture;
@@ -253,12 +253,12 @@ namespace Fussion::Renderer2D
         s_data.Stats.QuadCount++;
     }
 
-    void ResetStats()
+    void reset_stats()
     {
         s_data.Stats = {};
     }
 
-    DrawStats GetDrawStats()
+    DrawStats draw_stats()
     {
         return s_data.Stats;
     }

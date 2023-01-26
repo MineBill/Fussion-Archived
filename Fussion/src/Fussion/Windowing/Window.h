@@ -1,6 +1,6 @@
 #pragma once
-#include "Fussion/Events/Event.h"
 #include "Fussion/Core/Types.h"
+#include "Fussion/Events/Event.h"
 #include "VideoMode.h"
 #include <functional>
 
@@ -21,16 +21,16 @@ namespace Fussion
 
         mustuse static Ptr<Window> Create(WindowProps const &);
 
-        virtual void PollEvents() const = 0;
-        virtual void SwapBuffers() const = 0;
-        virtual void SetEventCallback(EventCallback const &callback) = 0;
-        virtual void SetVSync(bool enabled) = 0;
-        virtual void SetShouldClose(bool enabled) = 0;
+        virtual void poll_events() const = 0;
+        virtual void swap_buffers() const = 0;
+        virtual void set_event_callback(EventCallback const &callback) = 0;
+        virtual void set_vsync(bool enabled) = 0;
+        virtual void set_should_close(bool enabled) = 0;
 
-        mustuse virtual std::vector<VideoMode> GetVideoModes() const = 0;
-        mustuse virtual bool ShouldClose() = 0;
-        mustuse virtual std::pair<i32, i32> GetSize() const = 0;
-        mustuse virtual void *Raw() = 0;
+        mustuse virtual std::vector<VideoMode> video_modes() const = 0;
+        mustuse virtual bool should_close() = 0;
+        mustuse virtual std::pair<i32, i32> size() const = 0;
+        mustuse virtual void *raw_ptr() = 0;
     };
 
 } // namespace Fussion

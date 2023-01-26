@@ -8,7 +8,7 @@
 
 namespace Fussion
 {
-    String OpenGLShader::ReadEntireFile(const fs::path &filePath)
+    String OpenGLShader::read_entire_file(const fs::path &filePath)
     {
         std::ifstream file(filePath);
         FSN_CORE_ASSERT(file.is_open(), "Failed to open file: {}, CWD: {}", filePath.string(),
@@ -20,9 +20,9 @@ namespace Fussion
 
     OpenGLShader::OpenGLShader(const fs::path &shaderPath)
     {
-        String sourceCode = ReadEntireFile(shaderPath);
-        auto sources = PreProcessPass(sourceCode);
-        CompileFromSources(sources);
+        String sourceCode = read_entire_file(shaderPath);
+        auto sources = pre_process_pass(sourceCode);
+        compile_from_sources(sources);
     }
 
     OpenGLShader::OpenGLShader(const StringView &vertex_source, const StringView &fragment_source)
@@ -30,7 +30,7 @@ namespace Fussion
         std::unordered_map<GLenum, StringView> sources(2);
         sources[GL_VERTEX_SHADER] = vertex_source;
         sources[GL_FRAGMENT_SHADER] = fragment_source;
-        CompileFromSources(sources);
+        compile_from_sources(sources);
     }
 
     OpenGLShader::~OpenGLShader()
@@ -38,7 +38,7 @@ namespace Fussion
         glDeleteProgram(id);
     }
 
-    void OpenGLShader::CompileFromSources(const std::unordered_map<GLenum, StringView> &sources)
+    void OpenGLShader::compile_from_sources(const std::unordered_map<GLenum, StringView> &sources)
     {
         std::array<GLenum, 2> shadersToDelete{};
 
@@ -50,19 +50,19 @@ namespace Fussion
             auto c_str = str.c_str();
             glShaderSource(shader, 1, &c_str, nullptr);
             glCompileShader(shader);
-            ReportCompilationError(shader);
+            report_compilation_error(shader);
             glAttachShader(id, shader);
             shadersToDelete[index++] = shader;
         }
         glLinkProgram(id);
-        ReportLinkingError(id);
+        report_linking_error(id);
 
         for (const auto shader : shadersToDelete) {
             glDeleteShader(shader);
         }
     }
 
-    std::unordered_map<GLenum, StringView> OpenGLShader::PreProcessPass(StringView sourceCode)
+    std::unordered_map<GLenum, StringView> OpenGLShader::pre_process_pass(StringView sourceCode)
     {
         const auto ShaderTypeFromString = [](StringView string) -> GLenum {
             if (string == "vertex")
@@ -90,77 +90,77 @@ namespace Fussion
         return sources;
     }
 
-    void OpenGLShader::Use() const
+    void OpenGLShader::bind() const
     {
         glUseProgram(id);
     }
 
-    void OpenGLShader::SetUniform(const StringView &name, f32 value)
+    void OpenGLShader::set_uniform(const StringView &name, f32 value)
     {
-        if (auto loc = FindUniformLocation(name)) {
+        if (auto loc = find_uniform_location(name)) {
             glUniform1f(*loc, value);
         }
     }
 
-    void OpenGLShader::SetUniform(const StringView &name, f64 value)
+    void OpenGLShader::set_uniform(const StringView &name, f64 value)
     {
-        if (auto loc = FindUniformLocation(name)) {
+        if (auto loc = find_uniform_location(name)) {
             glUniform1d(*loc, value);
         }
     }
 
-    void OpenGLShader::SetUniform(const StringView &name, i32 value)
+    void OpenGLShader::set_uniform(const StringView &name, i32 value)
     {
-        if (auto loc = FindUniformLocation(name)) {
+        if (auto loc = find_uniform_location(name)) {
             glUniform1i(*loc, value);
         }
     }
 
-    void OpenGLShader::SetUniform(const StringView &name, u32 value)
+    void OpenGLShader::set_uniform(const StringView &name, u32 value)
     {
-        if (auto loc = FindUniformLocation(name)) {
+        if (auto loc = find_uniform_location(name)) {
             glUniform1ui(*loc, value);
         }
     }
 
-    void OpenGLShader::SetUniform(const StringView &name, Vector3 value)
+    void OpenGLShader::set_uniform(const StringView &name, Vector3 value)
     {
-        if (auto loc = FindUniformLocation(name)) {
+        if (auto loc = find_uniform_location(name)) {
             glUniform3f(*loc, value.x(), value.y(), value.z());
         }
     }
 
-    void OpenGLShader::SetUniform(const StringView &name, Matrix4 value)
+    void OpenGLShader::set_uniform(const StringView &name, Matrix4 value)
     {
-        if (auto loc = FindUniformLocation(name)) {
+        if (auto loc = find_uniform_location(name)) {
             glUniformMatrix4fv(*loc, 1, GL_FALSE, value.data.data());
         }
     }
 
-    void OpenGLShader::SetUniform(const StringView &name, const glm::mat4 &value)
+    void OpenGLShader::set_uniform(const StringView &name, const glm::mat4 &value)
     {
-        if (auto loc = FindUniformLocation(name)) {
+        if (auto loc = find_uniform_location(name)) {
             glUniformMatrix4fv(*loc, 1, GL_FALSE, glm::value_ptr(value));
         }
     }
 
-    void OpenGLShader::SetUniform(const StringView &name, const glm::vec4 &value)
+    void OpenGLShader::set_uniform(const StringView &name, const glm::vec4 &value)
     {
-        if (auto loc = FindUniformLocation(name)) {
+        if (auto loc = find_uniform_location(name)) {
             glUniform4f(*loc, value.x, value.y, value.z, value.w);
         }
     }
 
-    void OpenGLShader::SetArray(StringView name, i32 *array, i32 count)
+    void OpenGLShader::set_array(StringView name, i32 *array, i32 count)
     {
-        if (auto loc = FindUniformLocation(name)) {
+        if (auto loc = find_uniform_location(name)) {
             glUniform1iv(*loc, count, array);
         }
     }
 
-    mustuse Optional<int> OpenGLShader::FindUniformLocation(const StringView &name) const
+    mustuse Optional<int> OpenGLShader::find_uniform_location(const StringView &name) const
     {
-        Use();
+        bind();
         if (auto loc = glGetUniformLocation(id, name.data()); loc != -1) {
             return loc;
         }
@@ -168,7 +168,7 @@ namespace Fussion
         return {};
     }
 
-    void OpenGLShader::ReportCompilationError(u32 shader)
+    void OpenGLShader::report_compilation_error(u32 shader)
     {
         i32 status;
         glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
@@ -180,7 +180,7 @@ namespace Fussion
         FSN_CORE_ASSERT(false, "Shader compilation error: {}", message);
     }
 
-    void OpenGLShader::ReportLinkingError(u32 shader)
+    void OpenGLShader::report_linking_error(u32 shader)
     {
         i32 status;
         glGetProgramiv(shader, GL_LINK_STATUS, &status);

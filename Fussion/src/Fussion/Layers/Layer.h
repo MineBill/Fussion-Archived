@@ -1,6 +1,6 @@
 #pragma once
-#include "Fussion/Events/Event.h"
 #include "Fussion/Core/Types.h"
+#include "Fussion/Events/Event.h"
 
 namespace Fussion
 {
@@ -9,10 +9,17 @@ namespace Fussion
     public:
         virtual ~Layer() = default;
 
-        virtual void OnLoad() {}
+        virtual void on_load()
+        {
+        }
 
-        virtual void OnUpdate(f32) {}
+        virtual void on_update(f32)
+        {
+        }
 
-        virtual bool OnEvent(Event &) { return false; }
+        virtual bool on_event(Event &)
+        {
+            return false;
+        }
     };
 } // namespace Fussion

@@ -14,22 +14,22 @@ namespace Fussion
         OpenGLVertexArray();
         ~OpenGLVertexArray() override;
 
-        void Use() const override;
+        void bind() const override;
 
-        void AddVertexBuffer(const Ref<VertexBuffer> &vertexBuffer) override;
-        void SetIndexBuffer(const Ref<IndexBuffer> &indexBuffer) override;
+        void add_vertex_buffer(const Ref<VertexBuffer> &vertexBuffer) override;
+        void set_index_buffer(const Ref<IndexBuffer> &indexBuffer) override;
 
-        mustuse const std::vector<Ref<VertexBuffer>> &GetVertexBuffer() const override
+        mustuse const std::vector<Ref<VertexBuffer>> &vertex_buffers() const override
         {
             return m_vertexBuffers;
         }
 
-        mustuse const Ref<IndexBuffer> &GetIndexBuffer() const override
+        mustuse const Ref<IndexBuffer> &index_buffer() const override
         {
             return m_indexBuffer;
         }
 
-        mustuse u32 Count() const override;
+        mustuse u32 count() const override;
     };
 
 } // namespace Fussion

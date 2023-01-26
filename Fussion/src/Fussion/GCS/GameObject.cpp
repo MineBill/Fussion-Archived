@@ -4,39 +4,39 @@
 
 namespace Fussion
 {
-    void GameObject::Initialize()
+    void GameObject::initialize()
     {
         for (const auto &comp : m_components) {
-            comp->OnStart();
+            comp->on_start();
         }
     }
 
-    void GameObject::Update(f32 delta)
+    void GameObject::update(f32 delta)
     {
         for (const auto &comp : m_components) {
-            comp->OnUpdate(delta);
+            comp->on_update(delta);
         }
     }
 
-    void GameObject::OnEvent(Event &e)
+    void GameObject::on_event(Event &event)
     {
         for (const auto &comp : m_components) {
-            comp->OnEvent(e);
+            comp->on_event(event);
         }
     }
 
-    void GameObject::AddChild(const Ref<GameObject> &child)
+    void GameObject::add_child(const Ref<GameObject> &child)
     {
         m_children.push_back(child);
-        child->SetParent(shared_from_this());
+        child->set_parent(shared_from_this());
     }
 
-    void GameObject::RemoveChild(const Ref<GameObject> &child)
+    void GameObject::remove_child(const Ref<GameObject> &child)
     {
-        FSN_CORE_LOG("I was asked to remove {} {}", child->GetName(), child->GetID());
+        FSN_CORE_LOG("I was asked to remove {} {}", child->name(), child->id());
         m_children.erase(std::remove_if(m_children.begin(), m_children.end(), [&](const Ref<GameObject> &go) {
-            FSN_CORE_LOG("go id {}", go->GetID());
-            return go->Equals(*child.get());
+            FSN_CORE_LOG("go id {}", go->id());
+            return go->equals(*child.get());
         }));
 
         FSN_CORE_LOG("{}", m_children.size());

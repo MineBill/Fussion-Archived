@@ -9,15 +9,15 @@
 
 using namespace Fussion;
 
-void ImGuiLayer::OnLoad()
+void ImGuiLayer::on_load()
 {
-    std::cout << "ImGuiLayer::OnLoad\n";
+    std::cout << "ImGuiLayer::on_load\n";
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     auto &io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
-    ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow *>(Application::Get().GetWindow().Raw()), true);
+    ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow *>(Application::get().window().raw_ptr()), true);
     ImGui_ImplOpenGL3_Init("#version 130");
 
     auto &style = ImGui::GetStyle();
@@ -31,24 +31,24 @@ void ImGuiLayer::OnLoad()
     style.FramePadding = {3, 3};
 }
 
-void ImGuiLayer::OnUpdate(f32 elapsed)
+void ImGuiLayer::on_update(f32 elapsed)
 {
     (void)elapsed;
 }
 
-bool ImGuiLayer::OnEvent(Event &)
+bool ImGuiLayer::on_event(Event &)
 {
     return false;
 }
 
-void ImGuiLayer::BeginFrame(f32)
+void ImGuiLayer::begin_frame(f32)
 {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 }
 
-void ImGuiLayer::EndFrame()
+void ImGuiLayer::end_frame()
 {
     ImGui::Render();
     //    ImGui::UpdatePlatformWindows();

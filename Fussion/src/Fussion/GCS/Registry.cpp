@@ -8,7 +8,7 @@ namespace Fussion
         return Last++;
     }
 
-    Registry::Registry() : m_root(CreateRef<GameObject>())
+    Registry::Registry() : m_root(make_ref<GameObject>())
     {
         m_root->m_id = GetGameObjectID();
         m_root->m_name = "Root";
@@ -16,36 +16,36 @@ namespace Fussion
 
     Ref<GameObject> Registry::Create(StringView name, const Ref<GameObject> &parent)
     {
-        auto go = CreateRef<GameObject>();
+        auto go = make_ref<GameObject>();
         go->m_name = name;
         go->m_id = GetGameObjectID();
-        m_gameObjects.push_back(go);
+        m_gameobjects.push_back(go);
         if (parent) {
-            parent->AddChild(go);
+            parent->add_child(go);
         } else {
-            m_root->AddChild(go);
+            m_root->add_child(go);
         }
         return go;
     }
 
-    void Registry::Update(f32 delta)
+    void Registry::update(f32 delta)
     {
         if (!m_initialized) {
             m_initialized = true;
 
-            for (const auto &go : m_gameObjects) {
-                go->Initialize();
+            for (const auto &go : m_gameobjects) {
+                go->initialize();
             }
         }
-        for (const auto &go : m_gameObjects) {
-            go->Update(delta);
+        for (const auto &go : m_gameobjects) {
+            go->update(delta);
         }
     }
 
-    void Registry::OnEvent(Event &event)
+    void Registry::on_event(Event &event)
     {
-        for (const auto &go : m_gameObjects) {
-            go->OnEvent(event);
+        for (const auto &go : m_gameobjects) {
+            go->on_event(event);
         }
     }
 } // namespace Fussion

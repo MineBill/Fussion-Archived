@@ -14,17 +14,17 @@ namespace Fussion
         OpenGLFrameBuffer(u32 width, u32 height);
         ~OpenGLFrameBuffer();
 
-        void Bind() override;
-        void UnBind() override;
+        void bind() override;
+        void unbind() override;
 
-        void Resize(u32 width, u32 height) override;
+        void resize(u32 width, u32 height) override;
 
-        u32 GetRendererHandle() const override
+        mustuse u32 renderer_handle() const override
         {
             return m_id;
         }
 
-        u32 GetColorAttachment() const override
+        mustuse u32 color_attachment() const override
         {
             return m_colorTextureId;
         }

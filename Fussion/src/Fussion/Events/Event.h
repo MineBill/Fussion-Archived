@@ -9,20 +9,20 @@
 #define FSN_BIND_FN(fn) [this](auto &&PH1) { return fn(std::forward<decltype(PH1)>(PH1)); }
 
 #define EVENT(name)                 \
-    static EventType StaticType()   \
+    static EventType static_type()  \
     {                               \
         return EventType::name;     \
     }                               \
                                     \
-    EventType Type() const override \
+    EventType type() const override \
     {                               \
-        return StaticType();        \
+        return static_type();       \
     }
 
-#define EVENT_TOSTRING(name)         \
-    String ToString() const override \
-    {                                \
-        return #name;                \
+#define EVENT_TOSTRING(name)          \
+    String to_string() const override \
+    {                                 \
+        return #name;                 \
     }
 
 namespace Fussion
@@ -55,19 +55,19 @@ namespace Fussion
 
         virtual ~Event() = default;
 
-        mustuse virtual EventType Type() const = 0;
-        mustuse virtual String ToString() const = 0;
+        mustuse virtual EventType type() const = 0;
+        mustuse virtual String to_string() const = 0;
     };
 
     class Dispatcher
     {
-        Event &event;
+        Event &m_event;
 
     public:
-        template<typename T>
+        template<std::derived_from<Event> T>
         using EventFn = std::function<bool(T &)>;
 
-        explicit Dispatcher(Event &e) : event(e)
+        explicit Dispatcher(Event &e) : m_event(e)
         {
         }
 
@@ -75,10 +75,10 @@ namespace Fussion
         void Dispatch(EventFn<T> fn)
         {
             FSN_PROFILE_FUNCTION();
-            if (event.Handled || event.Type() != T::StaticType())
+            if (m_event.Handled || m_event.type() != T::static_type())
                 return;
 
-            event.Handled = fn(dynamic_cast<T &>(event));
+            m_event.Handled = fn(dynamic_cast<T &>(m_event));
         }
     };
 

@@ -15,14 +15,14 @@ namespace Fussion
 
         static Ref<VertexArray> Create();
 
-        virtual void Use() const = 0;
+        virtual void bind() const = 0;
 
-        virtual void AddVertexBuffer(const Ref<VertexBuffer> &vertexBuffer) = 0;
-        virtual void SetIndexBuffer(const Ref<IndexBuffer> &indexBuffer) = 0;
+        virtual void add_vertex_buffer(const Ref<VertexBuffer> &vertexBuffer) = 0;
+        virtual void set_index_buffer(const Ref<IndexBuffer> &indexBuffer) = 0;
 
-        mustuse virtual const std::vector<Ref<VertexBuffer>> &GetVertexBuffer() const = 0;
-        mustuse virtual const Ref<IndexBuffer> &GetIndexBuffer() const = 0;
-        mustuse virtual u32 Count() const = 0;
+        mustuse virtual const std::vector<Ref<VertexBuffer>> &vertex_buffers() const = 0;
+        mustuse virtual const Ref<IndexBuffer> &index_buffer() const = 0;
+        mustuse virtual u32 count() const = 0;
     };
 
 } // namespace Fussion

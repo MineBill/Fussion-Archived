@@ -9,18 +9,18 @@ namespace Fussion
     i32 KeyToGLFWKey(Key key);
     GlfwInput::KeyState GlfwKeyStateToOurKeyState(i32 state);
 
-    glm::vec2 GlfwInput::GetMouseImpl()
+    glm::vec2 GlfwInput::mouse_impl()
     {
-        auto window = static_cast<GLFWwindow *>(Application::Get().GetWindow().Raw());
+        auto window = static_cast<GLFWwindow *>(Application::get().window().raw_ptr());
         f64 x, y;
 
         glfwGetCursorPos(window, &x, &y);
         return {x, y};
     }
 
-    bool GlfwInput::IsKeyDownImpl(Key key)
+    bool GlfwInput::is_key_down_impl(Key key)
     {
-        auto window = static_cast<GLFWwindow *>(Application::Get().GetWindow().Raw());
+        auto window = static_cast<GLFWwindow *>(Application::get().window().raw_ptr());
         FSN_CORE_ASSERT(window != nullptr)
 
         auto state = glfwGetKey(window, KeyToGLFWKey(key));
@@ -28,9 +28,9 @@ namespace Fussion
         return m_key_cache[key] == GlfwInput::KeyState::Down;
     }
 
-    bool GlfwInput::IsKeyUpImpl(Key key)
+    bool GlfwInput::is_key_up_impl(Key key)
     {
-        auto window = static_cast<GLFWwindow *>(Application::Get().GetWindow().Raw());
+        auto window = static_cast<GLFWwindow *>(Application::get().window().raw_ptr());
         FSN_CORE_ASSERT(window != nullptr)
 
         auto state = glfwGetKey(window, KeyToGLFWKey(key));
@@ -38,22 +38,22 @@ namespace Fussion
         return m_key_cache[key] == KeyState::Up;
     }
 
-    bool GlfwInput::IsKeyJustPressedImpl(Key key)
+    bool GlfwInput::is_key_just_pressed_impl(Key key)
     {
-        (void)IsKeyDown(key);
-        (void)IsKeyUp(key);
+        (void)is_key_down(key);
+        (void)is_key_up(key);
         return (m_key_cache_previous[key] == KeyState::Up) && (m_key_cache[key] == KeyState::Down);
     }
 
-    void GlfwInput::SetMousePositionImpl(u32 x, u32 y)
+    void GlfwInput::set_mouse_impl(u32 x, u32 y)
     {
-        auto window = static_cast<GLFWwindow *>(Application::Get().GetWindow().Raw());
+        auto window = static_cast<GLFWwindow *>(Application::get().window().raw_ptr());
         FSN_CORE_ASSERT(window != nullptr)
 
         glfwSetCursorPos(window, static_cast<f64>(x), static_cast<f64>(y));
     }
 
-    void GlfwInput::FlushImpl()
+    void GlfwInput::flush_impl()
     {
         m_key_cache_previous = m_key_cache;
         m_key_cache.clear();

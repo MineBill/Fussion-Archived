@@ -8,31 +8,31 @@ namespace Fussion::Renderer2D
         u32 Drawcalls{0};
         u32 QuadCount{0};
 
-        u32 GetVertices() const
+        mustuse u32 vertices() const
         {
             return QuadCount * 4;
         }
     };
 
-    void Init();
-    void Shutdown();
+    void init();
+    void shutdown();
 
-    void BeginScene(const Camera2D &camera);
-    void EndScene();
+    void begin_scene(const Camera2D &camera);
+    void end_scene();
 
-    void DrawQuad(const Ref<Texture> &texture, const glm::vec3 &position, const glm::vec3 &scale = {1, 1, 1},
-                  const glm::vec2 &uvScale = {1, 1});
+    void draw_quad(const Ref<Texture> &texture, const glm::vec3 &position, const glm::vec3 &scale = {1, 1, 1},
+                   const glm::vec2 &uvScale = {1, 1});
 
-    void DrawQuadRotated(const Ref<Texture> &texture, const glm::vec3 &position, f32 rotation = 0.0f,
-                         const glm::vec3 &scale = {1, 1, 1}, const glm::vec2 &uvScale = {1, 1});
+    void draw_quad_rotated(const Ref<Texture> &texture, const glm::vec3 &position, f32 rotation = 0.0f,
+                           const glm::vec3 &scale = {1, 1, 1}, const glm::vec2 &uvScale = {1, 1});
 
-    void Flush();
+    void flush();
 
-    void StartBatch();
+    void start_batch();
 
-    void ResetStats();
+    void reset_stats();
 
-    DrawStats GetDrawStats();
+    DrawStats draw_stats();
 
     //    void DrawQuad(const Ref<Texture>& texture, const Transform2D);
 } // namespace Fussion::Renderer2D

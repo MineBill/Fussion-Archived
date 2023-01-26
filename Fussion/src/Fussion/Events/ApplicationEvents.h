@@ -5,7 +5,6 @@
 
 namespace Fussion
 {
-
     class WindowClosed : public Event
     {
     public:
@@ -15,53 +14,53 @@ namespace Fussion
 
     class WindowResized final : public Event
     {
-        i32 width{};
-        i32 height{};
+        i32 m_width{};
+        i32 m_height{};
 
     public:
         EVENT(WindowResized)
-        explicit WindowResized(int w, int h) : width(w), height(h)
+        explicit WindowResized(int w, int h) : m_width(w), m_height(h)
         {
         }
 
-        mustuse i32 Width() const
+        mustuse i32 width() const
         {
-            return width;
+            return m_width;
         }
-        mustuse i32 Height() const
+        mustuse i32 height() const
         {
-            return height;
+            return m_height;
         }
 
-        mustuse String ToString() const override
+        mustuse String to_string() const override
         {
-            return fmt::format("WindowResized(width: {}, height: {})", width, height);
+            return fmt::format("WindowResized(width: {}, height: {})", m_width, m_height);
         }
     };
 
     class WindowMoved : public Event
     {
-        u32 x{};
-        u32 y{};
+        u32 m_x{};
+        u32 m_y{};
 
     public:
         EVENT(WindowMoved)
-        explicit WindowMoved(unsigned new_x, unsigned new_y) : x(new_x), y(new_y)
+        explicit WindowMoved(unsigned new_x, unsigned new_y) : m_x(new_x), m_y(new_y)
         {
         }
 
-        mustuse u32 X() const
+        mustuse u32 x() const
         {
-            return x;
+            return m_x;
         }
-        mustuse u32 Y() const
+        mustuse u32 y() const
         {
-            return y;
+            return m_y;
         }
 
-        mustuse String ToString() const override
+        mustuse String to_string() const override
         {
-            return fmt::format("WindowMoved({}, {})", x, y);
+            return fmt::format("WindowMoved({}, {})", m_x, m_y);
         }
     };
 
@@ -96,5 +95,4 @@ namespace Fussion
         EVENT_TOSTRING(WindowLostFocus)
         WindowLostFocus() = default;
     };
-
 } // namespace Fussion

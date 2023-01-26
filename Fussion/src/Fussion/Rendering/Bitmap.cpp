@@ -7,12 +7,12 @@ namespace Fussion
     {
         Bitmap b(width, height);
 
-        for (u32 x = 0; x < b.GetWidth(); x++) {
-            for (u32 y = 0; y < b.GetHeight(); y++) {
+        for (u32 x = 0; x < b.width(); x++) {
+            for (u32 y = 0; y < b.height(); y++) {
                 if ((x * gridSize / width) % 2 == (y * gridSize / height) % 2)
-                    b.SetPixel(x, y, firstColor);
+                    b.set_pixel(x, y, firstColor);
                 else
-                    b.SetPixel(x, y, secondColor);
+                    b.set_pixel(x, y, secondColor);
             }
         }
 
@@ -21,10 +21,10 @@ namespace Fussion
 
     Bitmap::Bitmap(u32 width, u32 height)
     {
-        Resize(width, height);
+        resize(width, height);
     }
 
-    void Bitmap::Resize(u32 width, u32 height)
+    void Bitmap::resize(u32 width, u32 height)
     {
         m_width = width;
         m_height = height;
@@ -34,19 +34,19 @@ namespace Fussion
         std::memset(m_dataPtr, 0, width * height * 4);
     }
 
-    void Bitmap::SetPixel(u32 x, u32 y, u32 color)
+    void Bitmap::set_pixel(u32 x, u32 y, u32 value)
     {
         FSN_CORE_ASSERT(x < m_width, "x must be less than width");
         FSN_CORE_ASSERT(y < m_height, "y must be less than height");
         FSN_CORE_ASSERT(m_dataPtr != nullptr, "Data is null");
 
-        m_dataPtr[x * 4 * m_height + y * 4 + 3] = static_cast<u8>(color & 0x00'00'00'FF);
-        m_dataPtr[x * 4 * m_height + y * 4 + 2] = static_cast<u8>((color & 0x00'00'FF'00) >> 8);
-        m_dataPtr[x * 4 * m_height + y * 4 + 1] = static_cast<u8>((color & 0x00'FF'00'00) >> 16);
-        m_dataPtr[x * 4 * m_height + y * 4 + 0] = static_cast<u8>((color & 0xFF'00'00'00) >> 24);
+        m_dataPtr[x * 4 * m_height + y * 4 + 3] = static_cast<u8>(value & 0x00'00'00'FF);
+        m_dataPtr[x * 4 * m_height + y * 4 + 2] = static_cast<u8>((value & 0x00'00'FF'00) >> 8);
+        m_dataPtr[x * 4 * m_height + y * 4 + 1] = static_cast<u8>((value & 0x00'FF'00'00) >> 16);
+        m_dataPtr[x * 4 * m_height + y * 4 + 0] = static_cast<u8>((value & 0xFF'00'00'00) >> 24);
     }
 
-    Ref<Texture> Bitmap::ToTexture() const
+    Ref<Texture> Bitmap::to_texture() const
     {
         return Fussion::Texture::FromPixels(m_dataPtr, m_width, m_height, 4);
     }

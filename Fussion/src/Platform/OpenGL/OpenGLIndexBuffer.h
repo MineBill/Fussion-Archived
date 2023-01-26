@@ -15,11 +15,11 @@ namespace Fussion
         explicit OpenGLIndexBuffer(u32 size);
         ~OpenGLIndexBuffer() override;
 
-        void Use() const override;
-        void Resize(i32 new_size) override;
-        void UpdateSubDataRawPtr(i32 offset, const void *data, i32 size) override;
+        void bind() const override;
+        void resize(i32 new_size) override;
+        void update_sub_data(i32 offset, const void *data, i32 size) override;
 
-        mustuse u32 Count() const override;
+        mustuse u32 count() const override;
     };
 
 } // namespace Fussion

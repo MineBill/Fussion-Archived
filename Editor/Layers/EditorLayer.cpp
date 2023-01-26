@@ -9,75 +9,74 @@
 namespace Editor
 {
     struct Test {
-
     };
 
-    void EditorLayer::OnLoad()
+    void EditorLayer::on_load()
     {
         auto &io = ImGui::GetIO();
         io.Fonts->AddFontFromFileTTF("Resources/Inter-Regular.ttf", 16);
-        Fussion::RenderCommand::SetClearColor({0.56, 0.56, 0.56});
-        m_camera = Fussion::CreatePtr<Fussion::Camera2DController>(100, 100);
+        Fussion::RenderCommand::set_clear_color({0.56, 0.56, 0.56});
+        m_camera = Fussion::make_ptr<Fussion::Camera2DController>(100, 100);
 
-        m_texture = Fussion::Bitmap::GridPattern(100, 100, 2, 0xAAAAAAFF).ToTexture();
+        m_texture = Fussion::Bitmap::GridPattern(100, 100, 2, 0xAAAAAAFF).to_texture();
 
         m_frameBuffer = Fussion::Framebuffer::WithSize(100, 100);
 
         auto gameObject1 = m_registry.Create("GameObject 1");
         auto sub = m_registry.Create("sub");
         auto sub2 = m_registry.Create("sub2");
-        gameObject1->AddChild(sub);
-        gameObject1->AddChild(sub2);
+        gameObject1->add_child(sub);
+        gameObject1->add_child(sub2);
         auto subsub1 = m_registry.Create("subsub1");
-        sub2->AddChild(subsub1);
+        sub2->add_child(subsub1);
         auto lol = m_registry.Create("lol");
-        gameObject1->AddChild(lol);
+        gameObject1->add_child(lol);
         auto LOL = m_registry.Create("LOL@");
         auto Ppeegas = m_registry.Create("Ppeegas");
-        LOL->AddChild(Ppeegas);
+        LOL->add_child(Ppeegas);
     }
 
-    void EditorLayer::OnUpdate(f32 delta)
+    void EditorLayer::on_update(f32 delta)
     {
-        m_registry.Update(delta);
+        m_registry.update(delta);
         using namespace Fussion;
-        m_camera->OnUpdate(delta);
+        m_camera->update(delta);
 
-        m_frameBuffer->Bind();
-        RenderCommand::Clear();
-        Renderer2D::ResetStats();
-        Renderer2D::BeginScene(m_camera->GetCamera());
-        Renderer2D::DrawQuad(m_texture, m_first_position, {100, 100, 1}, {500, 500});
-        Renderer2D::EndScene();
-        m_frameBuffer->UnBind();
+        m_frameBuffer->bind();
+        RenderCommand::clear();
+        Renderer2D::reset_stats();
+        Renderer2D::begin_scene(m_camera->camera());
+        Renderer2D::draw_quad(m_texture, m_first_position, {100, 100, 1}, {500, 500});
+        Renderer2D::end_scene();
+        m_frameBuffer->unbind();
 
-        EditorMainInterface(delta);
+        main_interface(delta);
     }
 
-    bool EditorLayer::OnEvent(Fussion::Event &e)
+    bool EditorLayer::on_event(Fussion::Event &e)
     {
-        m_registry.OnEvent(e);
+        m_registry.on_event(e);
         if (m_isViewportFocused) {
-            m_camera->OnEvent(e);
+            m_camera->on_event(e);
         }
         using namespace Fussion;
         Dispatcher d(e);
 
         d.Dispatch<OnKeyPressed>([](OnKeyPressed &k) {
-            if (k.GetKey() == Key::Escape) {
-                Application::Get().Quit();
+            if (k.key() == Key::Escape) {
+                Application::get().quit();
             }
             return false;
         });
 
-        if (m_camera->IsPanning()) {
+        if (m_camera->is_panning()) {
             d.Dispatch<MouseMoved>([&](MouseMoved &mm) {
-                glm::vec2 pos = {mm.X(), mm.Y()};
+                glm::vec2 pos = {mm.x(), mm.y()};
                 if (pos.x < m_viewportPosition.x) {
-                    Input::SetMousePosition(static_cast<u32>(m_viewportPosition.x + m_viewportSize.x),
-                                            static_cast<u32>(pos.y));
+                    Input::set_mouse(static_cast<u32>(m_viewportPosition.x + m_viewportSize.x),
+                                     static_cast<u32>(pos.y));
                 } else if (pos.x > m_viewportPosition.x + m_viewportSize.x) {
-                    Input::SetMousePosition(static_cast<u32>(m_viewportPosition.x), static_cast<u32>(pos.y));
+                    Input::set_mouse(static_cast<u32>(m_viewportPosition.x), static_cast<u32>(pos.y));
                 }
 
                 return false;
@@ -87,30 +86,30 @@ namespace Editor
         return false;
     }
 
-    void EditorLayer::EditorMainInterface(f32 delta)
+    void EditorLayer::main_interface(f32 delta)
     {
         (void)delta;
-        EditorMainMenuBar();
+        main_menubar();
 
         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
 
         ImGui::ShowStyleEditor();
         // Inspector
-        EditorInspector();
-        EditorScene();
-        EditorViewport();
+        inspector();
+        scene();
+        viewport();
 
         if (m_showRenderer) {
-            EditorRendererStatistics();
+            renderer_statistics();
         }
     }
 
-    void EditorLayer::EditorMainMenuBar()
+    void EditorLayer::main_menubar()
     {
         ImGui::BeginMainMenuBar();
         if (ImGui::BeginMenu("Options")) {
-            if (ImGui::MenuItem("Quit")) {
-                Fussion::Application::Get().Quit();
+            if (ImGui::MenuItem("quit")) {
+                Fussion::Application::get().quit();
             }
             ImGui::EndMenu();
         }
@@ -124,17 +123,17 @@ namespace Editor
         ImGui::EndMainMenuBar();
     }
 
-    void EditorLayer::EditorInspector()
+    void EditorLayer::inspector()
     {
         ImGui::Begin("Inspector");
         ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, {4, 4});
         if (!m_selectedGameObject.expired()) {
             auto go = m_selectedGameObject.lock();
-            for (const auto &component : go->GetAllComponents()) {
-                auto name = component->GetName();
+            for (const auto &component : go->get_all_components()) {
+                auto name = component->name();
 
                 if (ImGui::TreeNode(name.data())) {
-                    component->OnEditorGUI();
+                    component->on_editor_gui();
                     ImGui::TreePop();
                 }
             }
@@ -143,18 +142,18 @@ namespace Editor
         ImGui::End();
     }
 
-    void EditorLayer::RenderGameObject(const Fussion::Ref<Fussion::GameObject> &go)
+    void EditorLayer::render_gameobject(const Fussion::Ref<Fussion::GameObject> &go)
     {
         auto i = 0;
-        for (const auto &child : go->GetChildren()) {
+        for (const auto &child : go->children()) {
             ImGuiTreeNodeFlags flags =
                 ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_OpenOnArrow;
-            if (child->GetChildren().size() == 0) {
+            if (child->children().size() == 0) {
                 flags |= ImGuiTreeNodeFlags_Leaf;
             }
 
             ImGui::PushID(i++);
-            bool opened = ImGui::TreeNodeEx(child->GetName().c_str(), flags, "%s", child->GetName().c_str());
+            bool opened = ImGui::TreeNodeEx(child->name().c_str(), flags, "%s", child->name().c_str());
             ImGui::PopID();
 
             if (ImGui::IsItemClicked()) {
@@ -162,25 +161,25 @@ namespace Editor
             }
 
             if (opened) {
-                RenderGameObject(child);
+                render_gameobject(child);
                 ImGui::TreePop();
             }
         }
     }
 
-    void EditorLayer::EditorScene()
+    void EditorLayer::scene()
     {
         ImGui::Begin("Scene");
 
-        auto gameObjects = m_registry.GetAllGameObjects();
+        auto gameObjects = m_registry.all_gameobjects();
         ImGui::Text("GameObjects: Total of %d", static_cast<i32>(gameObjects.size()));
         ImGui::Separator();
-        RenderGameObject(m_registry.GetRoot());
+        render_gameobject(m_registry.root());
 
         ImGui::End();
     }
 
-    void EditorLayer::EditorViewport()
+    void EditorLayer::viewport()
     {
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {0, 0});
         ImGui::Begin("Viewport");
@@ -188,7 +187,7 @@ namespace Editor
             m_isViewportFocused = ImGui::IsWindowHovered();
             // ImGui::Image(reinterpret_cast<void *>(id), ViewportSize, {0, 0}, {1, -1}); // NOLINT
             // static ImVec2 ViewportSize = {200.0f, 200.0f};
-            auto id = m_frameBuffer->GetColorAttachment();
+            auto id = m_frameBuffer->color_attachment();
             auto min = ImGui::GetWindowContentRegionMin();
             auto max = ImGui::GetWindowContentRegionMax();
 
@@ -201,8 +200,8 @@ namespace Editor
 
             auto newViewportSize = glm::vec2{max.x - min.x, max.y - min.y};
             if (newViewportSize != m_viewportSize) {
-                m_frameBuffer->Resize(static_cast<u32>(newViewportSize.x), static_cast<u32>(newViewportSize.y));
-                m_camera->GetCamera().Resize(newViewportSize.x, newViewportSize.y);
+                m_frameBuffer->resize(static_cast<u32>(newViewportSize.x), static_cast<u32>(newViewportSize.y));
+                m_camera->camera().resize(newViewportSize.x, newViewportSize.y);
             }
             m_viewportSize = newViewportSize;
 
@@ -214,12 +213,12 @@ namespace Editor
         ImGui::PopStyleVar();
     }
 
-    void EditorLayer::EditorRendererStatistics()
+    void EditorLayer::renderer_statistics()
     {
         ImGui::Begin("Renderer", &m_showRenderer);
-        auto stats = Fussion::Renderer2D::GetDrawStats();
+        auto stats = Fussion::Renderer2D::draw_stats();
         ImGui::Text("Drawcalls: %d", stats.Drawcalls);
-        ImGui::Text("Vertices: %d", stats.GetVertices());
+        ImGui::Text("Vertices: %d", stats.vertices());
         ImGui::End();
     }
 } // namespace Editor

@@ -10,17 +10,17 @@ namespace Fussion
     {
     }
 
-    void Camera2DController::OnUpdate(f32 elapsed)
+    void Camera2DController::update(f32 elapsed)
     {
         (void)elapsed;
-        if (Input::IsKeyJustPressed(Key::F)) {
-            m_camera.SetPosition({});
+        if (Input::is_key_just_pressed(Key::F)) {
+            m_camera.set_position({});
         }
     }
 
-    void Camera2DController::OnEvent(Event &event)
+    void Camera2DController::on_event(Event &event)
     {
-        static glm::vec2 oldMouse = m_camera.ScreenToWorld(Input::GetMouse());
+        static glm::vec2 oldMouse = m_camera.screen_to_world(Input::mouse());
         Fussion::Dispatcher dispatcher(event);
         /* dispatcher.Dispatch<WindowResized>([&](WindowResized &e) {
             m_camera.Resize(static_cast<f32>(e.Width()), static_cast<f32>(e.Height()));
@@ -29,33 +29,33 @@ namespace Fussion
 
         dispatcher.Dispatch<MouseMoved>([&](MouseMoved &) {
             if (m_panning) {
-                auto mouse = m_camera.ScreenToWorld(Input::GetMouse());
+                auto mouse = m_camera.screen_to_world(Input::mouse());
                 auto offset = mouse - oldMouse;
                 oldMouse = mouse;
 
-                auto pos = m_camera.GetPosition();
-                m_camera.SetPosition(pos + glm::vec3(offset, 0.0f));
+                auto pos = m_camera.position();
+                m_camera.set_position(pos + glm::vec3(offset, 0.0f));
             }
             return false;
         });
 
         dispatcher.Dispatch<MouseButtonPressed>([&](MouseButtonPressed &e) {
-            if (e.GetButton() == MouseButton::Middle && !m_panning) {
+            if (e.button() == MouseButton::Middle && !m_panning) {
                 m_panning = true;
-                oldMouse = m_camera.ScreenToWorld(Input::GetMouse());
+                oldMouse = m_camera.screen_to_world(Input::mouse());
             }
             return false;
         });
 
         dispatcher.Dispatch<MouseButtonReleased>([&](MouseButtonReleased &e) {
-            if (e.Button() == MouseButton::Middle && m_panning) {
+            if (e.button() == MouseButton::Middle && m_panning) {
                 m_panning = false;
             }
             return false;
         });
 
         dispatcher.Dispatch<MouseWheelMoved>([&](MouseWheelMoved &e) {
-            m_camera.SetSize(m_camera.GetSize() - e.Offset().second * 0.5f);
+            m_camera.set_size(m_camera.size() - e.offset().second * 0.5f);
             return false;
         });
     }

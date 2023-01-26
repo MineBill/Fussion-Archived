@@ -4,36 +4,36 @@
 
 namespace Fussion
 {
-    Ptr<Renderer::SceneData> Renderer::s_sceneData = std::make_unique<SceneData>();
+    Ptr<Renderer::SceneData> Renderer::s_scene_data = std::make_unique<SceneData>();
 
-    bool Renderer::s_beganScene = false;
+    bool Renderer::s_began_scene = false;
 
-    void Renderer::Init()
+    void Renderer::init()
     {
-        RenderCommand::Init();
-        Renderer2D::Init();
+        RenderCommand::inti();
+        Renderer2D::init();
     }
 
-    void Renderer::BeginScene(const Camera2D &camera)
+    void Renderer::begin_scene(const Camera2D &camera)
     {
-        FSN_CORE_ASSERT(!s_beganScene, "Did you forget to call EndScene()?")
+        FSN_CORE_ASSERT(!s_began_scene, "Did you forget to call end_scene()?")
 
-        s_sceneData->Projection = camera.GetProjection() * camera.GetView();
-        s_beganScene = true;
+        s_scene_data->Projection = camera.projection() * camera.view();
+        s_began_scene = true;
     }
 
-    void Renderer::EndScene()
+    void Renderer::end_scene()
     {
-        s_beganScene = false;
+        s_began_scene = false;
     }
 
-    void Renderer::Submit(const Ref<VertexArray> &array, const Ref<Shader> &shader, const glm::mat4 &modelMatrix)
+    void Renderer::submit(const Ref<VertexArray> &array, const Ref<Shader> &shader, const glm::mat4 &matrix)
     {
-        shader->Use();
-        shader->SetUniform("u_ViewProjection", s_sceneData->Projection);
-        shader->SetUniform("u_Model", modelMatrix);
+        shader->bind();
+        shader->set_uniform("u_ViewProjection", s_scene_data->Projection);
+        shader->set_uniform("u_Model", matrix);
 
-        array->Use();
-        RenderCommand::DrawIndexed(array);
+        array->bind();
+        RenderCommand::draw_indexed(array);
     }
 } // namespace Fussion

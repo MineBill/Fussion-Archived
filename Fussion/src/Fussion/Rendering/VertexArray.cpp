@@ -7,7 +7,7 @@ namespace Fussion
 {
     Ref<VertexArray> VertexArray::Create()
     {
-        switch (Renderer::GetAPI()) {
+        switch (Renderer::api()) {
         case RendererAPI::API::None:
             FSN_CORE_ASSERT(false, "RenderAPI::None is not supported");
             return nullptr;

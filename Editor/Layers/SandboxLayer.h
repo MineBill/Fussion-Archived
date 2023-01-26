@@ -15,7 +15,7 @@ class SandboxLayer : public Fussion::Layer
 
 public:
     ~SandboxLayer() override = default;
-    void OnLoad() override;
-    void OnUpdate(f32 f321) override;
-    bool OnEvent(Fussion::Event &event) override;
+    void on_load() override;
+    void on_update(f32 f321) override;
+    bool on_event(Fussion::Event &event) override;
 };

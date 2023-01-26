@@ -19,20 +19,20 @@ namespace Editor
         bool m_isViewportFocused{false};
         bool m_showRenderer{false};
 
-        void EditorMainInterface(f32);
-        void EditorMainMenuBar();
-        void EditorInspector();
-        void EditorScene();
-        void EditorViewport();
-        void RenderGameObject(const Fussion::Ref<Fussion::GameObject> &go);
+        void main_interface(f32);
+        void main_menubar();
+        void inspector();
+        void scene();
+        void viewport();
+        void render_gameobject(const Fussion::Ref<Fussion::GameObject> &go);
 
-        void EditorRendererStatistics();
+        void renderer_statistics();
 
     public:
         EditorLayer() = default;
         ~EditorLayer() override = default;
-        void OnLoad() override;
-        void OnUpdate(f32 delta) override;
-        bool OnEvent(Fussion::Event &event) override;
+        void on_load() override;
+        void on_update(f32 delta) override;
+        bool on_event(Fussion::Event &event) override;
     };
 } // namespace Editor

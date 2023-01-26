@@ -6,7 +6,7 @@ namespace Fussion
 {
     class Registry
     {
-        std::vector<Ref<GameObject>> m_gameObjects{};
+        std::vector<Ref<GameObject>> m_gameobjects{};
         bool m_initialized{false};
 
         Ref<GameObject> m_root{};
@@ -16,16 +16,16 @@ namespace Fussion
 
         Ref<GameObject> Create(StringView name, const Ref<GameObject> &parent = nullptr);
 
-        void Update(f32);
+        void update(f32);
 
-        void OnEvent(Event &);
+        void on_event(Event &);
 
-        const std::vector<Ref<GameObject>> GetAllGameObjects() const
+        const std::vector<Ref<GameObject>> all_gameobjects() const
         {
-            return m_gameObjects;
+            return m_gameobjects;
         }
 
-        Ref<GameObject> &GetRoot()
+        Ref<GameObject> &root()
         {
             return m_root;
         }

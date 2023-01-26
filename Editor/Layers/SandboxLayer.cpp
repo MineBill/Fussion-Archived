@@ -8,10 +8,10 @@
 #include <imgui_internal.h>
 #include <misc/cpp/imgui_stdlib.h>
 
-void SandboxLayer::OnLoad()
+void SandboxLayer::on_load()
 {
     FSN_PROFILE_FUNCTION();
-    auto size = Fussion::Application::Get().GetWindow().GetSize();
+    auto size = Fussion::Application::get().window().size();
     m_camera =
         std::make_unique<Fussion::Camera2DController>(static_cast<f32>(size.first), static_cast<f32>(size.second));
 
@@ -21,47 +21,48 @@ void SandboxLayer::OnLoad()
         m_second_texture = Fussion::Texture::LoadFromFile("Resources/Textures/watercolor.png");
     }
 
-    Fussion::RenderCommand::ResizeViewport(0, 0, size.first, size.second);
+    Fussion::RenderCommand::resize_viewport(0, 0, size.first, size.second);
 
     m_frameBuffer = Fussion::Framebuffer::WithSize(static_cast<u32>(size.first), static_cast<u32>(size.second));
 }
 
-void SandboxLayer::OnUpdate(f32 elapsed)
+void SandboxLayer::on_update(f32 elapsed)
 {
     FSN_PROFILE_FUNCTION();
-    m_camera->OnUpdate(elapsed);
+    m_camera->update(elapsed);
     static f32 time = 0;
     time += elapsed;
 
-    m_frameBuffer->Bind();
-    Fussion::RenderCommand::SetClearColor(m_clearColor);
-    Fussion::RenderCommand::Clear();
-    Fussion::Renderer2D::ResetStats();
-    Fussion::Renderer2D::BeginScene(m_camera->GetCamera());
+    m_frameBuffer->bind();
+    Fussion::RenderCommand::set_clear_color(m_clearColor);
+    Fussion::RenderCommand::clear();
+    Fussion::Renderer2D::reset_stats();
+    Fussion::Renderer2D::begin_scene(m_camera->camera());
 
     for (auto x = 0; x < 100; x++) {
         for (auto y = 0; y < 100; y++) {
             if (x % 2 == 0)
-                Fussion::Renderer2D::DrawQuadRotated(m_second_texture, {static_cast<f32>(x), static_cast<f32>(y), 0.0f},
-                                                     glm::radians(time), {1, 1, 1}, {1, 1});
+                Fussion::Renderer2D::draw_quad_rotated(m_second_texture,
+                                                       {static_cast<f32>(x), static_cast<f32>(y), 0.0f},
+                                                       glm::radians(time), {1, 1, 1}, {1, 1});
             else
-                Fussion::Renderer2D::DrawQuad(m_texture, {static_cast<f32>(x), static_cast<f32>(y), 0.0f}, {1, 1, 1},
-                                              {1, 1});
+                Fussion::Renderer2D::draw_quad(m_texture, {static_cast<f32>(x), static_cast<f32>(y), 0.0f}, {1, 1, 1},
+                                               {1, 1});
         }
     }
     // Fussion::Renderer2D::DrawQuad(m_texture, m_first_position);
 
-    Fussion::Renderer2D::EndScene();
-    m_frameBuffer->UnBind();
+    Fussion::Renderer2D::end_scene();
+    m_frameBuffer->unbind();
 
     Interface(elapsed);
 }
 
-bool SandboxLayer::OnEvent(Fussion::Event &event)
+bool SandboxLayer::on_event(Fussion::Event &event)
 {
     FSN_PROFILE_FUNCTION();
     Fussion::Dispatcher dispatcher(event);
-    m_camera->OnEvent(event);
+    m_camera->on_event(event);
     dispatcher.Dispatch<Fussion::WindowResized>([&](Fussion::WindowResized &) {
         // Fussion::RenderCommand::ResizeViewport(0, 0, e.Width(), e.Height());
 
@@ -69,8 +70,8 @@ bool SandboxLayer::OnEvent(Fussion::Event &event)
     });
 
     dispatcher.Dispatch<Fussion::OnKeyPressed>([](Fussion::OnKeyPressed &key_pressed) {
-        if (key_pressed.GetKey() == Fussion::Key::Escape) {
-            Fussion::Application::Get().Quit();
+        if (key_pressed.key() == Fussion::Key::Escape) {
+            Fussion::Application::get().quit();
         }
         return true;
     });
@@ -87,23 +88,23 @@ void SandboxLayer::Interface(f32 elapsed) // NOLINT
     ImGui::Text("Elapsed: %fsec | %.2fms", static_cast<f64>(elapsed), elapsed_in_ms);
     if (ImGui::Button("Toggle VSync")) {
         enabled_vsync = !enabled_vsync;
-        Fussion::Application::Get().GetWindow().SetVSync(enabled_vsync);
+        Fussion::Application::get().window().set_vsync(enabled_vsync);
     }
     ImGui::EndMainMenuBar();
     ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), flags);
     //        ImGui::ShowDemoWindow();
     ImGui::Begin("Input Debug Window");
-    ImGui::Text("Is key down: %d", Fussion::Input::IsKeyDown(Fussion::Key::F));
-    ImGui::Text("Is key up: %d", Fussion::Input::IsKeyUp(Fussion::Key::F));
-    auto cam = m_camera->GetCamera().GetPosition();
+    ImGui::Text("Is key down: %d", Fussion::Input::is_key_down(Fussion::Key::F));
+    ImGui::Text("Is key up: %d", Fussion::Input::is_key_up(Fussion::Key::F));
+    auto cam = m_camera->camera().position();
     ImGui::DragFloat3("Camera", glm::value_ptr(cam));
     ImGui::DragFloat3("Position1", glm::value_ptr(m_first_position), 0.05f);
     ImGui::DragFloat3("Position2", glm::value_ptr(m_second_position), 0.05f);
-    ImGui::ColorEdit3("Clear Color", glm::value_ptr(m_clearColor));
+    ImGui::ColorEdit3("clear Color", glm::value_ptr(m_clearColor));
 
     static Fussion::String input;
     ImGui::Begin("Profiler");
-    bool isRecording = Fussion::Profiler::Get().IsEnabled();
+    bool isRecording = Fussion::Profiler::get().is_enabled();
     ImGui::Text("Recording: %d", isRecording);
     {
         ImGui::InputText("Output filename: ", &input);
@@ -111,7 +112,7 @@ void SandboxLayer::Interface(f32 elapsed) // NOLINT
         {
             if (ImGui::Button("Start Recording")) {
                 if (!input.empty()) {
-                    Fussion::Profiler::Get().BeginProfile(input);
+                    Fussion::Profiler::get().begin_profile(input);
                 } else {
                 }
             }
@@ -120,7 +121,7 @@ void SandboxLayer::Interface(f32 elapsed) // NOLINT
 
         ImGui::BeginDisabled(!isRecording);
         if (ImGui::Button("Stop Recording")) {
-            Fussion::Profiler::Get().EndProfile();
+            Fussion::Profiler::get().end_profile();
         }
         ImGui::EndDisabled();
 
@@ -128,11 +129,11 @@ void SandboxLayer::Interface(f32 elapsed) // NOLINT
     }
     ImGui::End();
 
-    auto stats = Fussion::Renderer2D::GetDrawStats();
+    auto stats = Fussion::Renderer2D::draw_stats();
     ImGui::Begin("Renderer2D Stats");
     {
         ImGui::Text("Drawcalls: %d", stats.Drawcalls);
-        ImGui::Text("Vertices : %d", stats.GetVertices());
+        ImGui::Text("Vertices : %d", stats.vertices());
         ImGui::Text("Viewport Size: {%f, %f}", static_cast<f64>(m_viewportSize.x), static_cast<f64>(m_viewportSize.y));
     }
     ImGui::End();
@@ -142,7 +143,7 @@ void SandboxLayer::Interface(f32 elapsed) // NOLINT
     {
         // ImGui::Image(reinterpret_cast<void *>(id), ViewportSize, {0, 0}, {1, -1}); // NOLINT
         // static ImVec2 ViewportSize = {200.0f, 200.0f};
-        auto id = m_frameBuffer->GetColorAttachment();
+        auto id = m_frameBuffer->color_attachment();
         auto min = ImGui::GetWindowContentRegionMin();
         auto max = ImGui::GetWindowContentRegionMax();
 
@@ -153,8 +154,8 @@ void SandboxLayer::Interface(f32 elapsed) // NOLINT
 
         auto newViewportSize = glm::vec2{max.x - min.x, max.y - min.y};
         if (newViewportSize != m_viewportSize) {
-            m_frameBuffer->Resize(static_cast<u32>(newViewportSize.x), static_cast<u32>(newViewportSize.y));
-            m_camera->GetCamera().Resize(newViewportSize.x, newViewportSize.y);
+            m_frameBuffer->resize(static_cast<u32>(newViewportSize.x), static_cast<u32>(newViewportSize.y));
+            m_camera->camera().resize(newViewportSize.x, newViewportSize.y);
         }
         m_viewportSize = newViewportSize;
 
