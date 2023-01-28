@@ -11,7 +11,7 @@
     #define FSN_ASSERT(expr, ...)                                                                    \
         {                                                                                            \
             if (!(expr)) {                                                                           \
-                FSN_ERR("ASSERTION HIT: ");                                                   \
+                FSN_ERR("ASSERTION HIT: {}", #expr);                                                   \
                 if constexpr (std::tuple_size<decltype(std::make_tuple(__VA_ARGS__))>::value != 0) { \
                     FSN_ERR("    " __VA_ARGS__);                                              \
                 } else {                                                                             \
@@ -23,7 +23,7 @@
     #define FSN_CORE_ASSERT(expr, ...)                                                               \
         {                                                                                            \
             if (!(expr)) {                                                                           \
-                FSN_CORE_ERR("ASSERTION HIT: ");                                                     \
+                FSN_CORE_ERR("ASSERTION HIT: {}", #expr);                                                     \
                 if constexpr (std::tuple_size<decltype(std::make_tuple(__VA_ARGS__))>::value != 0) { \
                     FSN_CORE_ERR("    " __VA_ARGS__);                                                \
                 } else {                                                                             \
