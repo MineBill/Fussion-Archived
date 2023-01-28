@@ -6,6 +6,7 @@ namespace Fussion
 {
     void GameObject::initialize()
     {
+        m_transform = make_ref<Transform>();
         for (const auto &comp : m_components) {
             comp->on_start();
         }
@@ -27,6 +28,10 @@ namespace Fussion
 
     void GameObject::add_child(const Ref<GameObject> &child)
     {
+        if (child->equals(*this)) {
+            FSN_CORE_ERR("Cannot add self as a child");
+            return;
+        }
         m_children.push_back(child);
         child->set_parent(shared_from_this());
     }

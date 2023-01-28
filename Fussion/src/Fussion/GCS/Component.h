@@ -1,16 +1,20 @@
 #pragma once
 #include "Fussion/Events/Event.h"
 
-#define FSN_COMPONENT(T)          \
+#define FSN_COMPONENT(T)       \
     StringView name() override \
-    {                             \
-        return #T;                \
+    {                          \
+        return #T;             \
     }
 
 namespace Fussion
 {
+    class GameObject;
     class Component
     {
+        friend GameObject;
+        Ref<GameObject> m_owner{};
+
     public:
         virtual ~Component() = default;
 
@@ -31,5 +35,10 @@ namespace Fussion
         }
 
         virtual StringView name() = 0;
+
+        auto owner() -> Ref<GameObject> &
+        {
+            return m_owner;
+        }
     };
 } // namespace Fussion
