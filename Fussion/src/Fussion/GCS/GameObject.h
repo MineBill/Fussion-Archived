@@ -14,14 +14,14 @@ namespace Fussion
     using GameObjectID = std::size_t;
     using ComponentID = std::size_t;
 
-    static ComponentID generate_new_component_id()
+    static auto generate_new_component_id() -> ComponentID
     {
         static ComponentID Last = 0;
         return Last++;
     }
 
     template<std::derived_from<Component> T>
-    static ComponentID get_component_id()
+    static auto get_component_id() -> ComponentID
     {
         static ComponentID Last = generate_new_component_id();
         return Last++;
@@ -58,6 +58,7 @@ namespace Fussion
         void add_component(Args &&...args)
         {
             auto t = make_ptr<T>(std::forward<Args>(args)...);
+            t->m_owner = shared_from_this();
 
             auto id = get_component_id<T>();
             m_component_bitset.set(id);
@@ -66,7 +67,7 @@ namespace Fussion
         }
 
         template<std::derived_from<Component> T>
-        mustuse Ptr<T> &get_component()
+        mustuse auto get_component() -> Ptr<T> &
         {
             auto id = get_component_id<T>();
             if (m_component_bitset[id]) {
@@ -89,33 +90,33 @@ namespace Fussion
             m_component_array[id] = nullptr;
         }
 
-        mustuse const std::vector<Component *> &get_all_components() const
+        mustuse auto get_all_components() const -> const std::vector<Component *> &
         {
             return m_components;
         }
 
-        mustuse std::vector<Component *> &get_all_components()
+        mustuse auto get_all_components() -> std::vector<Component *> &
         {
             return m_components;
         }
 
         template<std::derived_from<Component> T>
-        bool has_components()
+        auto has_components() -> bool
         {
             return m_component_bitset[get_component_id<T>()];
         }
 
-        bool equals(const GameObject &other) const
+        auto equals(const GameObject &other) const -> bool
         {
             return m_id == other.m_id;
         }
 
-        mustuse Ref<Transform> &transform()
+        mustuse auto transform() -> Ref<Transform> &
         {
             return m_transform;
         }
 
-        mustuse const std::vector<Ref<GameObject>> children() const
+        mustuse auto children() const -> const std::vector<Ref<GameObject>>
         {
             return m_children;
         }
@@ -129,17 +130,17 @@ namespace Fussion
             m_parent = go;
         }
 
-        mustuse Ref<GameObject> &parent()
+        mustuse auto parent() -> Ref<GameObject> &
         {
             return m_parent;
         }
 
-        mustuse const String &name() const
+        mustuse auto name() const -> const String &
         {
             return m_name;
         }
 
-        mustuse GameObjectID id() const
+        mustuse auto id() const -> GameObjectID
         {
             return m_id;
         }

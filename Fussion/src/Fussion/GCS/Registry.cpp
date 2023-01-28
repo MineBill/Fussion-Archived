@@ -14,7 +14,7 @@ namespace Fussion
         m_root->m_name = "Root";
     }
 
-    Ref<GameObject> Registry::Create(StringView name, const Ref<GameObject> &parent)
+    auto Registry::create(StringView name, const Ref<GameObject> &parent) -> Ref<GameObject>
     {
         auto go = make_ref<GameObject>();
         go->m_name = name;

@@ -14,7 +14,7 @@ namespace Fussion
     public:
         Registry();
 
-        Ref<GameObject> Create(StringView name, const Ref<GameObject> &parent = nullptr);
+        Ref<GameObject> create(StringView name, const Ref<GameObject> &parent = nullptr);
 
         void update(f32);
 

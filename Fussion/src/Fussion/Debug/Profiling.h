@@ -126,5 +126,5 @@ namespace Fussion
     #define FSN_BEGIN_PROFILE(name)
     #define FSN_END_PROFILE(name)
     #define FSN_PROFILE_SCOPE(ScopeName)
-    #define FSN_PROFILE_FUNCTION
+    #define FSN_PROFILE_FUNCTION()
 #endif
