@@ -64,6 +64,8 @@ add_library(
         src/Fussion/GCS/Component.h
         src/Fussion/GCS/Transform.cpp
         src/Fussion/GCS/Transform.h
+        src/Fussion/GCS/SpriteRenderer.cpp
+        src/Fussion/GCS/SpriteRenderer.h
 
         src/Fussion/Debug/Profiling.h
         src/Fussion/Debug/Profiling.cpp
@@ -87,6 +89,7 @@ target_link_libraries(
         spdlog::spdlog
         stb
         glm::glm
+        ImGuiFileDialog
 )
 
 target_include_directories(${ENGINE_NAME} PUBLIC src)

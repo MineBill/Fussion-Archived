@@ -33,6 +33,6 @@ namespace Editor
         ~EditorLayer() override = default;
         void on_load() override;
         void on_update(f32 delta) override;
-        bool on_event(Fussion::Event &event) override;
+        auto on_event(Fussion::Event &event) -> bool override;
     };
 } // namespace Editor
