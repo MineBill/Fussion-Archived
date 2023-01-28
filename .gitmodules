@@ -10,3 +10,6 @@
 [submodule "ThirdParty/glm"]
 	path = ThirdParty/glm
 	url = git@github.com:MineBill/glm.git
+[submodule "ThirdParty/ImGuiFileDialog"]
+	path = ThirdParty/ImGuiFileDialog
+	url = git@github.com:MineBill/ImGuiFileDialog.git
