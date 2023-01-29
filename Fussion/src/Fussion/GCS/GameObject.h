@@ -44,6 +44,9 @@ namespace Fussion
         std::vector<Ref<GameObject>> m_children{};
         Ref<GameObject> m_parent{};
         Ref<Transform> m_transform;
+        Registry &m_registry;
+
+        GameObject(Registry &registry);
 
     protected:
         void initialize();
@@ -51,9 +54,6 @@ namespace Fussion
         void on_event(Event &);
 
     public:
-        void add_child(const Ref<GameObject> &child);
-        void remove_child(const Ref<GameObject> &child);
-
         template<std::derived_from<Component> T, typename... Args>
         void add_component(Args &&...args)
         {
@@ -90,36 +90,16 @@ namespace Fussion
             m_component_array[id] = nullptr;
         }
 
-        mustuse auto get_all_components() const -> const std::vector<Component *> &
-        {
-            return m_components;
-        }
-
-        mustuse auto get_all_components() -> std::vector<Component *> &
-        {
-            return m_components;
-        }
-
         template<std::derived_from<Component> T>
-        auto has_components() -> bool
+        mustuse auto has_components() -> bool
         {
             return m_component_bitset[get_component_id<T>()];
         }
 
-        auto equals(const GameObject &other) const -> bool
-        {
-            return m_id == other.m_id;
-        }
+        void add_child(const Ref<GameObject> &child);
+        void remove_child(const Ref<GameObject> &child);
 
-        mustuse auto transform() -> Ref<Transform> &
-        {
-            return m_transform;
-        }
-
-        mustuse auto children() const -> const std::vector<Ref<GameObject>>
-        {
-            return m_children;
-        }
+        void destroy();
 
         void set_parent(const Ref<GameObject> &go)
         {
@@ -130,19 +110,15 @@ namespace Fussion
             m_parent = go;
         }
 
-        mustuse auto parent() -> Ref<GameObject> &
-        {
-            return m_parent;
-        }
+        void set_name(StringView new_name) { m_name = new_name; }
 
-        mustuse auto name() const -> const String &
-        {
-            return m_name;
-        }
-
-        mustuse auto id() const -> GameObjectID
-        {
-            return m_id;
-        }
+        mustuse auto equals(const auto &other) const -> bool { return m_id == other.m_id; }
+        mustuse auto all_components() const -> const std::vector<Component *> & { return m_components; }
+        mustuse auto all_components() -> std::vector<Component *> & { return m_components; }
+        mustuse auto transform() -> Ref<Transform> & { return m_transform; }
+        mustuse auto children() const -> const std::vector<Ref<GameObject>> { return m_children; }
+        mustuse auto parent() -> Ref<GameObject> & { return m_parent; }
+        mustuse auto name() const -> const String & { return m_name; }
+        mustuse auto id() const -> GameObjectID { return m_id; }
     };
 } // namespace Fussion

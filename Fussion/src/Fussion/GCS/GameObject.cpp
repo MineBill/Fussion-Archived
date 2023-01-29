@@ -1,9 +1,13 @@
 #include "Fussion/GCS/GameObject.h"
 #include "Fussion/Core/Log.h"
 #include "Fussion/GCS/Component.h"
+#include "Fussion/GCS/Registry.h"
+#include <algorithm>
 
 namespace Fussion
 {
+    GameObject::GameObject(Registry &registry) : m_registry(registry) {}
+
     void GameObject::initialize()
     {
         m_transform = make_ref<Transform>();
@@ -38,12 +42,14 @@ namespace Fussion
 
     void GameObject::remove_child(const Ref<GameObject> &child)
     {
-        FSN_CORE_LOG("I was asked to remove {} {}", child->name(), child->id());
-        m_children.erase(std::remove_if(m_children.begin(), m_children.end(), [&](const Ref<GameObject> &go) {
-            FSN_CORE_LOG("go id {}", go->id());
-            return go->equals(*child.get());
-        }));
+        m_children.erase(std::remove_if(m_children.begin(), m_children.end(),
+                                        [&](const Ref<GameObject> &go) { return go->equals(*child.get()); }));
+        m_registry.notify_remove(child);
+    }
 
-        FSN_CORE_LOG("{}", m_children.size());
+    void GameObject::destroy()
+    {
+        std::ranges::for_each(m_children, [](Ref<GameObject> &go) { go->destroy(); });
+        m_parent->remove_child(shared_from_this());
     }
 } // namespace Fussion

@@ -20,7 +20,8 @@ namespace Fussion
         if (ImGui::TreeNode("Texture")) {
             ImGui::Text("ID: [%s]", m_sprite ? std::to_string(m_sprite->renderer_handle()).c_str() : "null");
             if (m_sprite) {
-                ImGui::Image(reinterpret_cast<ImTextureID>(m_sprite->renderer_handle()), {100, 100});
+                ImTextureID texture = reinterpret_cast<ImTextureID>(m_sprite->renderer_handle()); // NOLINT
+                ImGui::Image(texture, {100, 100});
             }
 
             if (ImGui::Button("Load Texture From File"))

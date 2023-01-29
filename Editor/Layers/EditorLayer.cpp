@@ -6,9 +6,25 @@
 #include "glm/gtc/type_ptr.hpp"
 #include <imgui.h>
 #include <imgui_internal.h>
+#include <misc/cpp/imgui_stdlib.h>
 
 namespace Editor
 {
+    class ComponentDB {
+
+    };
+
+    static void HelpMarker(const char *desc)
+    {
+        ImGui::TextDisabled("(?)");
+        if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayShort)) {
+            ImGui::BeginTooltip();
+            ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+            ImGui::TextUnformatted(desc);
+            ImGui::PopTextWrapPos();
+            ImGui::EndTooltip();
+        }
+    }
     void EditorLayer::on_load()
     {
         auto &io = ImGui::GetIO();
@@ -118,13 +134,24 @@ namespace Editor
         ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, {4, 4});
         if (!m_selectedGameObject.expired()) {
             auto go = m_selectedGameObject.lock();
-            ImGui::Text("%s", go->name().c_str());
+            // ImGui::Text("%s", go->name().c_str());
+            Fussion::String tmp_name = go->name();
+            ImGui::InputText("##name_input", &tmp_name);
+            if (tmp_name != go->name()) {
+                go->set_name(tmp_name);
+            }
             ImGui::Separator();
 
-            for (const auto &component : go->get_all_components()) {
+            auto flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed;
+            if (ImGui::TreeNodeEx("Transform", flags, "Transform")) {
+                go->transform()->on_editor_gui();
+                ImGui::TreePop();
+            }
+            auto i = 0;
+            for (const auto &component : go->all_components()) {
                 auto name = component->name();
 
-                if (ImGui::TreeNode(name.data())) {
+                if (ImGui::TreeNodeEx(reinterpret_cast<void *>(i++), flags, "%s", name.data())) { // NOLINT
                     component->on_editor_gui();
                     ImGui::TreePop();
                 }
@@ -137,20 +164,44 @@ namespace Editor
     void EditorLayer::render_gameobject(const Fussion::Ref<Fussion::GameObject> &go)
     {
         auto i = 0;
-        for (const auto &child : go->children()) {
+        for (auto &child : go->children()) {
             ImGuiTreeNodeFlags flags =
                 ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_OpenOnArrow;
             if (child->children().size() == 0) {
                 flags |= ImGuiTreeNodeFlags_Leaf;
             }
 
+            if (!m_selectedGameObject.expired()) {
+                auto selected = m_selectedGameObject.lock();
+                if (child->equals(*selected.get())) {
+                    flags |= ImGuiTreeNodeFlags_Selected;
+                }
+            }
             ImGui::PushID(i++);
-            bool opened = ImGui::TreeNodeEx(child->name().c_str(), flags, "%s", child->name().c_str());
+            void* id = reinterpret_cast<void*>(child->id()); // NOLINT
+            bool opened = ImGui::TreeNodeEx(id, flags, "%s", child->name().c_str());
             ImGui::PopID();
 
             if (ImGui::IsItemClicked()) {
                 m_selectedGameObject = child;
             }
+
+            ImGui::OpenPopupOnItemClick("context");
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(6, 6));
+            if (ImGui::BeginPopup("context")) {
+                if (ImGui::MenuItem("Create GameObject")) {
+                    auto new_go = m_registry.create("New GameObject", child);
+                }
+                ImGui::SameLine();
+                HelpMarker("Create a new gameobject as a child.");
+
+                if (ImGui::MenuItem("Destroy")) {
+                    // go->remove_child(child);
+                    child->destroy();
+                }
+                ImGui::EndPopup();
+            }
+            ImGui::PopStyleVar();
 
             if (opened) {
                 render_gameobject(child);
@@ -163,13 +214,21 @@ namespace Editor
     {
         ImGui::Begin("Scene");
         if (ImGui::Button("Create Object")) {
-            (void)m_registry.create("New GameObject");
+            auto go = m_registry.create("New GameObject", m_selectedGameObject.lock());
+            m_selectedGameObject = go;
         }
+        ImGui::SameLine();
+        HelpMarker("Create a new gameobject with the selected gameobject as parent, and then select it.");
 
         auto gameObjects = m_registry.all_gameobjects();
         ImGui::Text("GameObjects: Total of %d", static_cast<i32>(gameObjects.size()));
         ImGui::Separator();
         render_gameobject(m_registry.root());
+
+        // Clear active item when clicked inside the scene window but _NOT_ on another item or button
+        if (ImGui::IsWindowHovered() and ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
+            m_selectedGameObject.reset();
+        }
 
         ImGui::End();
     }

@@ -30,6 +30,11 @@ namespace Fussion
             return m_root;
         }
 
+        void notify_remove(const Ref<GameObject> &go);
+
+        // NOTE: Is this needed?
+        void notify_add(const Ref<GameObject> &go);
+
         /* struct Iterator {
             using iterator_category = std::forward_iterator_tag;
             using difference_type = std::ptrdiff_t;
