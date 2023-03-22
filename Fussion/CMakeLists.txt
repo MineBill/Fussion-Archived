@@ -57,16 +57,6 @@ add_library(
         src/Fussion/Rendering/2D/Camera2DController.h
         src/Fussion/Rendering/2D/Camera2DController.cpp
 
-        src/Fussion/GCS/GameObject.cpp
-        src/Fussion/GCS/GameObject.h
-        src/Fussion/GCS/Registry.cpp
-        src/Fussion/GCS/Registry.h
-        src/Fussion/GCS/Component.h
-        src/Fussion/GCS/Transform.cpp
-        src/Fussion/GCS/Transform.h
-        src/Fussion/GCS/SpriteRenderer.cpp
-        src/Fussion/GCS/SpriteRenderer.h
-
         src/Fussion/Debug/Profiling.h
         src/Fussion/Debug/Profiling.cpp
 )

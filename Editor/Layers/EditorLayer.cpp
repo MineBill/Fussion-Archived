@@ -1,8 +1,6 @@
 #include "EditorLayer.h"
 #include "Fussion/Events/KeyboardEvents.h"
 #include "Fussion/Events/MouseEvents.h"
-#include "Fussion/GCS/SpriteRenderer.h"
-#include "Fussion/GCS/Transform.h"
 #include "glm/gtc/type_ptr.hpp"
 #include <imgui.h>
 #include <imgui_internal.h>
@@ -10,11 +8,8 @@
 
 namespace Editor
 {
-    class ComponentDB {
-
-    };
-
-    static void HelpMarker(const char *desc)
+    // Preserving ImGUI naming
+    [[maybe_unused]] static void HelpMarker(const char *desc)
     {
         ImGui::TextDisabled("(?)");
         if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayShort)) {
@@ -25,6 +20,7 @@ namespace Editor
             ImGui::EndTooltip();
         }
     }
+
     void EditorLayer::on_load()
     {
         auto &io = ImGui::GetIO();
@@ -36,8 +32,6 @@ namespace Editor
 
         m_frameBuffer = Fussion::Framebuffer::WithSize(100, 100);
 
-        auto player = m_registry.create("Sprite 1");
-        player->add_component<Fussion::SpriteRenderer>();
     }
 
     void EditorLayer::on_update(f32 delta)
@@ -50,8 +44,6 @@ namespace Editor
         Renderer2D::reset_stats();
         Renderer2D::begin_scene(m_camera->camera());
 
-        m_registry.update(delta);
-
         Renderer2D::end_scene();
         m_frameBuffer->unbind();
 
@@ -60,7 +52,6 @@ namespace Editor
 
     auto EditorLayer::on_event(Fussion::Event &e) -> bool
     {
-        m_registry.on_event(e);
         if (m_isViewportFocused) {
             m_camera->on_event(e);
         }
@@ -130,8 +121,10 @@ namespace Editor
 
     void EditorLayer::inspector()
     {
+#if GO
         ImGui::Begin("Inspector");
         ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, {4, 4});
+
         if (!m_selectedGameObject.expired()) {
             auto go = m_selectedGameObject.lock();
             // ImGui::Text("%s", go->name().c_str());
@@ -159,8 +152,10 @@ namespace Editor
         }
         ImGui::PopStyleVar();
         ImGui::End();
+#endif
     }
 
+#if RENDER_GAMEOBJECT
     void EditorLayer::render_gameobject(const Fussion::Ref<Fussion::GameObject> &go)
     {
         auto i = 0;
@@ -178,7 +173,7 @@ namespace Editor
                 }
             }
             ImGui::PushID(i++);
-            void* id = reinterpret_cast<void*>(child->id()); // NOLINT
+            void *id = reinterpret_cast<void *>(child->id()); // NOLINT
             bool opened = ImGui::TreeNodeEx(id, flags, "%s", child->name().c_str());
             ImGui::PopID();
 
@@ -209,9 +204,11 @@ namespace Editor
             }
         }
     }
+#endif
 
     void EditorLayer::scene()
     {
+#if OLDSCENE
         ImGui::Begin("Scene");
         if (ImGui::Button("Create Object")) {
             auto go = m_registry.create("New GameObject", m_selectedGameObject.lock());
@@ -231,6 +228,7 @@ namespace Editor
         }
 
         ImGui::End();
+#endif
     }
 
     void EditorLayer::viewport()
