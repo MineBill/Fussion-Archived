@@ -16,6 +16,9 @@ namespace Fussion
 
     void OpenGLFrameBuffer::resize(u32 width, u32 height)
     {
+        FSN_CORE_ASSERT(width > 0, "Width cannot be zero or negative");
+        FSN_CORE_ASSERT(height > 0, "Height cannot be zero or negative");
+
         if (m_id) {
             glDeleteFramebuffers(1, &m_id);
             glDeleteTextures(1, &m_colorTextureId);
@@ -34,8 +37,8 @@ namespace Fussion
 
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_colorTextureId, 0);
 
-        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-            FSN_CORE_ASSERT(false, "Framebuffer is not complete");
+        if (auto status = glCheckFramebufferStatus(GL_FRAMEBUFFER); status != GL_FRAMEBUFFER_COMPLETE) {
+            FSN_CORE_ASSERT(false, "Framebuffer is not complete: {}", status);
         }
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);

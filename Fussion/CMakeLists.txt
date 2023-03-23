@@ -4,6 +4,9 @@ add_library(
         ${ENGINE_NAME}
         src/Fussion/Fussion.h
 
+        src/Fussion/Entity/Scene.h
+        src/Fussion/Entity/Scene.cpp
+
         src/Fussion/Core/Core.h
         src/Fussion/Core/Log.cpp
         src/Fussion/Core/Log.h
@@ -59,7 +62,7 @@ add_library(
 
         src/Fussion/Debug/Profiling.h
         src/Fussion/Debug/Profiling.cpp
-)
+        src/Fussion/Entity/Entity.h src/Fussion/Entity/Components.h)
 add_subdirectory(src/Platform)
 
 if (LINUX)
@@ -80,6 +83,7 @@ target_link_libraries(
         stb
         glm::glm
         ImGuiFileDialog
+        entt
 )
 
 target_include_directories(${ENGINE_NAME} PUBLIC src)
@@ -96,6 +100,7 @@ target_precompile_headers(
         <glm/glm.hpp>
         <unordered_map>
         <span>
+        <entt.hpp>
 )
 
-set_project_warnings(${ENGINE_NAME} ON)
+set_project_warnings(${ENGINE_NAME} OFF)

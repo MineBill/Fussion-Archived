@@ -45,30 +45,12 @@ namespace Fussion
             update_view_matrix();
         }
 
-        mustuse f32 rotation() const
-        {
-            return m_rotation;
-        }
-        mustuse f32 size() const
-        {
-            return m_size;
-        }
-        mustuse const glm::vec3 &position() const
-        {
-            return m_position;
-        }
-        mustuse const glm::mat4 &projection() const
-        {
-            return m_projectionMatrix;
-        }
-        mustuse const glm::mat4 &view() const
-        {
-            return m_viewMatrix;
-        }
-        mustuse glm::mat4 view_projection() const
-        {
-            return m_projectionMatrix * glm::inverse(m_viewMatrix);
-        }
+        mustuse f32 rotation() const { return m_rotation; }
+        mustuse f32 size() const { return m_size; }
+        mustuse const glm::vec3 &position() const { return m_position; }
+        mustuse const glm::mat4 &projection() const { return m_projectionMatrix; }
+        mustuse const glm::mat4 &view() const { return m_viewMatrix; }
+        mustuse glm::mat4 view_projection() const { return m_projectionMatrix * glm::inverse(m_viewMatrix); }
 
         mustuse glm::vec2 screen_to_world(const glm::vec2 &screen);
         mustuse glm::vec3 world_to_screen(const glm::vec3 &world);

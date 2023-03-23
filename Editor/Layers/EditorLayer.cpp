@@ -1,13 +1,17 @@
 #include "EditorLayer.h"
+#include "Fussion/Entity/Components.h"
 #include "Fussion/Events/KeyboardEvents.h"
 #include "Fussion/Events/MouseEvents.h"
 #include "glm/gtc/type_ptr.hpp"
+#include <Fussion/Entity/Entity.h>
 #include <imgui.h>
 #include <imgui_internal.h>
 #include <misc/cpp/imgui_stdlib.h>
 
 namespace Editor
 {
+    using namespace Fussion;
+
     // Preserving ImGUI naming
     [[maybe_unused]] static void HelpMarker(const char *desc)
     {
@@ -27,11 +31,11 @@ namespace Editor
         io.Fonts->AddFontFromFileTTF("Resources/Inter-Regular.ttf", 16);
         Fussion::RenderCommand::set_clear_color({0.56, 0.56, 0.56});
         m_camera = Fussion::make_ptr<Fussion::Camera2DController>(100, 100);
-
         m_texture = Fussion::Bitmap::GridPattern(100, 100, 2, 0xAAAAAAFF).to_texture();
-
         m_frameBuffer = Fussion::Framebuffer::WithSize(100, 100);
 
+        auto entity = m_scene.create();
+        entity.add_component<SpriteComponent>(m_texture);
     }
 
     void EditorLayer::on_update(f32 delta)
@@ -43,6 +47,14 @@ namespace Editor
         RenderCommand::clear();
         Renderer2D::reset_stats();
         Renderer2D::begin_scene(m_camera->camera());
+
+        auto view = m_scene.registry().view<TransformComponent, SpriteComponent>();
+        for (auto entity : view) {
+            auto sprite_component = view.get<SpriteComponent>(entity);
+            auto transform = view.get<TransformComponent>(entity);
+
+            Renderer2D::draw_quad(sprite_component.texture, transform.position);
+        }
 
         Renderer2D::end_scene();
         m_frameBuffer->unbind();

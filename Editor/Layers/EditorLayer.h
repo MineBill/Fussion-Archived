@@ -1,4 +1,5 @@
 #pragma once
+#include <Fussion/Entity/Scene.h>
 #include <Fussion/Fussion.h>
 
 namespace Editor
@@ -23,6 +24,8 @@ namespace Editor
         void scene();
         void viewport();
         void renderer_statistics();
+
+        Fussion::Scene m_scene{};
 
     public:
         EditorLayer() = default;
