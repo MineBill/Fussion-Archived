@@ -1,5 +1,6 @@
 #include "Fussion/Core/Core.h"
 #include "Fussion/Rendering/2D/Renderer2D.h"
+#include <Fussion/Rendering/RenderCommand.h>
 #include <Fussion/Scene/Components.h>
 #include <Fussion/Scene/Entity.h>
 #include <Fussion/Scene/Scene.h>
@@ -15,6 +16,8 @@ namespace Fussion
         auto &cam = camera2.add_component<CameraComponent>(Camera2D{50, 50});
         cam.primary = true;
         cam.camera.set_size(50);
+        cam.clear_color = glm::vec3{1.0f, 0, 0};
+        FSN_CORE_LOG("clear_color: {}", cam.clear_color.x);
 
         // Insert the editor camera:
         // CameraComponent
@@ -33,7 +36,8 @@ namespace Fussion
     void Scene::on_update([[maybe_unused]] f32 delta)
     {
         // Find the rendering camera
-        Camera2D *camera = nullptr;
+        Camera2D *camera{nullptr};
+        glm::vec3 *clear_color{nullptr};
         glm::mat4 transform;
         {
             auto view = m_registry.view<CameraComponent, TransformComponent>();
@@ -41,12 +45,16 @@ namespace Fussion
                 auto camera_comp = view.get<CameraComponent>(entity);
                 if (camera_comp.primary) {
                     camera = &camera_comp.camera;
+                    clear_color = &camera_comp.clear_color;
                     transform = view.get<TransformComponent>(entity).transform();
+                    break;
                 }
             }
         }
         FSN_CORE_ASSERT(camera != nullptr, "Did not find a main camera");
 
+        RenderCommand::set_clear_color(*clear_color);
+        RenderCommand::clear();
         Renderer2D::begin_scene(*camera, transform);
 
         auto view = m_registry.view<TransformComponent, SpriteComponent>();

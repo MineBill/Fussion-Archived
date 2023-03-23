@@ -33,9 +33,10 @@ namespace Fussion
     };
 
     struct CameraComponent {
+        glm::vec3 clear_color{0, 0, 0};
         Camera2D camera;
         bool primary = false;
 
-        CameraComponent(Camera2D cam): camera(cam) {}
+        explicit CameraComponent(Camera2D cam): camera(cam) {}
     };
 } // namespace Fussion

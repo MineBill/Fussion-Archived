@@ -44,7 +44,6 @@ namespace Editor
         using namespace Fussion;
 
         m_frameBuffer->bind();
-        RenderCommand::clear();
         Renderer2D::reset_stats();
 
         m_scene.on_update(delta);
