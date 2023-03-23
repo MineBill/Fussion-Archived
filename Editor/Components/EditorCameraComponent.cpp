@@ -1,16 +1,19 @@
-#include "Camera2DController.h"
+#include "EditorCameraComponent.h"
 #include "Fussion/Events/ApplicationEvents.h"
 #include "Fussion/Events/MouseEvents.h"
 #include "Fussion/Input/Input.h"
 
-namespace Fussion
+#if 0
+namespace Editor
 {
-    Camera2DController::Camera2DController(f32 width, f32 height)
+    using namespace Fussion;
+
+    EditorCameraComponent::EditorCameraComponent(f32 width, f32 height)
         : m_width(width), m_height(height), m_camera(width, height)
     {
     }
 
-    void Camera2DController::update(f32 elapsed)
+    void EditorCameraComponent::update(f32 elapsed)
     {
         (void)elapsed;
         if (Input::is_key_just_pressed(Key::F)) {
@@ -18,7 +21,7 @@ namespace Fussion
         }
     }
 
-    void Camera2DController::on_event(Event &event)
+    void EditorCameraComponent::on_event(Event &event)
     {
         static glm::vec2 oldMouse = m_camera.screen_to_world(Input::mouse());
         Fussion::Dispatcher dispatcher(event);
@@ -59,4 +62,6 @@ namespace Fussion
             return false;
         });
     }
-} // namespace Fussion
+} // namespace Editor
+
+#endif

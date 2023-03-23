@@ -5,13 +5,14 @@ add_executable(
         EditorApplication.hpp
         EditorApplication.cpp
         CubeData.hpp
-        Layers/SandboxLayer.cpp
-        Layers/SandboxLayer.h
         Layers/EditorLayer.cpp
         Layers/EditorLayer.h
+        Components/EditorCameraComponent.h
+        Components/EditorCameraComponent.cpp
         )
 
 target_link_libraries(Editor Fussion)
+target_include_directories(Editor PRIVATE .)
 
 add_custom_target(run
         DEPENDS Editor
@@ -19,5 +20,6 @@ add_custom_target(run
         USES_TERMINAL
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         )
+
 
 set_project_warnings(Editor ON)

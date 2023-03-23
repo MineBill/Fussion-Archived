@@ -1,7 +1,6 @@
 #include "Camera.h"
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_projection.hpp"
-#include "glm/ext/matrix_transform.hpp"
 
 namespace Fussion
 {
@@ -10,7 +9,6 @@ namespace Fussion
           m_screenHeight(height)
     {
         update_projection_matrix();
-        update_view_matrix();
     }
 
     void Camera2D::update_projection_matrix()
@@ -24,13 +22,6 @@ namespace Fussion
         m_screenHeight = height;
         m_aspect = width / height;
         update_projection_matrix();
-    }
-
-    void Camera2D::update_view_matrix()
-    {
-        auto transform = glm::rotate(glm::mat4(1.0f), glm::radians(m_rotation), {0, 0, 1});
-        transform = glm::translate(transform, m_position);
-        m_viewMatrix = transform;
     }
 
     mustuse glm::vec2 Camera2D::screen_to_world(const glm::vec2 &screen)

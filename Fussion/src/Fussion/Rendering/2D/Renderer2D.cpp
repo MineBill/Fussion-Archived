@@ -95,10 +95,10 @@ namespace Fussion::Renderer2D
         delete[] s_data.VertexBufferDataBase;
     }
 
-    void begin_scene(const Camera2D &camera)
+    void begin_scene(const Camera2D &camera, const glm::mat4& transform)
     {
         s_data.TextureShader->bind();
-        s_data.TextureShader->set_uniform("u_ViewProjection", camera.view_projection());
+        s_data.TextureShader->set_uniform("u_ViewProjection", camera.projection() * glm::inverse(transform));
 
         start_batch();
     }
@@ -131,7 +131,7 @@ namespace Fussion::Renderer2D
     }
 
     void draw_quad(const Ref<Texture> &texture, const glm::vec3 &position, const glm::vec3 &scale,
-                  const glm::vec2 &uvScale)
+                   const glm::vec2 &uvScale)
     {
         FSN_PROFILE_FUNCTION();
 
@@ -189,7 +189,7 @@ namespace Fussion::Renderer2D
     }
 
     void draw_quad_rotated(const Ref<Texture> &texture, const glm::vec3 &position, f32 rotation, const glm::vec3 &scale,
-                         const glm::vec2 &uvScale)
+                           const glm::vec2 &uvScale)
     {
         FSN_PROFILE_FUNCTION();
         if (rotation == 0.0f) {

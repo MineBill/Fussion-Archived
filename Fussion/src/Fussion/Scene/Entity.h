@@ -1,15 +1,16 @@
 #pragma once
-#include <Fussion/Entity/Scene.h>
+#include <Fussion/Scene/Scene.h>
 #include <entt.hpp>
 
 namespace Fussion
 {
     class Entity final
     {
-        Scene *m_scene;
+        Scene *m_scene{nullptr};
         entt::entity m_id{entt::null};
 
     public:
+        Entity() = default;
         Entity(entt::entity id, Scene *scene) : m_scene(scene), m_id(id) {}
 
         template<class T>
@@ -19,9 +20,9 @@ namespace Fussion
         }
 
         template<class T>
-        T *get_component()
+        T &get_component()
         {
-            return m_scene->m_registry.get<T>();
+            return m_scene->m_registry.get<T>(m_id);
         }
 
         template<class T, typename... Args>

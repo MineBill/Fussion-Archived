@@ -4,8 +4,10 @@ add_library(
         ${ENGINE_NAME}
         src/Fussion/Fussion.h
 
-        src/Fussion/Entity/Scene.h
-        src/Fussion/Entity/Scene.cpp
+        src/Fussion/Scene/Scene.h
+        src/Fussion/Scene/Scene.cpp
+        src/Fussion/Scene/Entity.h
+        src/Fussion/Scene/Components.h
 
         src/Fussion/Core/Core.h
         src/Fussion/Core/Log.cpp
@@ -57,12 +59,9 @@ add_library(
 
         src/Fussion/Rendering/2D/Camera.cpp
         src/Fussion/Rendering/2D/Camera.h
-        src/Fussion/Rendering/2D/Camera2DController.h
-        src/Fussion/Rendering/2D/Camera2DController.cpp
 
         src/Fussion/Debug/Profiling.h
-        src/Fussion/Debug/Profiling.cpp
-        src/Fussion/Entity/Entity.h src/Fussion/Entity/Components.h)
+        src/Fussion/Debug/Profiling.cpp)
 add_subdirectory(src/Platform)
 
 if (LINUX)

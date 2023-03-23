@@ -8,16 +8,13 @@ namespace Fussion::Renderer2D
         u32 Drawcalls{0};
         u32 QuadCount{0};
 
-        mustuse u32 vertices() const
-        {
-            return QuadCount * 4;
-        }
+        mustuse u32 vertices() const { return QuadCount * 4; }
     };
 
     void init();
     void shutdown();
 
-    void begin_scene(const Camera2D &camera);
+    void begin_scene(const Camera2D &camera, const glm::mat4 &transform);
     void end_scene();
 
     void draw_quad(const Ref<Texture> &texture, const glm::vec3 &position, const glm::vec3 &scale = {1, 1, 1},

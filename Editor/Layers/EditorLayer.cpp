@@ -1,9 +1,10 @@
 #include "EditorLayer.h"
-#include "Fussion/Entity/Components.h"
+#include "../Components/EditorCameraComponent.h"
 #include "Fussion/Events/KeyboardEvents.h"
 #include "Fussion/Events/MouseEvents.h"
+#include "Fussion/Scene/Components.h"
 #include "glm/gtc/type_ptr.hpp"
-#include <Fussion/Entity/Entity.h>
+#include <Fussion/Scene/Entity.h>
 #include <imgui.h>
 #include <imgui_internal.h>
 #include <misc/cpp/imgui_stdlib.h>
@@ -30,7 +31,7 @@ namespace Editor
         auto &io = ImGui::GetIO();
         io.Fonts->AddFontFromFileTTF("Resources/Inter-Regular.ttf", 16);
         Fussion::RenderCommand::set_clear_color({0.56, 0.56, 0.56});
-        m_camera = Fussion::make_ptr<Fussion::Camera2DController>(100, 100);
+
         m_texture = Fussion::Bitmap::GridPattern(100, 100, 2, 0xAAAAAAFF).to_texture();
         m_frameBuffer = Fussion::Framebuffer::WithSize(100, 100);
 
@@ -41,22 +42,13 @@ namespace Editor
     void EditorLayer::on_update(f32 delta)
     {
         using namespace Fussion;
-        m_camera->update(delta);
 
         m_frameBuffer->bind();
         RenderCommand::clear();
         Renderer2D::reset_stats();
-        Renderer2D::begin_scene(m_camera->camera());
 
-        auto view = m_scene.registry().view<TransformComponent, SpriteComponent>();
-        for (auto entity : view) {
-            auto sprite_component = view.get<SpriteComponent>(entity);
-            auto transform = view.get<TransformComponent>(entity);
+        m_scene.on_update(delta);
 
-            Renderer2D::draw_quad(sprite_component.texture, transform.position);
-        }
-
-        Renderer2D::end_scene();
         m_frameBuffer->unbind();
 
         main_interface(delta);
@@ -64,9 +56,10 @@ namespace Editor
 
     auto EditorLayer::on_event(Fussion::Event &e) -> bool
     {
-        if (m_isViewportFocused) {
-            m_camera->on_event(e);
-        }
+        //        EditorCameraComponent editor_camera = m_camera.get_component<EditorCameraComponent>();
+        //        if (m_isViewportFocused) {
+        //            editor_camera.on_event(e);
+        //        }
         using namespace Fussion;
         Dispatcher d(e);
 
@@ -77,19 +70,19 @@ namespace Editor
             return false;
         });
 
-        if (m_camera->is_panning()) {
-            d.Dispatch<MouseMoved>([&](MouseMoved &mm) {
-                glm::vec2 pos = {mm.x(), mm.y()};
-                if (pos.x < m_viewportPosition.x) {
-                    Input::set_mouse(static_cast<u32>(m_viewportPosition.x + m_viewportSize.x),
-                                     static_cast<u32>(pos.y));
-                } else if (pos.x > m_viewportPosition.x + m_viewportSize.x) {
-                    Input::set_mouse(static_cast<u32>(m_viewportPosition.x), static_cast<u32>(pos.y));
-                }
-
-                return false;
-            });
-        }
+        //        if (editor_camera.is_panning()) {
+        //            d.Dispatch<MouseMoved>([&](MouseMoved &mm) {
+        //                glm::vec2 pos = {mm.x(), mm.y()};
+        //                if (pos.x < m_viewportPosition.x) {
+        //                    Input::set_mouse(static_cast<u32>(m_viewportPosition.x + m_viewportSize.x),
+        //                                     static_cast<u32>(pos.y));
+        //                } else if (pos.x > m_viewportPosition.x + m_viewportSize.x) {
+        //                    Input::set_mouse(static_cast<u32>(m_viewportPosition.x), static_cast<u32>(pos.y));
+        //                }
+        //
+        //                return false;
+        //            });
+        //        }
 
         return false;
     }
@@ -265,7 +258,6 @@ namespace Editor
             auto newViewportSize = glm::vec2{max.x - min.x, max.y - min.y};
             if (newViewportSize != m_viewportSize) {
                 m_frameBuffer->resize(static_cast<u32>(newViewportSize.x), static_cast<u32>(newViewportSize.y));
-                m_camera->camera().resize(newViewportSize.x, newViewportSize.y);
             }
             m_viewportSize = newViewportSize;
 

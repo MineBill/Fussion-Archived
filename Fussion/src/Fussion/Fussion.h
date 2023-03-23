@@ -5,8 +5,10 @@
 #include "Fussion/Core/Log.h"
 #include "Fussion/Core/Types.h"
 
+#include <Fussion/Scene/Scene.h>
+#include <Fussion/Scene/Entity.h>
+
 #include "Fussion/Rendering/2D/Camera.h"
-#include "Fussion/Rendering/2D/Camera2DController.h"
 #include "Fussion/Rendering/2D/Renderer2D.h"
 #include "Fussion/Rendering/Bitmap.h"
 #include "Fussion/Rendering/Buffers.h"
