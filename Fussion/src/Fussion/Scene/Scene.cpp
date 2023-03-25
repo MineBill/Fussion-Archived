@@ -13,8 +13,8 @@ namespace Fussion
         auto camera = create("Camera");
         auto &cam = camera.add_component<CameraComponent>(Camera2D{50, 50});
         cam.primary = true;
-        cam.camera.set_size(5);
-        cam.clear_color = glm::vec3{1.0f, 0, 0};
+        cam.camera.set_size(1);
+        cam.clear_color = glm::vec3{0.12f, 0.12f, 0.12f};
         FSN_CORE_LOG("clear_color: {}", cam.clear_color.x);
 
         // Insert the editor camera:
