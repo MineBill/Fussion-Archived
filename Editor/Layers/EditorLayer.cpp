@@ -43,14 +43,14 @@ namespace Editor
     {
         using namespace Fussion;
 
+        main_interface(delta);
+
         m_frameBuffer->bind();
         Renderer2D::reset_stats();
 
         m_scene.on_update(delta);
 
         m_frameBuffer->unbind();
-
-        main_interface(delta);
     }
 
     auto EditorLayer::on_event(Fussion::Event &e) -> bool
