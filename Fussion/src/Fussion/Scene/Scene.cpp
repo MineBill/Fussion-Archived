@@ -42,7 +42,7 @@ namespace Fussion
         {
             auto view = m_registry.view<CameraComponent, TransformComponent>();
             for (auto entity : view) {
-                auto camera_comp = view.get<CameraComponent>(entity);
+                auto &camera_comp = view.get<CameraComponent>(entity);
                 if (camera_comp.primary) {
                     camera = &camera_comp.camera;
                     clear_color = &camera_comp.clear_color;
