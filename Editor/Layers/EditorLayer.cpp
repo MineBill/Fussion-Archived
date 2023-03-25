@@ -69,6 +69,7 @@ namespace Editor
             return false;
         });
 
+        m_scene.on_event(e);
         //        if (editor_camera.is_panning()) {
         //            d.Dispatch<MouseMoved>([&](MouseMoved &mm) {
         //                glm::vec2 pos = {mm.x(), mm.y()};

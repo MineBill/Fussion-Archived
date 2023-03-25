@@ -68,4 +68,30 @@ namespace Fussion
         Renderer2D::end_scene();
     }
 
+    void Scene::on_event(Event &event)
+    {
+        Dispatcher dispatcher(event);
+
+        dispatcher.dispatch<WindowResized>([&](WindowResized &window_resized) {
+            on_resized(window_resized.width(), window_resized.height());
+            return false;
+        });
+    }
+
+    void Scene::on_resized(i32 width, i32 height)
+    {
+        Camera2D *camera{nullptr};
+        {
+            auto view = m_registry.view<CameraComponent, TransformComponent>();
+            for (auto entity : view) {
+                auto &camera_comp = view.get<CameraComponent>(entity);
+                if (camera_comp.primary) {
+                    camera = &camera_comp.camera;
+                    break;
+                }
+            }
+        }
+        camera->resize(width, height);
+    }
+
 } // namespace Fussion
