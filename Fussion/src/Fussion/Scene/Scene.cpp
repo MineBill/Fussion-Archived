@@ -1,5 +1,6 @@
 #include "Fussion/Core/Core.h"
 #include "Fussion/Rendering/2D/Renderer2D.h"
+#include <Fussion/Events/ApplicationEvents.h>
 #include <Fussion/Rendering/RenderCommand.h>
 #include <Fussion/Scene/Components.h>
 #include <Fussion/Scene/Entity.h>
@@ -10,12 +11,9 @@ namespace Fussion
     Scene::Scene()
     {
         auto camera = create("Camera");
-        camera.add_component<CameraComponent>(Camera2D{100, 100});
-
-        auto camera2 = create("Camera 2");
-        auto &cam = camera2.add_component<CameraComponent>(Camera2D{50, 50});
+        auto &cam = camera.add_component<CameraComponent>(Camera2D{50, 50});
         cam.primary = true;
-        cam.camera.set_size(50);
+        cam.camera.set_size(5);
         cam.clear_color = glm::vec3{1.0f, 0, 0};
         FSN_CORE_LOG("clear_color: {}", cam.clear_color.x);
 

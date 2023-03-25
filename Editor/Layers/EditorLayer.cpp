@@ -62,7 +62,7 @@ namespace Editor
         using namespace Fussion;
         Dispatcher d(e);
 
-        d.Dispatch<OnKeyPressed>([](OnKeyPressed &k) {
+        d.dispatch<OnKeyPressed>([](OnKeyPressed &k) {
             if (k.key() == Key::Escape) {
                 Application::get().quit();
             }
@@ -255,11 +255,12 @@ namespace Editor
             max.y += pos.y;
             m_viewportPosition = {pos.x, pos.y};
 
-            auto newViewportSize = glm::vec2{max.x - min.x, max.y - min.y};
-            if (newViewportSize != m_viewportSize) {
-                m_frameBuffer->resize(static_cast<u32>(newViewportSize.x), static_cast<u32>(newViewportSize.y));
+            auto new_viewport_size = glm::vec2{max.x - min.x, max.y - min.y};
+            if (new_viewport_size != m_viewportSize) {
+                m_frameBuffer->resize(static_cast<u32>(new_viewport_size.x), static_cast<u32>(new_viewport_size.y));
+                m_scene.on_resized(static_cast<i32>(new_viewport_size.x), static_cast<i32>(new_viewport_size.y));
             }
-            m_viewportSize = newViewportSize;
+            m_viewportSize = new_viewport_size;
 
             ImGui::Image(reinterpret_cast<ImTextureID>(static_cast<u64>(id)), {max.x - min.x, max.y - min.y}, // NOLINT
                          {0, 0},                                                                              // NOLINT

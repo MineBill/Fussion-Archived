@@ -72,7 +72,7 @@ namespace Fussion
         }
 
         template<std::derived_from<Event> T>
-        void Dispatch(EventFn<T> fn)
+        void dispatch(EventFn<T> fn)
         {
             FSN_PROFILE_FUNCTION();
             if (m_event.Handled || m_event.type() != T::static_type())

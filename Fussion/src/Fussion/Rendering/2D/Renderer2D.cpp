@@ -95,7 +95,7 @@ namespace Fussion::Renderer2D
         delete[] s_data.VertexBufferDataBase;
     }
 
-    void begin_scene(const Camera2D &camera, const glm::mat4& transform)
+    void begin_scene(const Camera2D &camera, const glm::mat4 &transform)
     {
         s_data.TextureShader->bind();
         s_data.TextureShader->set_uniform("u_ViewProjection", camera.projection() * glm::inverse(transform));
