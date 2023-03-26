@@ -4,6 +4,6 @@
 int main()
 {
     Editor::EditorApplication editor{
-        Fussion::WindowProps{.width = 1280, .height = 720, .title = "This is a cool window"}};
+        Fussion::WindowProps{.width = 1280, .height = 720, .title = "Fussion Editor"}};
     editor.run();
 }
