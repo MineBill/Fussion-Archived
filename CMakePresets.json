@@ -47,6 +47,22 @@
             "inherits": "linux-x64",
             "hidden": true,
             "generator": "Ninja"
+        },
+        {
+            "name": "linux-debug",
+            "displayName": "Linux Debug",
+            "inherits": [
+                "debug",
+                "linux-x64"
+            ]
+        },
+        {
+            "name": "windows-debug",
+            "displayName": "Windows Debug",
+            "inherits": [
+                "debug",
+                "windows-x64-vs2022"
+            ]
         }
     ]
 }
