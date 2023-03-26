@@ -1,14 +1,9 @@
 #include "EditorLayer.h"
-#include "../Components/EditorCameraComponent.h"
 #include "Fussion/Events/KeyboardEvents.h"
-#include "Fussion/Events/MouseEvents.h"
 #include "Fussion/Scene/Components.h"
 #include "Systems/EditorCameraSystem.h"
-#include "glm/gtc/type_ptr.hpp"
-#include <Fussion/Scene/Entity.h>
 #include <imgui.h>
 #include <imgui_internal.h>
-#include <misc/cpp/imgui_stdlib.h>
 
 namespace Editor
 {
