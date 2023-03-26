@@ -2,19 +2,22 @@ add_executable(
         Editor
 
         main.cpp
+        CubeData.hpp
         EditorApplication.hpp
         EditorApplication.cpp
-        CubeData.hpp
         Layers/EditorLayer.cpp
         Layers/EditorLayer.h
         Components/EditorCameraComponent.h
         Components/EditorCameraComponent.cpp
+        Systems/EditorCameraSystem.cpp
+        Systems/EditorCameraSystem.h
 )
 
 target_link_libraries(Editor Fussion)
 target_include_directories(Editor PRIVATE .)
 
-add_custom_target(run
+add_custom_target(
+        run
         DEPENDS Editor
         COMMAND ${CMAKE_CURRENT_BINARY_DIR}/Editor
         USES_TERMINAL

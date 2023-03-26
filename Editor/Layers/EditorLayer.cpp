@@ -3,6 +3,7 @@
 #include "Fussion/Events/KeyboardEvents.h"
 #include "Fussion/Events/MouseEvents.h"
 #include "Fussion/Scene/Components.h"
+#include "Systems/EditorCameraSystem.h"
 #include "glm/gtc/type_ptr.hpp"
 #include <Fussion/Scene/Entity.h>
 #include <imgui.h>
@@ -12,6 +13,7 @@
 namespace Editor
 {
     using namespace Fussion;
+    EditorLayer *EditorLayer::s_instance = nullptr;
 
     // Preserving ImGUI naming
     [[maybe_unused]] static void HelpMarker(const char *desc)
@@ -28,6 +30,8 @@ namespace Editor
 
     void EditorLayer::on_load()
     {
+        s_instance = this;
+
         auto &io = ImGui::GetIO();
         io.Fonts->AddFontFromFileTTF("Resources/Inter-Regular.ttf", 16);
         Fussion::RenderCommand::set_clear_color({0.56, 0.56, 0.56});
@@ -37,6 +41,15 @@ namespace Editor
 
         auto entity = m_scene.create();
         entity.add_component<SpriteComponent>(m_texture);
+
+        auto camera = m_scene.create();
+        camera.add_component<EditorCameraComponent>();
+        auto &cam = camera.add_component<CameraComponent>(Camera2D(50, 50));
+        cam.primary = true;
+        cam.camera.set_size(1);
+        cam.clear_color = glm::vec3{0.12f, 0.12f, 0.12f};
+
+        m_scene.register_system<EditorCameraSystem>();
     }
 
     void EditorLayer::on_update(f32 delta)
@@ -55,10 +68,6 @@ namespace Editor
 
     auto EditorLayer::on_event(Fussion::Event &e) -> bool
     {
-        //        EditorCameraComponent editor_camera = m_camera.get_component<EditorCameraComponent>();
-        //        if (m_isViewportFocused) {
-        //            editor_camera.on_event(e);
-        //        }
         using namespace Fussion;
         Dispatcher d(e);
 
@@ -240,7 +249,7 @@ namespace Editor
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {0, 0});
         ImGui::Begin("Viewport");
         {
-            m_is_viewport_visible = ImGui::IsWindowHovered();
+            m_is_viewport_focused = ImGui::IsWindowHovered();
             // ImGui::Image(reinterpret_cast<void *>(id), ViewportSize, {0, 0}, {1, -1}); // NOLINT
             // static ImVec2 ViewportSize = {200.0f, 200.0f};
             auto id = m_frame_buffer->color_attachment();
@@ -276,5 +285,10 @@ namespace Editor
         ImGui::Text("Drawcalls: %d", stats.Drawcalls);
         ImGui::Text("Vertices: %d", stats.vertices());
         ImGui::End();
+    }
+
+    EditorLayer &EditorLayer::get()
+    {
+        return *s_instance;
     }
 } // namespace Editor

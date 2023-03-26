@@ -1,10 +1,13 @@
 #pragma once
+#include <Components/EditorCameraComponent.h>
 #include <Fussion/Fussion.h>
 
 namespace Editor
 {
     class EditorLayer final : public Fussion::Layer
     {
+        static EditorLayer *s_instance;
+
         Fussion::Ref<Fussion::Texture> m_texture, m_second_texture;
         Fussion::Ref<Fussion::Framebuffer> m_frame_buffer{};
 
@@ -13,7 +16,7 @@ namespace Editor
         glm::vec2 m_viewport_size{};
         glm::vec2 m_viewport_position{};
 
-        bool m_is_viewport_visible{false};
+        bool m_is_viewport_focused{false};
         bool m_show_renderer{false};
 
         void main_interface(f32);
@@ -31,5 +34,9 @@ namespace Editor
         void on_load() override;
         void on_update(f32 delta) override;
         auto on_event(Fussion::Event &event) -> bool override;
+
+        static EditorLayer &get();
+
+        bool is_viewport_focused() const { return m_is_viewport_focused; }
     };
 } // namespace Editor

@@ -8,6 +8,7 @@ add_library(
         src/Fussion/Scene/Scene.cpp
         src/Fussion/Scene/Entity.h
         src/Fussion/Scene/Components.h
+        src/Fussion/Scene/System.h
 
         src/Fussion/Core/Core.h
         src/Fussion/Core/Log.cpp

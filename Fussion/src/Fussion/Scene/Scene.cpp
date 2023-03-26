@@ -8,20 +8,7 @@
 
 namespace Fussion
 {
-    Scene::Scene()
-    {
-        auto camera = create("Camera");
-        auto &cam = camera.add_component<CameraComponent>(Camera2D{50, 50});
-        cam.primary = true;
-        cam.camera.set_size(1);
-        cam.clear_color = glm::vec3{0.12f, 0.12f, 0.12f};
-        FSN_CORE_LOG("clear_color: {}", cam.clear_color.x);
-
-        // Insert the editor camera:
-        // CameraComponent
-        // CameraComponent
-        // EditorCamera <= Takes precedence when running the editor, always updates
-    }
+    Scene::Scene() = default;
 
     Entity Scene::create(const String &name)
     {
@@ -33,6 +20,10 @@ namespace Fussion
 
     void Scene::on_update([[maybe_unused]] f32 delta)
     {
+        for (auto &system : m_systems) {
+            system->run(m_registry);
+        }
+
         // Find the rendering camera
         Camera2D *camera{nullptr};
         glm::vec3 *clear_color{nullptr};
@@ -74,6 +65,10 @@ namespace Fussion
             on_resized(window_resized.width(), window_resized.height());
             return false;
         });
+
+        for (auto &system : m_systems) {
+            system->on_event(m_registry, event);
+        }
     }
 
     void Scene::on_resized(i32 width, i32 height)
@@ -89,6 +84,7 @@ namespace Fussion
                 }
             }
         }
+        FSN_CORE_ASSERT(camera != nullptr, "Could not find a main camera to render");
         camera->resize(width, height);
     }
 
