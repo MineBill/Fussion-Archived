@@ -1,4 +1,5 @@
 #pragma once
+#include "SceneTreePanel.h"
 #include <Components/EditorCameraComponent.h>
 #include <Fussion/Fussion.h>
 
@@ -19,10 +20,10 @@ namespace Editor
         bool m_is_viewport_focused{false};
         bool m_show_renderer{false};
 
+        SceneTreePanel m_scene_tree_panel{};
+
         void main_interface(f32);
         void main_menubar();
-        void inspector();
-        void scene();
         void viewport();
         void renderer_statistics();
 
@@ -37,6 +38,6 @@ namespace Editor
 
         static EditorLayer &get();
 
-        bool is_viewport_focused() const { return m_is_viewport_focused; }
+        mustuse bool is_viewport_focused() const { return m_is_viewport_focused; }
     };
 } // namespace Editor

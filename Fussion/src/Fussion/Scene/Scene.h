@@ -1,6 +1,5 @@
 #pragma once
 #include <Fussion/Events/Event.h>
-#include <Fussion/Scene/Components.h>
 #include <Fussion/Scene/System.h>
 #include <entt.hpp>
 
@@ -28,5 +27,9 @@ namespace Fussion
         {
             m_systems.emplace_back(make_ptr<T>());
         }
+    };
+
+    class TestMe
+    {
     };
 } // namespace Fussion

@@ -2,6 +2,7 @@
 #include "Fussion/Core/Types.h"
 #include "Fussion/Rendering/2D/Camera.h"
 #include "Fussion/Rendering/Texture.h"
+#include "Fussion/Scene/Entity.h"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/vec3.hpp"
 
@@ -37,6 +38,28 @@ namespace Fussion
         Camera2D camera;
         bool primary = false;
 
-        explicit CameraComponent(Camera2D cam): camera(cam) {}
+        explicit CameraComponent(Camera2D cam) : camera(cam) {}
     };
+
+    /**
+     * @brief Contains reference to the parent of this entity.
+     * @attention Only exists if the entity has a parent.
+     */
+    struct ParentComponent {
+        Entity parent;
+
+        explicit ParentComponent(const Entity &entity) : parent(entity) {}
+        ParentComponent(const ParentComponent &other) = default;
+    };
+
+    /**
+     * @brief Contains references to the children of this entity
+     * @attention Only exists if the entity has children.
+     */
+    struct ChildrenComponent {
+        std::vector<Entity> children;
+
+        explicit ChildrenComponent(const std::vector<Entity> &c) : children(c) {}
+    };
+
 } // namespace Fussion

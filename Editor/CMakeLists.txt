@@ -7,6 +7,10 @@ add_executable(
         EditorApplication.cpp
         Layers/EditorLayer.cpp
         Layers/EditorLayer.h
+
+        Layers/SceneTreePanel.cpp
+        Layers/SceneTreePanel.h
+
         Components/EditorCameraComponent.h
         Components/EditorCameraComponent.cpp
         Systems/EditorCameraSystem.cpp

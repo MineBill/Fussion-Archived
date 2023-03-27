@@ -37,7 +37,7 @@ namespace Editor
         auto entity = m_scene.create();
         entity.add_component<SpriteComponent>(m_texture);
 
-        auto camera = m_scene.create();
+        auto camera = m_scene.create("Editor Camera");
         camera.add_component<EditorCameraComponent>();
         auto &cam = camera.add_component<CameraComponent>(Camera2D(50, 50));
         cam.primary = true;
@@ -45,6 +45,12 @@ namespace Editor
         cam.clear_color = glm::vec3{0.12f, 0.12f, 0.12f};
 
         m_scene.register_system<EditorCameraSystem>();
+
+        auto e1 = m_scene.create("Entity 1");
+        auto e2 = m_scene.create("Entity 2");
+        auto e3 = m_scene.create("Entity 3");
+        e1.add_child(e2);
+        e2.add_child(e3);
     }
 
     void EditorLayer::on_update(f32 delta)
@@ -74,19 +80,6 @@ namespace Editor
         });
 
         m_scene.on_event(e);
-        //        if (editor_camera.is_panning()) {
-        //            d.Dispatch<MouseMoved>([&](MouseMoved &mm) {
-        //                glm::vec2 pos = {mm.x(), mm.y()};
-        //                if (pos.x < m_viewportPosition.x) {
-        //                    Input::set_mouse(static_cast<u32>(m_viewportPosition.x + m_viewportSize.x),
-        //                                     static_cast<u32>(pos.y));
-        //                } else if (pos.x > m_viewportPosition.x + m_viewportSize.x) {
-        //                    Input::set_mouse(static_cast<u32>(m_viewportPosition.x), static_cast<u32>(pos.y));
-        //                }
-        //
-        //                return false;
-        //            });
-        //        }
 
         return false;
     }
@@ -98,9 +91,7 @@ namespace Editor
 
         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
 
-        // Inspector
-        inspector();
-        scene();
+        m_scene_tree_panel.on_draw(m_scene, delta);
         viewport();
 
         if (m_show_renderer) {
@@ -127,9 +118,9 @@ namespace Editor
         ImGui::EndMainMenuBar();
     }
 
+#if GO
     void EditorLayer::inspector()
     {
-#if GO
         ImGui::Begin("Inspector");
         ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, {4, 4});
 
@@ -160,84 +151,8 @@ namespace Editor
         }
         ImGui::PopStyleVar();
         ImGui::End();
-#endif
-    }
-
-#if RENDER_GAMEOBJECT
-    void EditorLayer::render_gameobject(const Fussion::Ref<Fussion::GameObject> &go)
-    {
-        auto i = 0;
-        for (auto &child : go->children()) {
-            ImGuiTreeNodeFlags flags =
-                ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_FramePadding | ImGuiTreeNodeFlags_OpenOnArrow;
-            if (child->children().size() == 0) {
-                flags |= ImGuiTreeNodeFlags_Leaf;
-            }
-
-            if (!m_selectedGameObject.expired()) {
-                auto selected = m_selectedGameObject.lock();
-                if (child->equals(*selected.get())) {
-                    flags |= ImGuiTreeNodeFlags_Selected;
-                }
-            }
-            ImGui::PushID(i++);
-            void *id = reinterpret_cast<void *>(child->id()); // NOLINT
-            bool opened = ImGui::TreeNodeEx(id, flags, "%s", child->name().c_str());
-            ImGui::PopID();
-
-            if (ImGui::IsItemClicked()) {
-                m_selectedGameObject = child;
-            }
-
-            ImGui::OpenPopupOnItemClick("context");
-            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(6, 6));
-            if (ImGui::BeginPopup("context")) {
-                if (ImGui::MenuItem("Create GameObject")) {
-                    auto new_go = m_registry.create("New GameObject", child);
-                }
-                ImGui::SameLine();
-                HelpMarker("Create a new gameobject as a child.");
-
-                if (ImGui::MenuItem("Destroy")) {
-                    // go->remove_child(child);
-                    child->destroy();
-                }
-                ImGui::EndPopup();
-            }
-            ImGui::PopStyleVar();
-
-            if (opened) {
-                render_gameobject(child);
-                ImGui::TreePop();
-            }
-        }
     }
 #endif
-
-    void EditorLayer::scene()
-    {
-#if OLDSCENE
-        ImGui::Begin("Scene");
-        if (ImGui::Button("Create Object")) {
-            auto go = m_registry.create("New GameObject", m_selectedGameObject.lock());
-            m_selectedGameObject = go;
-        }
-        ImGui::SameLine();
-        HelpMarker("Create a new gameobject with the selected gameobject as parent, and then select it.");
-
-        auto gameObjects = m_registry.all_gameobjects();
-        ImGui::Text("GameObjects: Total of %d", static_cast<i32>(gameObjects.size()));
-        ImGui::Separator();
-        render_gameobject(m_registry.root());
-
-        // Clear active item when clicked inside the scene window but _NOT_ on another item or button
-        if (ImGui::IsWindowHovered() and ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
-            m_selectedGameObject.reset();
-        }
-
-        ImGui::End();
-#endif
-    }
 
     void EditorLayer::viewport()
     {
@@ -245,8 +160,6 @@ namespace Editor
         ImGui::Begin("Viewport");
         {
             m_is_viewport_focused = ImGui::IsWindowHovered();
-            // ImGui::Image(reinterpret_cast<void *>(id), ViewportSize, {0, 0}, {1, -1}); // NOLINT
-            // static ImVec2 ViewportSize = {200.0f, 200.0f};
             auto id = m_frame_buffer->color_attachment();
             auto min = ImGui::GetWindowContentRegionMin();
             auto max = ImGui::GetWindowContentRegionMax();
