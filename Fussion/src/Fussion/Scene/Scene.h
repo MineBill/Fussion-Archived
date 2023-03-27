@@ -28,8 +28,4 @@ namespace Fussion
             m_systems.emplace_back(make_ptr<T>());
         }
     };
-
-    class TestMe
-    {
-    };
 } // namespace Fussion

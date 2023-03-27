@@ -15,7 +15,7 @@ namespace Fussion
 
     public:
         Entity() = default;
-        Entity(const Entity &other);
+        // Entity(const Entity &other);
         Entity(entt::entity id, Scene *scene);
 
         template<class T>

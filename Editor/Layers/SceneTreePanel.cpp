@@ -5,8 +5,7 @@
 
 Editor::SceneTreePanel::SceneTreePanel() : m_selected_entity()
 {
-    FSN_CORE_LOG("LOL");
-};
+}
 
 namespace
 {

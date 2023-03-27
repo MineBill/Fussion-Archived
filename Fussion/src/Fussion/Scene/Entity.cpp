@@ -8,12 +8,12 @@ namespace Fussion
         m_name = &get_component<NameComponent>();
     }
 
-    Entity::Entity(const Entity &other)
+    /* Entity::Entity(const Entity &other)
     {
         m_scene = other.m_scene;
         m_id = other.m_id;
         m_name = other.m_name;
-    }
+    } */
 
     void Entity::add_child(Entity &child)
     {
