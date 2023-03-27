@@ -48,8 +48,8 @@ namespace Fussion
 
         auto view = m_registry.view<TransformComponent, SpriteComponent>();
         for (auto entity : view) {
-            auto sprite_component = view.get<SpriteComponent>(entity);
-            auto transform_component = view.get<TransformComponent>(entity);
+            auto &sprite_component = view.get<SpriteComponent>(entity);
+            auto &transform_component = view.get<TransformComponent>(entity);
 
             Renderer2D::draw_quad(sprite_component.texture, transform_component.position);
         }
