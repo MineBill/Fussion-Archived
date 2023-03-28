@@ -1,4 +1,5 @@
 #pragma once
+#include "PropertiesEditorPanel.h"
 #include "SceneTreePanel.h"
 #include <Components/EditorCameraComponent.h>
 #include <Fussion/Fussion.h>
@@ -21,6 +22,7 @@ namespace Editor
         bool m_show_renderer{false};
 
         SceneTreePanel m_scene_tree_panel{};
+        PropertiesEditorPanel m_properties_editor_panel{};
 
         void main_interface(f32);
         void main_menubar();

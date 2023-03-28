@@ -3,7 +3,6 @@
 #include "Fussion/Scene/Components.h"
 #include "Systems/EditorCameraSystem.h"
 #include <imgui.h>
-#include <imgui_internal.h>
 
 namespace Editor
 {
@@ -27,12 +26,12 @@ namespace Editor
     {
         s_instance = this;
 
-        auto &io = ImGui::GetIO();
+        const auto &io = ImGui::GetIO();
         io.Fonts->AddFontFromFileTTF("Resources/Inter-Regular.ttf", 16);
-        Fussion::RenderCommand::set_clear_color({0.56, 0.56, 0.56});
+        RenderCommand::set_clear_color({0.56, 0.56, 0.56});
 
-        m_texture = Fussion::Bitmap::GridPattern(100, 100, 2, 0xAAAAAAFF).to_texture();
-        m_frame_buffer = Fussion::Framebuffer::WithSize(100, 100);
+        m_texture = Bitmap::GridPattern(100, 100, 2, 0xAAAAAAFF).to_texture();
+        m_frame_buffer = Framebuffer::WithSize(100, 100);
 
         auto entity = m_scene.create();
         entity.add_component<SpriteComponent>(m_texture);
@@ -92,6 +91,7 @@ namespace Editor
         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
 
         m_scene_tree_panel.on_draw(m_scene, delta);
+        m_properties_editor_panel.on_draw(m_scene_tree_panel.selected_entity(), delta);
         viewport();
 
         if (m_show_renderer) {
@@ -104,7 +104,7 @@ namespace Editor
         ImGui::BeginMainMenuBar();
         if (ImGui::BeginMenu("Options")) {
             if (ImGui::MenuItem("quit")) {
-                Fussion::Application::get().quit();
+                Application::get().quit();
             }
             ImGui::EndMenu();
         }
@@ -160,7 +160,7 @@ namespace Editor
         ImGui::Begin("Viewport");
         {
             m_is_viewport_focused = ImGui::IsWindowHovered();
-            auto id = m_frame_buffer->color_attachment();
+            const auto id = m_frame_buffer->color_attachment();
             auto min = ImGui::GetWindowContentRegionMin();
             auto max = ImGui::GetWindowContentRegionMax();
 
@@ -171,7 +171,7 @@ namespace Editor
             max.y += pos.y;
             m_viewport_position = {pos.x, pos.y};
 
-            auto new_viewport_size = glm::vec2{max.x - min.x, max.y - min.y};
+            const auto new_viewport_size = glm::vec2{max.x - min.x, max.y - min.y};
             if (new_viewport_size != m_viewport_size) {
                 m_frame_buffer->resize(static_cast<u32>(new_viewport_size.x), static_cast<u32>(new_viewport_size.y));
                 m_scene.on_resized(static_cast<i32>(new_viewport_size.x), static_cast<i32>(new_viewport_size.y));
@@ -189,8 +189,8 @@ namespace Editor
     void EditorLayer::renderer_statistics()
     {
         ImGui::Begin("Renderer", &m_show_renderer);
-        auto stats = Fussion::Renderer2D::draw_stats();
-        ImGui::Text("Drawcalls: %d", stats.Drawcalls);
+        const auto stats = Renderer2D::draw_stats();
+        ImGui::Text("Draw-calls: %d", stats.Drawcalls);
         ImGui::Text("Vertices: %d", stats.vertices());
         ImGui::End();
     }
