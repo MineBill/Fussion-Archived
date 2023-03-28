@@ -2,7 +2,7 @@
 A very serious(not really) OpenGL Game™ Engine™
 
 ## Amazing high performance quad rendering(again, not really)
-![quads_yay](https://user-images.githubusercontent.com/30367251/213934812-acf9c267-baab-481e-9c30-4e4b6b4a2177.png)
+![image](https://user-images.githubusercontent.com/30367251/228143690-f045524d-f7fb-467b-8da0-2983b8a6b127.png)
 
 # Building
 ### Prerequisites
