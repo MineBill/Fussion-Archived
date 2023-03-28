@@ -5,9 +5,11 @@
 namespace Fussion
 {
     struct NameComponent;
+    struct TransformComponent;
     class Entity final
     {
         NameComponent *m_name{nullptr};
+        TransformComponent *m_transform{nullptr};
         Scene *m_scene{nullptr};
         entt::entity m_id{entt::null};
 
@@ -43,6 +45,7 @@ namespace Fussion
 
         mustuse entt::entity id() const { return m_id; }
         mustuse NameComponent &name() { return *m_name; }
+        mustuse TransformComponent &transform() { return *m_transform; }
         mustuse u32 entity_id() const;
         mustuse u16 version() const;
 

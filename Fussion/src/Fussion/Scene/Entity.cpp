@@ -6,6 +6,10 @@ namespace Fussion
     Entity::Entity(entt::entity id, Scene *scene) : m_scene(scene), m_id(id)
     {
         m_name = &get_component<NameComponent>();
+        FSN_ASSERT(m_name != nullptr, "Missing NameComponent on entity");
+
+        m_transform = &get_component<TransformComponent>();
+        FSN_ASSERT(m_transform != nullptr, "Missing TransformComponent on entity");
     }
 
     /* Entity::Entity(const Entity &other)
