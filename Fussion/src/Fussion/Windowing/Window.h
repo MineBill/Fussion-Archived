@@ -11,6 +11,8 @@ namespace Fussion
         int width{0};
         int height{0};
         std::string title;
+        // Only works in windows
+        bool dark_mode;
     };
 
     class Window

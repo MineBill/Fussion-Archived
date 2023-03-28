@@ -8,6 +8,12 @@
 #include "Platform/OpenGL/OpenGLRenderContext.h"
 #include <GLFW/glfw3.h>
 
+#if _WIN32
+    #define GLFW_EXPOSE_NATIVE_WIN32
+    #include <dwmapi.h>
+#endif
+#include <GLFW/glfw3native.h>
+
 namespace Fussion
 {
 
@@ -31,6 +37,15 @@ namespace Fussion
         m_render_context->init();
 
         setup_bindings();
+
+#if _WIN32
+        if (props.dark_mode) {
+			FSN_CORE_LOG("Setting dark mode for titlebar");
+			HWND handle = glfwGetWin32Window(m_window_ptr);
+			BOOL value = TRUE;
+			DwmSetWindowAttribute(handle, DWMWA_USE_IMMERSIVE_DARK_MODE, &value, sizeof(value));
+        }
+#endif
     }
 
     void WindowGLFW::poll_events() const

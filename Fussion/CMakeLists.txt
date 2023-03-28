@@ -70,6 +70,7 @@ if (LINUX)
     set(debug_library dl)
 elseif (WIN32)
     set(debug_library dbghelp)
+    target_link_libraries(${ENGINE_NAME} PUBLIC Dwmapi.lib)
 endif ()
 
 target_compile_definitions(${ENGINE_NAME} PUBLIC GLM_FORCE_SILENT_WARNINGS)
