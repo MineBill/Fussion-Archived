@@ -17,6 +17,9 @@ add_executable(
         Components/EditorCameraComponent.cpp
         Systems/EditorCameraSystem.cpp
         Systems/EditorCameraSystem.h
+
+        ImGuiHelpers.h
+        ImGuiHelpers.cpp
 )
 
 target_link_libraries(Editor Fussion)

@@ -59,6 +59,7 @@ namespace Fussion
     struct ChildrenComponent {
         std::vector<Entity> children;
 
+        ChildrenComponent() : children({}) {}
         explicit ChildrenComponent(const std::vector<Entity> &c) : children(c) {}
     };
 

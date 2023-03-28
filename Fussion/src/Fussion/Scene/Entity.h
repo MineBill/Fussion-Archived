@@ -32,6 +32,14 @@ namespace Fussion
             return m_scene->m_registry.get<T>(m_id);
         }
 
+        template<typename T>
+        T *get_component_or_null()
+        {
+            if (!has_component<T>())
+                return nullptr;
+            return &get_component<T>();
+        }
+
         template<class T, typename... Args>
         T &add_component(Args &&...args)
         {

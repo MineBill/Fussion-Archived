@@ -33,7 +33,7 @@ namespace Editor
         m_texture = Bitmap::GridPattern(100, 100, 2, 0xAAAAAAFF).to_texture();
         m_frame_buffer = Framebuffer::WithSize(100, 100);
 
-        auto entity = m_scene.create();
+        auto entity = m_scene.create("Checkerboard");
         entity.add_component<SpriteComponent>(m_texture);
 
         auto camera = m_scene.create("Editor Camera");
@@ -50,6 +50,7 @@ namespace Editor
         auto e3 = m_scene.create("Entity 3");
         e1.add_child(e2);
         e2.add_child(e3);
+        entity.add_component<ChildrenComponent>();
     }
 
     void EditorLayer::on_update(f32 delta)
@@ -87,6 +88,7 @@ namespace Editor
     {
         (void)delta;
         main_menubar();
+        ImGui::ShowDemoWindow();
 
         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
 

@@ -2,6 +2,9 @@
 #include <Fussion/Scene/Components.h>
 #include <Fussion/Scene/Entity.h>
 #include <imgui.h>
+#include <misc/cpp/imgui_stdlib.h>
+#define IMGUI_DEFINE_MATH_OPERATORS
+#include <imgui_internal.h>
 
 Editor::SceneTreePanel::SceneTreePanel() : m_selected_entity() {}
 
@@ -40,9 +43,40 @@ void Editor::SceneTreePanel::render_entity(Fussion::Scene &scene, Fussion::Entit
 
     void *id = reinterpret_cast<void *>(e.id()); // NOLINT
     ImGui::PushID(id);
-    bool opened = ImGui::TreeNodeEx(id, flags, "%s", name.name.c_str());
-    ImGui::PopID();
 
+    bool opened = ImGui::TreeNodeEx(id, flags, "%s", name.name.c_str());
+
+    if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
+        ImGui::Text("%s", e.name().name.c_str());
+        ImGui::SetDragDropPayload("SELECTED_ENTITY", &*m_selected_entity, sizeof(Fussion::Entity));
+        ImGui::EndDragDropSource();
+    }
+
+    if (ImGui::BeginDragDropTarget()) {
+        ImGui::PushStyleColor(ImGuiCol_DragDropTarget, ImVec4(1, 0, 0, 1));
+
+        { // Manual border highlight for drag and drop
+            auto *window = ImGui::GetCurrentWindow();
+            auto *ctx = ImGui::GetCurrentContext();
+            ImRect r = ctx->DragDropTargetRect;
+            if (ctx->DragDropAcceptIdPrev == ctx->DragDropTargetId) {
+                window->DrawList->AddRect(r.Min - ImVec2(2.5f, 2.5f), r.Max + ImVec2(2.5f, 2.5f),
+                                          ImGui::GetColorU32(ImGuiCol_SeparatorActive), 0.0f, 0, 0.5f);
+            }
+        }
+
+        if (const ImGuiPayload *payload =
+                ImGui::AcceptDragDropPayload("SELECTED_ENTITY", ImGuiDragDropFlags_AcceptNoDrawDefaultRect)) {
+
+            FSN_CORE_ASSERT(payload->DataSize == sizeof(Fussion::Entity));
+            Fussion::Entity source_entity = *static_cast<Fussion::Entity *>(payload->Data);
+            e.add_child(source_entity);
+        }
+        ImGui::EndDragDropTarget();
+        ImGui::PopStyleColor();
+    }
+
+    ImGui::PopID();
     if (ImGui::IsItemClicked()) {
         m_selected_entity = e;
     }
@@ -87,6 +121,20 @@ void Editor::SceneTreePanel::render_entity(Fussion::Scene &scene, Fussion::Entit
     }
 }
 
+bool ButtonCenteredOnLine(const char *label, float alignment = 0.5f)
+{
+    ImGuiStyle &style = ImGui::GetStyle();
+
+    float size = ImGui::CalcTextSize(label).x + style.FramePadding.x * 2.0f;
+    float avail = ImGui::GetContentRegionAvail().x;
+
+    float off = (avail - size) * alignment;
+    if (off > 0.0f)
+        ImGui::SetCursorPosX(ImGui::GetCursorPosX() + off);
+
+    return ImGui::Button(label);
+}
+
 void Editor::SceneTreePanel::on_draw(Fussion::Scene &scene, f32 delta)
 {
     auto &reg = scene.registry();
@@ -94,7 +142,24 @@ void Editor::SceneTreePanel::on_draw(Fussion::Scene &scene, f32 delta)
     ImGui::Begin("Scene Tree");
 
     if (ImGui::Button("New Entity")) {
-        scene.create("New Entity").add_component<Fussion::ChildrenComponent>(std::vector<Fussion::Entity>());
+        ImGui::OpenPopup("Create new entity");
+    }
+
+    bool opened = true;
+    if (ImGui::BeginPopupModal("Create new entity", &opened)) {
+        static std::string name{"New Entity"};
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(10, 10));
+        ImGui::AlignTextToFramePadding();
+        ImGui::Text("Name");
+        ImGui::SameLine();
+        ImGui::InputText("##new_entity_name", &name);
+
+        if (ButtonCenteredOnLine("Create")) {
+            ImGui::CloseCurrentPopup();
+            scene.create(name).add_component<Fussion::ChildrenComponent>(std::vector<Fussion::Entity>());
+        }
+        ImGui::PopStyleVar();
+        ImGui::EndPopup();
     }
     ImGui::Separator();
     reg.each([&](entt::entity entity) {

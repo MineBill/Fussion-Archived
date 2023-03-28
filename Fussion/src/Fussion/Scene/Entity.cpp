@@ -12,15 +12,14 @@ namespace Fussion
         FSN_ASSERT(m_transform != nullptr, "Missing TransformComponent on entity");
     }
 
-    /* Entity::Entity(const Entity &other)
-    {
-        m_scene = other.m_scene;
-        m_id = other.m_id;
-        m_name = other.m_name;
-    } */
-
     void Entity::add_child(Entity &child)
     {
+        if (auto* parent = get_component_or_null<ParentComponent>()) {
+            if (parent->parent == child) {
+                FSN_CORE_ERR("Cannot add parent as child");
+                return;
+            }
+        }
         FSN_CORE_LOG("Adding child {} to entity {}", child.m_name->name, m_name->name);
         child.set_parent(*this);
         if (has_component<ChildrenComponent>()) {
@@ -43,10 +42,20 @@ namespace Fussion
 
     void Entity::set_parent(Entity &parent)
     {
+        if (has_component<ChildrenComponent>()) {
+            auto& comp = get_component<ChildrenComponent>();
+            for (auto child : comp.children) {
+                if (parent == child) {
+                    return;
+                }
+            }
+        }
+
         FSN_CORE_LOG("{}: My parent is now {}", m_name->name, parent.m_name->name);
         if (has_component<ParentComponent>()) {
             FSN_CORE_LOG("I have a ParentComponent so i'm just setting the parent");
             auto &p = get_component<ParentComponent>();
+            p.parent.remove_child(*this);
             p.parent = parent;
             return;
         }

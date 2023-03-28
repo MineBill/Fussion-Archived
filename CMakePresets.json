@@ -53,7 +53,7 @@
             "displayName": "Linux Debug",
             "inherits": [
                 "debug",
-                "linux-x64"
+                "linux-x64-ninja"
             ]
         },
         {

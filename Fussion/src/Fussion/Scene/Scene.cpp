@@ -51,7 +51,9 @@ namespace Fussion
             auto &sprite_component = view.get<SpriteComponent>(entity);
             auto &transform_component = view.get<TransformComponent>(entity);
 
-            Renderer2D::draw_quad(sprite_component.texture, transform_component.position);
+            // Renderer2D::draw_quad(sprite_component.texture, transform_component.position);
+            Renderer2D::draw_quad_rotated(sprite_component.texture, transform_component.position,
+                                          transform_component.rotation, transform_component.scale);
         }
 
         Renderer2D::end_scene();
