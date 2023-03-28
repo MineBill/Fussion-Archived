@@ -6,7 +6,7 @@ namespace Editor
 {
     class SceneTreePanel final
     {
-        Fussion::Entity m_selected_entity{};
+        Fussion::Optional<Fussion::Entity> m_selected_entity{};
 
         void render_entity(Fussion::Scene &scene, Fussion::Entity e);
 
@@ -15,6 +15,6 @@ namespace Editor
 
         void on_draw(Fussion::Scene &scene, f32 delta);
 
-        Fussion::Entity &selected_entity() { return m_selected_entity; }
+        Fussion::Optional<Fussion::Entity> &selected_entity() { return m_selected_entity; }
     };
 } // namespace Editor

@@ -3,9 +3,7 @@
 #include <Fussion/Scene/Entity.h>
 #include <imgui.h>
 
-Editor::SceneTreePanel::SceneTreePanel() : m_selected_entity()
-{
-}
+Editor::SceneTreePanel::SceneTreePanel() : m_selected_entity() {}
 
 namespace
 {
@@ -36,7 +34,7 @@ void Editor::SceneTreePanel::render_entity(Fussion::Scene &scene, Fussion::Entit
     if (children_component == nullptr || children_component->children.empty()) {
         flags |= ImGuiTreeNodeFlags_Leaf;
     }
-    if (m_selected_entity == e) {
+    if (m_selected_entity.has_value() && (*m_selected_entity) == e) {
         flags |= ImGuiTreeNodeFlags_Selected;
     }
 
@@ -61,6 +59,9 @@ void Editor::SceneTreePanel::render_entity(Fussion::Scene &scene, Fussion::Entit
 
         if (ImGui::MenuItem("Destroy")) {
             e.destroy();
+            if (*m_selected_entity == e) {
+                m_selected_entity.reset();
+            }
             FSN_CORE_LOG("Destroy {} id: {}", e.name().name, static_cast<u64>(e.id()));
         }
         ImGui::EndPopup();
