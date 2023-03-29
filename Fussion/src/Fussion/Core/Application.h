@@ -15,6 +15,7 @@ namespace Fussion
         Ptr<Window> m_window{};
         Ref<ImGuiLayer> m_imgui_layer{};
         bool m_running{true};
+        f32 m_timer{0.0f};
 
         LayerStack m_layer_stack{};
 
@@ -51,5 +52,7 @@ namespace Fussion
         }
 
         mustuse Window &window();
+
+        mustuse static f32 time_since_start();
     };
 } // namespace Fussion

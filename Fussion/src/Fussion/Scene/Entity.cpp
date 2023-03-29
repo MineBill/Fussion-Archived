@@ -42,7 +42,7 @@ namespace Fussion
     void Entity::set_parent(Entity &parent)
     {
         if (has_component<ChildrenComponent>()) {
-            auto& comp = get_component<ChildrenComponent>();
+            auto &comp = get_component<ChildrenComponent>();
             for (auto &child : comp.children) {
                 if (parent == child) {
                     return;
@@ -62,7 +62,7 @@ namespace Fussion
         add_component<ParentComponent>(parent);
     }
 
-    void Entity::destroy()
+    void Entity::destroy() // NOLINT
     {
         if (has_component<ParentComponent>()) {
             auto &parent = get_component<ParentComponent>();
@@ -90,7 +90,8 @@ namespace Fussion
             }
             return parent->parent.is_grandparent_or_parent(entity);
         }
-        FSN_CORE_ERR("{}: Asked to check if entity is a grandparent but i don't have a parent component.", m_name->name);
+        FSN_CORE_ERR("{}: Asked to check if entity is a grandparent but i don't have a parent component.",
+                     m_name->name);
         return false;
     }
 

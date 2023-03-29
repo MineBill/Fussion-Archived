@@ -9,6 +9,10 @@ namespace Editor
     using namespace Fussion;
     EditorLayer *EditorLayer::s_instance = nullptr;
 
+    struct RotatorComponent {
+        f32 speed = 1.0f;
+    };
+
     // Preserving ImGUI naming
     [[maybe_unused]] static void HelpMarker(const char *desc)
     {
@@ -51,6 +55,16 @@ namespace Editor
         e1.add_child(e2);
         e2.add_child(e3);
         entity.add_component<ChildrenComponent>();
+
+        constexpr i32 STACK_EVERY = 20;
+        for (auto x = 0; x < STACK_EVERY; x++) {
+            for (auto y = 0; y < STACK_EVERY; y++) {
+                auto box = m_scene.create("Box");
+                box.add_component<SpriteComponent>(m_texture);
+                box.add_component<RotatorComponent>();
+                box.transform().position = {x, y, 0};
+            }
+        }
     }
 
     void EditorLayer::on_update(f32 delta)
@@ -62,6 +76,11 @@ namespace Editor
         m_frame_buffer->bind();
         Renderer2D::reset_stats();
 
+        auto view = m_scene.registry().view<TransformComponent, RotatorComponent>();
+        for (auto [entity, transform, rotator] : view.each()) {
+            transform.rotation += rotator.speed * delta;
+            transform.scale.x = sinf(Application::time_since_start());
+        }
         m_scene.on_update(delta);
 
         m_frame_buffer->unbind();

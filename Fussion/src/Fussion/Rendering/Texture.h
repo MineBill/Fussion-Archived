@@ -11,9 +11,9 @@ namespace Fussion
     class Texture
     {
     public:
-        mustuse static Ptr<Texture> LoadFromFile(const fs::path &path);
+        mustuse static Ptr<Texture> load_from_file(const fs::path &path);
         // Create texture from raw pixels.
-        mustuse static Ptr<Texture> FromPixels(u8 *pixels, u32 width, u32 height, u32 channels);
+        mustuse static Ptr<Texture> from_pixels(u8 *pixels, u32 width, u32 height, u32 channels);
         virtual ~Texture() = default;
 
         virtual void bind(u32 unit) const = 0;

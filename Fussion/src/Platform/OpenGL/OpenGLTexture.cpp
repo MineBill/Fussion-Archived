@@ -47,6 +47,9 @@ namespace Fussion
             stbi_set_flip_vertically_on_load(1);
             const u8 *image = stbi_load(path.string().c_str(), &m_width, &m_height, &num_channels, 0);
             if (image == nullptr) {
+                FSN_CORE_ERR("Failed to load texture, i should probably give you something default to indicate that "
+                             "visually: path: {}",
+                             path.string());
                 return;
             }
             m_channels = num_channels;
@@ -81,28 +84,19 @@ namespace Fussion
             glBindTextureUnit(unit, m_handle);
         }
 
-        mustuse u32 renderer_handle() const override
-        {
-            return m_handle;
-        }
+        mustuse u32 renderer_handle() const override { return m_handle; }
 
-        mustuse i32 width() const override
-        {
-            return m_width;
-        }
+        mustuse i32 width() const override { return m_width; }
 
-        mustuse i32 height() const override
-        {
-            return m_height;
-        }
+        mustuse i32 height() const override { return m_height; }
     };
 
-    Ptr<Texture> Texture::LoadFromFile(const fs::path &path)
+    Ptr<Texture> Texture::load_from_file(const fs::path &path)
     {
         return std::make_unique<OpenGLTexture>(path);
     }
 
-    Ptr<Texture> Texture::FromPixels(u8 *pixels, u32 width, u32 height, u32 channels)
+    Ptr<Texture> Texture::from_pixels(u8 *pixels, u32 width, u32 height, u32 channels)
     {
         return std::make_unique<OpenGLTexture>(pixels, width, height, channels);
     }

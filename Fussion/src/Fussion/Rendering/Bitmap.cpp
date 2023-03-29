@@ -48,6 +48,6 @@ namespace Fussion
 
     Ref<Texture> Bitmap::to_texture() const
     {
-        return Fussion::Texture::FromPixels(m_dataPtr, m_width, m_height, 4);
+        return Fussion::Texture::from_pixels(m_dataPtr, m_width, m_height, 4);
     }
 } // namespace Fussion

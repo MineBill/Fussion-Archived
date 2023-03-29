@@ -4,6 +4,7 @@
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.h>
 #define IMGUI_DEFINE_MATH_OPERATORS
+#include <ImGuiHelpers.h>
 #include <imgui_internal.h>
 
 Editor::SceneTreePanel::SceneTreePanel() : m_selected_entity() {}
@@ -121,20 +122,6 @@ void Editor::SceneTreePanel::render_entity(Fussion::Scene &scene, Fussion::Entit
     }
 }
 
-bool ButtonCenteredOnLine(const char *label, float alignment = 0.5f)
-{
-    ImGuiStyle &style = ImGui::GetStyle();
-
-    float size = ImGui::CalcTextSize(label).x + style.FramePadding.x * 2.0f;
-    float avail = ImGui::GetContentRegionAvail().x;
-
-    float off = (avail - size) * alignment;
-    if (off > 0.0f)
-        ImGui::SetCursorPosX(ImGui::GetCursorPosX() + off);
-
-    return ImGui::Button(label);
-}
-
 void Editor::SceneTreePanel::on_draw(Fussion::Scene &scene, f32 delta)
 {
     auto &reg = scene.registry();
@@ -154,7 +141,7 @@ void Editor::SceneTreePanel::on_draw(Fussion::Scene &scene, f32 delta)
         ImGui::SameLine();
         ImGui::InputText("##new_entity_name", &name);
 
-        if (ButtonCenteredOnLine("Create")) {
+        if (ImGuiHelpers::ButtonCenteredOnLine("Create")) {
             ImGui::CloseCurrentPopup();
             scene.create(name).add_component<Fussion::ChildrenComponent>(std::vector<Fussion::Entity>());
         }

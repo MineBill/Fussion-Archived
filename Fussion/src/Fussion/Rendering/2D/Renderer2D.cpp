@@ -42,7 +42,7 @@ namespace Fussion::Renderer2D
     void init()
     {
         u8 pixels[3] = {0xff, 0xff, 0xff};
-        s_data.WhiteTexture = Texture::FromPixels(pixels, 1, 1, 3);
+        s_data.WhiteTexture = Texture::from_pixels(pixels, 1, 1, 3);
         s_data.TextureSlots[0] = s_data.WhiteTexture;
 
         s_data.TextureShader = Shader::LoadFromFile("Resources/Shaders/Texture.glsl");

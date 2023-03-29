@@ -181,3 +181,17 @@ void ImGuiHelpers::DragVec3(const char *id, glm::vec3 *value, f32 speed, f32 min
     ImGui::PopStyleVar();
     ImGui::PopID();
 }
+
+bool ImGuiHelpers::ButtonCenteredOnLine(const char *label, float alignment)
+{
+    ImGuiStyle &style = ImGui::GetStyle();
+
+    float size = ImGui::CalcTextSize(label).x + style.FramePadding.x * 2.0f;
+    float avail = ImGui::GetContentRegionAvail().x;
+
+    float off = (avail - size) * alignment;
+    if (off > 0.0f)
+        ImGui::SetCursorPosX(ImGui::GetCursorPosX() + off);
+
+    return ImGui::Button(label);
+}

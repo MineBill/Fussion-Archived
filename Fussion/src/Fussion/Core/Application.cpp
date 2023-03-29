@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "Fussion/Core/Log.h"
+#include "Fussion/Debug/Profiling.h"
 #include "Fussion/Events/ApplicationEvents.h"
 #include "Fussion/Events/Event.h"
 #include "Fussion/Events/KeyboardEvents.h"
@@ -11,7 +12,6 @@
 #include <iostream>
 #include <ranges>
 #include <utility>
-#include "Fussion/Debug/Profiling.h"
 
 using namespace Fussion;
 
@@ -53,6 +53,7 @@ void Application::run()
         std::chrono::duration<f32> elapsed_duration = now - previousClock;
         previousClock = now;
         f32 elapsed = elapsed_duration.count();
+        m_timer += elapsed;
 
         m_imgui_layer->begin_frame(elapsed);
         m_window->poll_events();
@@ -107,4 +108,9 @@ Window &Application::window()
 {
     FSN_CORE_ASSERT(m_window != nullptr);
     return *m_window.get();
+}
+
+f32 Application::time_since_start()
+{
+    return s_instance->m_timer;
 }
