@@ -14,11 +14,10 @@ namespace Fussion
 
     void Entity::add_child(Entity &child)
     {
-        if (auto* parent = get_component_or_null<ParentComponent>()) {
-            if (parent->parent == child) {
-                FSN_CORE_ERR("Cannot add parent as child");
-                return;
-            }
+        // Check if child to be added is a grandparent
+        if (is_grandparent_or_parent(child)) {
+            FSN_CORE_ERR("Cannot add parent as child");
+            return;
         }
         FSN_CORE_LOG("Adding child {} to entity {}", child.m_name->name, m_name->name);
         child.set_parent(*this);
@@ -30,7 +29,7 @@ namespace Fussion
         add_component<ChildrenComponent>(std::vector<Entity>{child});
     }
 
-    void Entity::remove_child(Fussion::Entity &child)
+    void Entity::remove_child(Fussion::Entity &child) const
     {
         if (has_component<ChildrenComponent>()) {
             auto &children = get_component<ChildrenComponent>();
@@ -44,7 +43,7 @@ namespace Fussion
     {
         if (has_component<ChildrenComponent>()) {
             auto& comp = get_component<ChildrenComponent>();
-            for (auto child : comp.children) {
+            for (auto &child : comp.children) {
                 if (parent == child) {
                     return;
                 }
@@ -80,6 +79,19 @@ namespace Fussion
         }
 
         m_scene->registry().destroy(m_id);
+    }
+
+    bool Entity::is_grandparent_or_parent(Entity &entity) const // NOLINT
+    {
+        if (auto *parent = get_component_or_null<ParentComponent>()) {
+            FSN_CORE_LOG("Comparing {} with {}", entity.m_name->name, parent->parent.m_name->name);
+            if (entity == parent->parent) {
+                return true;
+            }
+            return parent->parent.is_grandparent_or_parent(entity);
+        }
+        FSN_CORE_ERR("{}: Asked to check if entity is a grandparent but i don't have a parent component.", m_name->name);
+        return false;
     }
 
     u32 Entity::entity_id() const

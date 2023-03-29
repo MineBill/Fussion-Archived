@@ -21,19 +21,19 @@ namespace Fussion
         Entity(entt::entity id, Scene *scene);
 
         template<class T>
-        bool has_component()
+        bool has_component() const
         {
             return m_scene->m_registry.all_of<T>(m_id);
         }
 
         template<class T>
-        T &get_component()
+        T &get_component() const // @NOTE: Should this be const?
         {
             return m_scene->m_registry.get<T>(m_id);
         }
 
         template<typename T>
-        T *get_component_or_null()
+        T *get_component_or_null() const
         {
             if (!has_component<T>())
                 return nullptr;
@@ -48,8 +48,9 @@ namespace Fussion
         }
 
         void add_child(Entity &child);
-        void remove_child(Entity &child);
+        void remove_child(Entity &child) const;
         void destroy();
+        bool is_grandparent_or_parent(Entity& entity) const;
 
         mustuse entt::entity id() const { return m_id; }
         mustuse NameComponent &name() { return *m_name; }
