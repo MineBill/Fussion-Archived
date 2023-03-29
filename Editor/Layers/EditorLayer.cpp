@@ -139,42 +139,6 @@ namespace Editor
         ImGui::EndMainMenuBar();
     }
 
-#if GO
-    void EditorLayer::inspector()
-    {
-        ImGui::Begin("Inspector");
-        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, {4, 4});
-
-        if (!m_selectedGameObject.expired()) {
-            auto go = m_selectedGameObject.lock();
-            // ImGui::Text("%s", go->name().c_str());
-            Fussion::String tmp_name = go->name();
-            ImGui::InputText("##name_input", &tmp_name);
-            if (tmp_name != go->name()) {
-                go->set_name(tmp_name);
-            }
-            ImGui::Separator();
-
-            auto flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed;
-            if (ImGui::TreeNodeEx("Transform", flags, "Transform")) {
-                go->transform()->on_editor_gui();
-                ImGui::TreePop();
-            }
-            auto i = 0;
-            for (const auto &component : go->all_components()) {
-                auto name = component->name();
-
-                if (ImGui::TreeNodeEx(reinterpret_cast<void *>(i++), flags, "%s", name.data())) { // NOLINT
-                    component->on_editor_gui();
-                    ImGui::TreePop();
-                }
-            }
-        }
-        ImGui::PopStyleVar();
-        ImGui::End();
-    }
-#endif
-
     void EditorLayer::viewport()
     {
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {0, 0});
