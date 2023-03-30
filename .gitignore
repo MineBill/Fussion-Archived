@@ -6,3 +6,5 @@ out/
 CMakeUserPresets.json
 compile_commands.json
 */imgui.ini
+configure.sh
+build.sh

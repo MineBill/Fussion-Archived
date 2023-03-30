@@ -130,6 +130,7 @@ namespace Fussion::Renderer2D
         s_data.Stats.Drawcalls++;
     }
 
+#if OLD
     void draw_quad(const Ref<Texture> &texture, const glm::vec3 &position, const glm::vec3 &scale,
                    const glm::vec2 &uvScale)
     {
@@ -187,15 +188,17 @@ namespace Fussion::Renderer2D
 
         s_data.Stats.QuadCount++;
     }
+#endif
 
-    void draw_quad_rotated(const Ref<Texture> &texture, const glm::vec3 &position, f32 rotation, const glm::vec3 &scale,
-                           const glm::vec2 &uvScale)
+    void draw_quad(const Ref<Texture> &texture, const DrawQuadParams &params)
     {
         FSN_PROFILE_FUNCTION();
-        if (rotation == 0.0f) {
-            draw_quad(texture, position, scale, uvScale);
+#if OLD
+        if (params.rotation == 0.0f) {
+            draw_quad(texture, params.position, params.scale, params.uv_scale);
             return;
         }
+#endif
 
         if (s_data.IndexBufferCount >= MaxIndices) {
             end_scene();
@@ -221,30 +224,33 @@ namespace Fussion::Renderer2D
             }
         }
 
-        auto trans = glm::translate(glm::mat4(1.0f), position);
-        auto rotationMatrix = glm::rotate(trans, rotation, {0, 0, 1});
+        auto trans = glm::translate(glm::mat4(1.0f), params.position);
+        auto rotationMatrix = glm::rotate(trans, params.rotation, {0, 0, 1});
 
         s_data.VertexBufferDataPtr->Position = rotationMatrix * glm::vec4{0, 0, 0, 1};
-        s_data.VertexBufferDataPtr->Color = {1, 1, 1, 1};
+        s_data.VertexBufferDataPtr->Color = params.tint_color;
         s_data.VertexBufferDataPtr->TextureCoords = {0, 0};
         s_data.VertexBufferDataPtr->TextureIndex = textureIndex;
         s_data.VertexBufferDataPtr++;
 
-        s_data.VertexBufferDataPtr->Position = rotationMatrix * glm::vec4(glm::vec3(1.0f, 0.0f, 0.0f) * scale, 1.0f);
-        s_data.VertexBufferDataPtr->Color = {1, 1, 1, 1};
-        s_data.VertexBufferDataPtr->TextureCoords = glm::vec2{1, 0} * uvScale;
+        s_data.VertexBufferDataPtr->Position =
+            rotationMatrix * glm::vec4(glm::vec3(1.0f, 0.0f, 0.0f) * params.scale, 1.0f);
+        s_data.VertexBufferDataPtr->Color = params.tint_color;
+        s_data.VertexBufferDataPtr->TextureCoords = glm::vec2{1, 0} * params.uv_scale;
         s_data.VertexBufferDataPtr->TextureIndex = textureIndex;
         s_data.VertexBufferDataPtr++;
 
-        s_data.VertexBufferDataPtr->Position = rotationMatrix * glm::vec4(glm::vec3(1.0f, 1.0f, 0.0f) * scale, 1.0f);
-        s_data.VertexBufferDataPtr->Color = {1, 1, 1, 1};
-        s_data.VertexBufferDataPtr->TextureCoords = glm::vec2{1, 1} * uvScale;
+        s_data.VertexBufferDataPtr->Position =
+            rotationMatrix * glm::vec4(glm::vec3(1.0f, 1.0f, 0.0f) * params.scale, 1.0f);
+        s_data.VertexBufferDataPtr->Color = params.tint_color;
+        s_data.VertexBufferDataPtr->TextureCoords = glm::vec2{1, 1} * params.uv_scale;
         s_data.VertexBufferDataPtr->TextureIndex = textureIndex;
         s_data.VertexBufferDataPtr++;
 
-        s_data.VertexBufferDataPtr->Position = rotationMatrix * glm::vec4(glm::vec3(0.0f, 1.0f, 0.0f) * scale, 1.0f);
-        s_data.VertexBufferDataPtr->Color = {1, 1, 1, 1};
-        s_data.VertexBufferDataPtr->TextureCoords = glm::vec2{0, 1} * uvScale;
+        s_data.VertexBufferDataPtr->Position =
+            rotationMatrix * glm::vec4(glm::vec3(0.0f, 1.0f, 0.0f) * params.scale, 1.0f);
+        s_data.VertexBufferDataPtr->Color = params.tint_color;
+        s_data.VertexBufferDataPtr->TextureCoords = glm::vec2{0, 1} * params.uv_scale;
         s_data.VertexBufferDataPtr->TextureIndex = textureIndex;
         s_data.VertexBufferDataPtr++;
 
