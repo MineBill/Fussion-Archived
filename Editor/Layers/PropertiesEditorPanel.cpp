@@ -1,4 +1,5 @@
 #include "PropertiesEditorPanel.h"
+#include "glm/gtc/type_ptr.hpp"
 #include <Fussion/Scene/Components.h>
 #include <ImGuiFileDialog.h>
 #include <ImGuiHelpers.h>
@@ -43,9 +44,14 @@ void Editor::PropertiesEditorPanel::sprite_component_gui()
             auto string = fmt::format("Handle: {}", sprite->texture->renderer_handle());
             ImGui::InputText("##texture_handle", &string, ImGuiInputTextFlags_ReadOnly);
 
+            ImGui::Text("Color Tint");
+            ImGui::SameLine();
+            ImGui::ColorEdit4("##tint_color", glm::value_ptr(sprite->tint_color));
+
             if (ImGuiHelpers::ButtonCenteredOnLine("Load Texture")) {
                 ImGuiFileDialog::Instance()->OpenDialog("LoadTextureFileDialog", "Choose a texture", ".png,.jpg", ".");
             }
+
             if (ImGuiFileDialog::Instance()->Display("LoadTextureFileDialog")) {
                 if (ImGuiFileDialog::Instance()->IsOk()) {
                     namespace fs = std::filesystem;
@@ -57,6 +63,7 @@ void Editor::PropertiesEditorPanel::sprite_component_gui()
                 ImGuiFileDialog::Instance()->Close();
             }
             ImGui::Unindent();
+            ImGui::Separator();
         }
     }
 }

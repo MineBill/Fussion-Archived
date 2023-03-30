@@ -28,6 +28,7 @@ namespace Fussion
 
     struct SpriteComponent {
         Ref<Texture> texture;
+        glm::vec4 tint_color{1, 1, 1, 1};
 
         explicit SpriteComponent(Ref<Texture> &other) { texture = other; }
         SpriteComponent(SpriteComponent &other) { texture = other.texture; }

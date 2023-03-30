@@ -57,6 +57,14 @@
             ]
         },
         {
+            "name": "linux-release",
+            "displayName": "Linux Release",
+            "inherits": [
+                "release",
+                "linux-x64-ninja"
+            ]
+        },
+        {
             "name": "windows-debug",
             "displayName": "Windows Debug",
             "inherits": [

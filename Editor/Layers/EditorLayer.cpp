@@ -56,7 +56,7 @@ namespace Editor
         e2.add_child(e3);
         entity.add_component<ChildrenComponent>();
 
-        constexpr i32 STACK_EVERY = 20;
+        constexpr i32 STACK_EVERY = 10;
         for (auto x = 0; x < STACK_EVERY; x++) {
             for (auto y = 0; y < STACK_EVERY; y++) {
                 auto box = m_scene.create("Box");
