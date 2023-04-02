@@ -54,6 +54,8 @@ add_library(
         src/Fussion/Rendering/Bitmap.cpp
         src/Fussion/Rendering/Bitmap.h
 
+        src/Fussion/Math/Math.h
+        src/Fussion/Math/Math.cpp
         src/Fussion/Math/Vector3.cpp
         src/Fussion/Math/Vector3.h
         src/Fussion/Math/Matrix4.cpp
