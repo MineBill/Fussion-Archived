@@ -31,7 +31,7 @@ namespace Fussion::Renderer2D
         Vertex *VertexBufferDataPtr{nullptr};
 
         u32 CurrentTextureIndex{1};
-        // NOTE: Slot 0 will be used as a 'color' texture
+        // @Note Slot 0 will be used as a 'color' texture
         std::array<Ref<Texture>, MaxTextureSlots> TextureSlots{};
 
         DrawStats Stats;
@@ -269,22 +269,3 @@ namespace Fussion::Renderer2D
         return s_data.Stats;
     }
 } // namespace Fussion::Renderer2D
-
-/* s_storage.VertexBufferDataPtr->Position = rotationMatrix * glm::vec4{0, 0, 0, 1};
-s_storage.VertexBufferDataPtr->Color = {1, 1, 1, 1};
-s_storage.VertexBufferDataPtr->TextureCoords = {0, 0};
-s_storage.VertexBufferDataPtr->TextureIndex = textureIndex;
-s_storage.VertexBufferDataPtr++;
-
-s_storage.VertexBufferDataPtr->Position = rotationMatrix * glm::vec4(position + glm::vec3(1.0f, 0.0f, 0.0f) *
-scale, 1.0f); s_storage.VertexBufferDataPtr->Color = {1, 1, 1, 1}; s_storage.VertexBufferDataPtr->TextureCoords =
-glm::vec2{1, 0} * uvScale; s_storage.VertexBufferDataPtr->TextureIndex = textureIndex; s_storage.VertexBufferDataPtr++;
-
-s_storage.VertexBufferDataPtr->Position = rotationMatrix * glm::vec4(position + glm::vec3(1.0f, 1.0f, 0.0f) *
-scale, 1.0f); s_storage.VertexBufferDataPtr->Color = {1, 1, 1, 1}; s_storage.VertexBufferDataPtr->TextureCoords =
-glm::vec2{1, 1} * uvScale; s_storage.VertexBufferDataPtr->TextureIndex = textureIndex; s_storage.VertexBufferDataPtr++;
-
-s_storage.VertexBufferDataPtr->Position = rotationMatrix * glm::vec4(position + glm::vec3(0.0f, 1.0f, 0.0f) *
-scale, 1.0f); s_storage.VertexBufferDataPtr->Color = {1, 1, 1, 1}; s_storage.VertexBufferDataPtr->TextureCoords =
-glm::vec2{0, 1} * uvScale; s_storage.VertexBufferDataPtr->TextureIndex = textureIndex; s_storage.VertexBufferDataPtr++;
-*/

@@ -8,7 +8,7 @@ namespace Fussion
     {
     public:
         virtual ~System() = default;
-        virtual void run(entt::registry &registry) = 0;
+        virtual void run(entt::registry &registry, f32 delta) = 0;
 
         virtual void on_event(entt::registry &registry, Event &event) = 0;
     };

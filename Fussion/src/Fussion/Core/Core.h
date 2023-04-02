@@ -11,11 +11,11 @@
     #define FSN_ASSERT(expr, ...)                                                                    \
         {                                                                                            \
             if (!(expr)) {                                                                           \
-                FSN_ERR("ASSERTION HIT: {}", #expr);                                                   \
+                FSN_ERR("ASSERTION HIT: {}", #expr);                                                 \
                 if constexpr (std::tuple_size<decltype(std::make_tuple(__VA_ARGS__))>::value != 0) { \
-                    FSN_ERR("    " __VA_ARGS__);                                              \
+                    FSN_ERR("    " __VA_ARGS__);                                                     \
                 } else {                                                                             \
-                    FSN_ERR("   No additional information provided");                         \
+                    FSN_ERR("   No additional information provided");                                \
                 }                                                                                    \
                 BUILTIN_TRAP_FUNCTION();                                                             \
             }                                                                                        \
@@ -23,7 +23,7 @@
     #define FSN_CORE_ASSERT(expr, ...)                                                               \
         {                                                                                            \
             if (!(expr)) {                                                                           \
-                FSN_CORE_ERR("ASSERTION HIT: {}", #expr);                                                     \
+                FSN_CORE_ERR("ASSERTION HIT: {}", #expr);                                            \
                 if constexpr (std::tuple_size<decltype(std::make_tuple(__VA_ARGS__))>::value != 0) { \
                     FSN_CORE_ERR("    " __VA_ARGS__);                                                \
                 } else {                                                                             \

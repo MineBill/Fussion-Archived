@@ -40,10 +40,10 @@ namespace Fussion
 
 #if _WIN32
         if (props.dark_mode) {
-			FSN_CORE_LOG("Setting dark mode for titlebar");
-			HWND handle = glfwGetWin32Window(m_window_ptr);
-			BOOL value = TRUE;
-			DwmSetWindowAttribute(handle, DWMWA_USE_IMMERSIVE_DARK_MODE, &value, sizeof(value));
+            FSN_CORE_LOG("Setting dark mode for titlebar");
+            HWND handle = glfwGetWin32Window(m_window_ptr);
+            BOOL value = TRUE;
+            DwmSetWindowAttribute(handle, DWMWA_USE_IMMERSIVE_DARK_MODE, &value, sizeof(value));
         }
 #endif
     }

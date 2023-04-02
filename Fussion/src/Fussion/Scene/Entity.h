@@ -27,7 +27,7 @@ namespace Fussion
         }
 
         template<class T>
-        T &get_component() const // @NOTE: Should this be const?
+        T &get_component() const // @Note Should this be const?
         {
             return m_scene->m_registry.get<T>(m_id);
         }

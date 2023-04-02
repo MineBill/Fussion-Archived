@@ -18,10 +18,10 @@ namespace Fussion
         return Entity{entity, this};
     }
 
-    void Scene::on_update([[maybe_unused]] f32 delta)
+    void Scene::on_update(f32 delta)
     {
         for (auto &system : m_systems) {
-            system->run(m_registry);
+            system->run(m_registry, delta);
         }
 
         // Find the rendering camera

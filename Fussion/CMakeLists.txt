@@ -107,4 +107,4 @@ target_precompile_headers(
         <entt.hpp>
 )
 
-set_project_warnings(${ENGINE_NAME} OFF)
+set_project_warnings(${ENGINE_NAME} ON)

@@ -4,7 +4,6 @@
 #include "Fussion/Rendering/Texture.h"
 #include "Fussion/Scene/Entity.h"
 #include "glm/ext/matrix_transform.hpp"
-#include "glm/vec3.hpp"
 
 namespace Fussion
 {
@@ -31,7 +30,6 @@ namespace Fussion
         glm::vec4 tint_color{1, 1, 1, 1};
 
         explicit SpriteComponent(Ref<Texture> &other) { texture = other; }
-        SpriteComponent(SpriteComponent &other) { texture = other.texture; }
     };
 
     struct CameraComponent {
@@ -50,7 +48,6 @@ namespace Fussion
         Entity parent;
 
         explicit ParentComponent(const Entity &entity) : parent(entity) {}
-        ParentComponent(const ParentComponent &other) = default;
     };
 
     /**

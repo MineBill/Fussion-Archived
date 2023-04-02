@@ -130,7 +130,7 @@ namespace Fussion
         {
         }
 
-        mustuse std::pair<float, float> offset() const
+        mustuse glm::vec2 offset() const
         {
             return {m_x_offset, m_y_offset};
         }
