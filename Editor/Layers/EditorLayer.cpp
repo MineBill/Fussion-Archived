@@ -13,18 +13,19 @@ namespace Editor
         f32 speed = 1.0f;
     };
 
-    // Preserving ImGUI naming
-    [[maybe_unused]] static void HelpMarker(const char *desc)
+    class TestRotatorSystem : public System
     {
-        ImGui::TextDisabled("(?)");
-        if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayShort)) {
-            ImGui::BeginTooltip();
-            ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-            ImGui::TextUnformatted(desc);
-            ImGui::PopTextWrapPos();
-            ImGui::EndTooltip();
+    public:
+        void run(entt::registry &registry, f32 delta)
+        {
+            (void)registry;
+            auto view = registry.view<TransformComponent, RotatorComponent>();
+            for (auto [entity, transform, rotator] : view.each()) {
+                transform.rotation += rotator.speed * delta;
+                transform.scale.x = sinf(Application::time_since_start());
+            }
         }
-    }
+    };
 
     void EditorLayer::on_load()
     {
@@ -35,7 +36,6 @@ namespace Editor
         RenderCommand::set_clear_color({0.56, 0.56, 0.56});
 
         m_texture = Bitmap::GridPattern(100, 100, 2, 0xAAAAAAFF).to_texture();
-        m_frame_buffer = Framebuffer::WithSize(100, 100);
 
         auto entity = m_scene.create("Checkerboard");
         entity.add_component<SpriteComponent>(m_texture);
@@ -73,17 +73,12 @@ namespace Editor
 
         main_interface(delta);
 
-        m_frame_buffer->bind();
+        m_viewport_panel.framebuffer()->bind();
         Renderer2D::reset_stats();
 
-        auto view = m_scene.registry().view<TransformComponent, RotatorComponent>();
-        for (auto [entity, transform, rotator] : view.each()) {
-            transform.rotation += rotator.speed * delta;
-            transform.scale.x = sinf(Application::time_since_start());
-        }
         m_scene.on_update(delta);
 
-        m_frame_buffer->unbind();
+        m_viewport_panel.framebuffer()->unbind();
     }
 
     auto EditorLayer::on_event(Fussion::Event &e) -> bool
@@ -113,7 +108,7 @@ namespace Editor
 
         m_scene_tree_panel.on_draw(m_scene, delta);
         m_properties_editor_panel.on_draw(m_scene_tree_panel.selected_entity(), delta);
-        viewport();
+        m_viewport_panel.on_draw(m_scene);
 
         if (m_show_renderer) {
             renderer_statistics();
@@ -141,6 +136,7 @@ namespace Editor
 
     void EditorLayer::viewport()
     {
+#if 0
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {0, 0});
         ImGui::Begin("Viewport");
         {
@@ -169,6 +165,7 @@ namespace Editor
         }
         ImGui::End();
         ImGui::PopStyleVar();
+#endif
     }
 
     void EditorLayer::renderer_statistics()

@@ -8,10 +8,12 @@ add_executable(
         Layers/EditorLayer.cpp
         Layers/EditorLayer.h
 
-        Layers/SceneTreePanel.cpp
-        Layers/SceneTreePanel.h
-        Layers/PropertiesEditorPanel.cpp
-        Layers/PropertiesEditorPanel.h
+        Panels/SceneTreePanel.cpp
+        Panels/SceneTreePanel.h
+        Panels/PropertiesEditorPanel.cpp
+        Panels/PropertiesEditorPanel.h
+        Panels/ViewportPanel.cpp
+        Panels/ViewportPanel.h
 
         Components/EditorCameraComponent.h
         Components/EditorCameraComponent.cpp

@@ -4,7 +4,9 @@
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.h>
 #define IMGUI_DEFINE_MATH_OPERATORS
+#include <ImGuiFileDialog.h>
 #include <ImGuiHelpers.h>
+#include <filesystem>
 #include <imgui_internal.h>
 
 Editor::SceneTreePanel::SceneTreePanel() : m_selected_entity() {}
