@@ -3,6 +3,7 @@
 #include <Fussion/Events/ApplicationEvents.h>
 #include <Fussion/Events/MouseEvents.h>
 #include <Fussion/Input/Input.h>
+#include <Fussion/Math/Math.h>
 #include <Fussion/Scene/Components.h>
 #include <Layers/EditorLayer.h>
 
@@ -10,14 +11,19 @@ namespace Editor
 {
     using namespace Fussion;
 
-    void EditorCameraSystem::run(entt::registry &registry)
+    void EditorCameraSystem::run(entt::registry &registry, [[__maybe_unused__]] f32 delta)
     {
-        auto view = registry.view<EditorCameraSystem, TransformComponent>();
-        for (auto [entity, camera, transform] : view.each()) {
+        auto view = registry.view<EditorCameraComponent, CameraComponent, TransformComponent>();
+        for (auto [entity, editor_camera, camera, transform] : view.each()) {
             (void)entity;
             if (Input::is_key_just_pressed(Key::F)) {
                 transform.position = {};
             }
+
+            // @Note A lerp could possible be better here
+            const auto size = camera.camera.size();
+            const auto new_size = Math::move_towards(size, m_target_zoom, delta * m_smoothing_time);
+            camera.camera.set_size(new_size);
         }
     }
 
@@ -58,9 +64,9 @@ namespace Editor
             });
 
             dispatcher.dispatch<MouseWheelMoved>([&](MouseWheelMoved &e) {
-                camera.camera.set_size(camera.camera.size() - e.offset().second * 0.5f);
+                m_target_zoom -= e.offset().y * m_scroll_speed;
                 return false;
             });
         }
-    };
+    }
 } // namespace Editor
