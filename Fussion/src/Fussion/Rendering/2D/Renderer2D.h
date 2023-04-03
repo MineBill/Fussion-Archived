@@ -5,10 +5,10 @@
 namespace Fussion::Renderer2D
 {
     struct DrawStats {
-        u32 Drawcalls{0};
-        u32 QuadCount{0};
+        u32 draw_calls{0};
+        u32 quad_count{0};
 
-        mustuse u32 vertices() const { return QuadCount * 4; }
+        mustuse u32 vertices() const { return quad_count * 4; }
     };
 
     struct DrawQuadParams {

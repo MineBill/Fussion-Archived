@@ -30,6 +30,7 @@ namespace Editor
     void EditorLayer::on_load()
     {
         s_instance = this;
+        Application::get().window().set_vsync(true);
 
         const auto &io = ImGui::GetIO();
         io.Fonts->AddFontFromFileTTF("Resources/Inter-Regular.ttf", 16);
@@ -102,13 +103,13 @@ namespace Editor
     {
         (void)delta;
         main_menubar();
-        ImGui::ShowDemoWindow();
+        // ImGui::ShowDemoWindow();
 
         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
 
         m_scene_tree_panel.on_draw(m_scene, delta);
         m_properties_editor_panel.on_draw(m_scene_tree_panel.selected_entity(), delta);
-        m_viewport_panel.on_draw(m_scene);
+        m_viewport_panel.on_draw(m_scene, delta);
 
         if (m_show_renderer) {
             renderer_statistics();
@@ -129,50 +130,18 @@ namespace Editor
             if (ImGui::MenuItem("Renderer Statistics")) {
                 m_show_renderer = !m_show_renderer;
             }
+            if (ImGui::MenuItem("Camera Settings")) {
+            }
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();
-    }
-
-    void EditorLayer::viewport()
-    {
-#if 0
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {0, 0});
-        ImGui::Begin("Viewport");
-        {
-            m_is_viewport_focused = ImGui::IsWindowHovered();
-            const auto id = m_frame_buffer->color_attachment();
-            auto min = ImGui::GetWindowContentRegionMin();
-            auto max = ImGui::GetWindowContentRegionMax();
-
-            auto pos = ImGui::GetWindowPos();
-            min.x += pos.x;
-            min.y += pos.y;
-            max.x += pos.x;
-            max.y += pos.y;
-            m_viewport_position = {pos.x, pos.y};
-
-            const auto new_viewport_size = glm::vec2{max.x - min.x, max.y - min.y};
-            if (new_viewport_size != m_viewport_size) {
-                m_frame_buffer->resize(static_cast<u32>(new_viewport_size.x), static_cast<u32>(new_viewport_size.y));
-                m_scene.on_resized(static_cast<i32>(new_viewport_size.x), static_cast<i32>(new_viewport_size.y));
-            }
-            m_viewport_size = new_viewport_size;
-
-            ImGui::Image(reinterpret_cast<ImTextureID>(static_cast<u64>(id)), {max.x - min.x, max.y - min.y}, // NOLINT
-                         {0, 0},                                                                              // NOLINT
-                         {1, -1});
-        }
-        ImGui::End();
-        ImGui::PopStyleVar();
-#endif
     }
 
     void EditorLayer::renderer_statistics()
     {
         ImGui::Begin("Renderer", &m_show_renderer);
         const auto stats = Renderer2D::draw_stats();
-        ImGui::Text("Draw-calls: %d", stats.Drawcalls);
+        ImGui::Text("Draw-calls: %d", stats.draw_calls);
         ImGui::Text("Vertices: %d", stats.vertices());
         ImGui::End();
     }

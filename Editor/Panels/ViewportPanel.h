@@ -13,7 +13,7 @@ namespace Editor
 
     public:
         ViewportPanel();
-        void on_draw(Fussion::Scene &scene);
+        void on_draw(Fussion::Scene &scene, f32 delta);
         bool on_event(Fussion::Event &e);
 
         const glm::vec2 &size() const { return m_size; }

@@ -127,7 +127,7 @@ namespace Fussion::Renderer2D
         s_data.VertexBufferDataPtr = s_data.VertexBufferDataBase;
         s_data.CurrentTextureIndex = 1;
 
-        s_data.Stats.Drawcalls++;
+        s_data.Stats.draw_calls++;
     }
 
 #if OLD
@@ -256,7 +256,7 @@ namespace Fussion::Renderer2D
 
         s_data.IndexBufferCount += 6;
 
-        s_data.Stats.QuadCount++;
+        s_data.Stats.quad_count++;
     }
 
     void reset_stats()

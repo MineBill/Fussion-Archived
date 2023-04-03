@@ -21,7 +21,6 @@ namespace Editor
 
         void main_interface(f32);
         void main_menubar();
-        void viewport();
         void renderer_statistics();
 
         Fussion::Scene m_scene{};
