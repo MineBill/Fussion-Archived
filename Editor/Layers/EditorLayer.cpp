@@ -30,7 +30,7 @@ namespace Editor
     void EditorLayer::on_load()
     {
         s_instance = this;
-        Application::get().window().set_vsync(true);
+        Application::get().window().set_vsync(false);
 
         const auto &io = ImGui::GetIO();
         io.Fonts->AddFontFromFileTTF("Resources/Inter-Regular.ttf", 16);
@@ -64,6 +64,7 @@ namespace Editor
                 box.add_component<SpriteComponent>(m_texture);
                 box.add_component<RotatorComponent>();
                 box.transform().position = {x, y, 0};
+                entity.add_child(box);
             }
         }
     }

@@ -48,14 +48,22 @@ namespace Fussion
 
         auto view = m_registry.view<TransformComponent, SpriteComponent>();
         for (auto entity : view) {
+            Entity e(entity, this);
+
             auto &sprite_component = view.get<SpriteComponent>(entity);
             auto &transform_component = view.get<TransformComponent>(entity);
 
-            // Renderer2D::draw_quad(sprite_component.texture, transform_component.position);
+            auto parent = e.get_component_or_null<ParentComponent>();
+            glm::mat4 parent_transform;
+            if (parent) {
+                parent_transform = parent->parent.transform().transform();
+            }
+
             const auto params = Renderer2D::DrawQuadParams{.position = transform_component.position,
                                                            .rotation = transform_component.rotation,
                                                            .scale = transform_component.scale,
-                                                           .tint_color = sprite_component.tint_color};
+                                                           .tint_color = sprite_component.tint_color,
+                                                           .parent_transform = parent_transform};
             Renderer2D::draw_quad(sprite_component.texture, params);
         }
 

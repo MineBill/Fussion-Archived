@@ -151,14 +151,13 @@ namespace Fussion::Renderer2D
             if (s_data.CurrentTextureIndex >= MaxTextureSlots) {
                 FSN_CORE_ERR("Cannot use more to_texture slots. Max is: {}", MaxTextureSlots);
             } else {
-
                 s_data.TextureSlots[s_data.CurrentTextureIndex] = texture;
                 textureIndex = static_cast<f32>(s_data.CurrentTextureIndex);
                 s_data.CurrentTextureIndex++;
             }
         }
 
-        auto trans = glm::translate(glm::mat4(1.0f), params.position);
+        auto trans = glm::translate(glm::mat4(1.0f), params.position) * params.parent_transform;
         auto rotationMatrix = glm::rotate(trans, params.rotation, {0, 0, 1});
 
         s_data.VertexBufferDataPtr->Position = rotationMatrix * glm::vec4{0, 0, 0, 1};
