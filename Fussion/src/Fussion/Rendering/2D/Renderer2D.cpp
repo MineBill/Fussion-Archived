@@ -130,75 +130,9 @@ namespace Fussion::Renderer2D
         s_data.Stats.draw_calls++;
     }
 
-#if OLD
-    void draw_quad(const Ref<Texture> &texture, const glm::vec3 &position, const glm::vec3 &scale,
-                   const glm::vec2 &uvScale)
-    {
-        FSN_PROFILE_FUNCTION();
-
-        if (s_data.IndexBufferCount >= MaxIndices) {
-            end_scene();
-            start_batch();
-        }
-
-        // Check if texture is already used
-        f32 textureIndex = 0.0f;
-        for (u32 i = 1; i < s_data.CurrentTextureIndex; i++) {
-            if (s_data.TextureSlots[i]->renderer_handle() == texture->renderer_handle()) {
-                textureIndex = static_cast<f32>(i);
-            }
-        }
-
-        if (textureIndex == 0.0f) {
-            if (s_data.CurrentTextureIndex >= MaxTextureSlots) {
-                FSN_CORE_ERR("Cannot use more to_texture slots. Max is: {}", MaxTextureSlots);
-            } else {
-
-                s_data.TextureSlots[s_data.CurrentTextureIndex] = texture;
-                textureIndex = static_cast<f32>(s_data.CurrentTextureIndex);
-                s_data.CurrentTextureIndex++;
-            }
-        }
-
-        s_data.VertexBufferDataPtr->Position = position;
-        s_data.VertexBufferDataPtr->Color = {1, 1, 1, 1};
-        s_data.VertexBufferDataPtr->TextureCoords = {0, 0};
-        s_data.VertexBufferDataPtr->TextureIndex = textureIndex;
-        s_data.VertexBufferDataPtr++;
-
-        s_data.VertexBufferDataPtr->Position = position + glm::vec3(1.0f, 0.0f, 0.0f) * scale;
-        s_data.VertexBufferDataPtr->Color = {1, 1, 1, 1};
-        s_data.VertexBufferDataPtr->TextureCoords = glm::vec2{1, 0} * uvScale;
-        s_data.VertexBufferDataPtr->TextureIndex = textureIndex;
-        s_data.VertexBufferDataPtr++;
-
-        s_data.VertexBufferDataPtr->Position = position + glm::vec3(1.0f, 1.0f, 0.0f) * scale;
-        s_data.VertexBufferDataPtr->Color = {1, 1, 1, 1};
-        s_data.VertexBufferDataPtr->TextureCoords = glm::vec2{1, 1} * uvScale;
-        s_data.VertexBufferDataPtr->TextureIndex = textureIndex;
-        s_data.VertexBufferDataPtr++;
-
-        s_data.VertexBufferDataPtr->Position = position + glm::vec3(0.0f, 1.0f, 0.0f) * scale;
-        s_data.VertexBufferDataPtr->Color = {1, 1, 1, 1};
-        s_data.VertexBufferDataPtr->TextureCoords = glm::vec2{0, 1} * uvScale;
-        s_data.VertexBufferDataPtr->TextureIndex = textureIndex;
-        s_data.VertexBufferDataPtr++;
-
-        s_data.IndexBufferCount += 6;
-
-        s_data.Stats.QuadCount++;
-    }
-#endif
-
     void draw_quad(const Ref<Texture> &texture, const DrawQuadParams &params)
     {
         FSN_PROFILE_FUNCTION();
-#if OLD
-        if (params.rotation == 0.0f) {
-            draw_quad(texture, params.position, params.scale, params.uv_scale);
-            return;
-        }
-#endif
 
         if (s_data.IndexBufferCount >= MaxIndices) {
             end_scene();

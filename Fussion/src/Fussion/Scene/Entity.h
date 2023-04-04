@@ -50,7 +50,7 @@ namespace Fussion
         void add_child(Entity &child);
         void remove_child(Entity &child) const;
         void destroy();
-        bool is_grandparent_or_parent(Entity& entity) const;
+        bool is_grandparent_or_parent(Entity &entity) const;
 
         mustuse entt::entity id() const { return m_id; }
         mustuse NameComponent &name() { return *m_name; }
