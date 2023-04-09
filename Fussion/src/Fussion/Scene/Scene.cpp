@@ -53,9 +53,8 @@ namespace Fussion
             auto &sprite_component = view.get<SpriteComponent>(entity);
             auto &transform_component = view.get<TransformComponent>(entity);
 
-            auto parent = e.get_component_or_null<ParentComponent>();
-            glm::mat4 parent_transform;
-            if (parent) {
+            glm::mat4 parent_transform = glm::mat4(1.0);
+            if (auto parent = e.get_component_or_null<ParentComponent>()) {
                 parent_transform = parent->parent.transform().transform();
             }
 
