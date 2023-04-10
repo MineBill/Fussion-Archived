@@ -15,7 +15,8 @@ namespace Fussion::Renderer2D
     // batch rendering works.
     struct DrawQuadParams {
         glm::vec3 position{0.f, 0.f, 0.f};
-        f32 rotation{0.0f};
+        /// Rotation in radians
+        f32 rotation_radians{0.0f};
         glm::vec3 scale{1.f, 1.f, 1.f};
         glm::vec4 tint_color{1.f, 1.f, 1.f, 1.f};
         glm::vec2 uv_scale{1.f, 1.f};

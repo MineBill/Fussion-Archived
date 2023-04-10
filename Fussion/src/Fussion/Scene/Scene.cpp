@@ -32,7 +32,7 @@ namespace Fussion
             auto view = m_registry.view<CameraComponent, TransformComponent>();
             for (auto entity : view) {
                 auto &camera_comp = view.get<CameraComponent>(entity);
-                if (camera_comp.primary) {
+				if (camera_comp.primary) {
                     camera = &camera_comp.camera;
                     clear_color = &camera_comp.clear_color;
                     transform = view.get<TransformComponent>(entity).transform();
@@ -59,7 +59,7 @@ namespace Fussion
             }
 
             const auto params = Renderer2D::DrawQuadParams{.position = transform_component.position,
-                                                           .rotation = transform_component.rotation,
+                                                           .rotation_radians = glm::radians(transform_component.rotation_degrees),
                                                            .scale = transform_component.scale,
                                                            .tint_color = sprite_component.tint_color,
                                                            .parent_transform = parent_transform};

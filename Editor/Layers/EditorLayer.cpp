@@ -21,7 +21,7 @@ namespace Editor
             (void)registry;
             auto view = registry.view<TransformComponent, RotatorComponent>();
             for (auto [entity, transform, rotator] : view.each()) {
-                transform.rotation += rotator.speed * delta;
+                transform.rotation_degrees += rotator.speed * delta;
                 transform.scale.x = sinf(Application::time_since_start());
             }
         }

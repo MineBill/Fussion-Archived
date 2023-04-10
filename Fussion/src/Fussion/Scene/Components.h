@@ -13,14 +13,16 @@ namespace Fussion
 
     struct TransformComponent {
         glm::vec3 position{};
-        f32 rotation{};
+        f32 rotation_degrees{};
         glm::vec3 scale{1, 1, 1};
         glm::mat4 m_transform{};
 
         glm::mat4 transform()
         {
-            m_transform = glm::rotate(glm::mat4(1.0), glm::radians(rotation), {0, 0, 1});
-            m_transform = glm::translate(m_transform, position);
+            /* m_transform = glm::rotate(glm::mat4(1.0), glm::radians(rotation_degrees), {0, 0, 1});
+            m_transform = glm::translate(m_transform, position); */
+            m_transform = glm::translate(glm::mat4(1.0), position);
+            m_transform = glm::rotate(m_transform, glm::radians(rotation_degrees), {0, 0, 1});
             return m_transform;
         }
     };
