@@ -41,12 +41,12 @@ namespace Editor
         auto entity = m_scene.create("Checkerboard");
         entity.add_component<SpriteComponent>(m_texture);
 
-        auto camera = m_scene.create("Editor Camera");
-        camera.add_component<EditorCameraComponent>();
-        auto &cam = camera.add_component<CameraComponent>(Camera2D(50, 50));
-        cam.primary = true;
-        cam.camera.set_size(1);
-        cam.clear_color = glm::vec3{0.12f, 0.12f, 0.12f};
+        m_scene_camera_entity = m_scene.create("Editor Camera");
+        m_scene_camera_entity.add_component<EditorCameraComponent>();
+        m_scene_camera = &m_scene_camera_entity.add_component<CameraComponent>(Camera2D(50, 50));
+        m_scene_camera->primary = true;
+        m_scene_camera->camera.set_size(1);
+        m_scene_camera->clear_color = glm::vec3{0.12f, 0.12f, 0.12f};
 
         m_scene.register_system<EditorCameraSystem>();
 
@@ -104,13 +104,13 @@ namespace Editor
     {
         (void)delta;
         main_menubar();
-        // ImGui::ShowDemoWindow();
 
         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
 
+        auto &selected_entity = m_scene_tree_panel.selected_entity();
         m_scene_tree_panel.on_draw(m_scene, delta);
-        m_properties_editor_panel.on_draw(m_scene_tree_panel.selected_entity(), delta);
-        m_viewport_panel.on_draw(m_scene, delta);
+        m_properties_editor_panel.on_draw(selected_entity, delta);
+        m_viewport_panel.on_draw(selected_entity, m_scene_camera_entity, m_scene, delta);
 
         if (m_show_renderer) {
             renderer_statistics();

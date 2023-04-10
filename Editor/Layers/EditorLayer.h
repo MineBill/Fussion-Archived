@@ -15,6 +15,8 @@ namespace Editor
 
         bool m_show_renderer{false};
 
+        CameraComponent *m_scene_camera{nullptr};
+        Entity m_scene_camera_entity{};
         SceneTreePanel m_scene_tree_panel{};
         ViewportPanel m_viewport_panel;
         PropertiesEditorPanel m_properties_editor_panel{};

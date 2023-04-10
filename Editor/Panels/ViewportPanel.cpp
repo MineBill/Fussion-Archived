@@ -1,5 +1,4 @@
 #include "ViewportPanel.h"
-#include "Fussion/Core/Application.h"
 #include "Fussion/Rendering/2D/Renderer2D.h"
 #include <Fussion/Scene/Components.h>
 #include <Fussion/Scene/Entity.h>
@@ -14,10 +13,10 @@
 Editor::ViewportPanel::ViewportPanel()
 {
     // @Note Will crash if RendererAPI is not initialized yet
-    m_frame_buffer = Fussion::Framebuffer::WithSize(100, 100);
+    m_frame_buffer = Framebuffer::WithSize(100, 100);
 }
 
-void Editor::ViewportPanel::on_draw(Fussion::Scene &scene, f32 delta)
+void Editor::ViewportPanel::on_draw(Optional<Entity> selected, Entity camera_entity, Scene &scene, f32 delta)
 {
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {0, 0});
     ImGui::Begin("Viewport");
@@ -48,7 +47,7 @@ void Editor::ViewportPanel::on_draw(Fussion::Scene &scene, f32 delta)
 
         ImGui::GetCurrentWindow()->DC.CursorPos = start + ImVec2(10, 10);
 
-        const auto stats = Fussion::Renderer2D::draw_stats();
+        const auto stats = Renderer2D::draw_stats();
         ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 0, 0, 1));
 
         ImGuiHelpers::BeginGroupPanel("Renderer");
@@ -62,13 +61,30 @@ void Editor::ViewportPanel::on_draw(Fussion::Scene &scene, f32 delta)
         ImGui::Text("FPS: %d", static_cast<i32>(1.0f / delta));
         ImGuiHelpers::EndGroupPanel();
 
+        // Gizmos
+        if (auto entity = selected) {
+            (void)selected;
+            auto draw_list = ImGui::GetCurrentWindow()->DrawList;
+            // Get the selected entity position
+            // Get the editor camera
+            // Convert the entity position to screen space
+            // Draw the gizmo
+            auto camera = camera_entity.get_component<CameraComponent>().camera;
+
+            auto screen_position = camera.world_to_screen(entity->transform().position);
+            auto camera_position = camera.world_to_screen(camera_entity.transform().position);
+            auto start_position = m_position - glm::vec2(screen_position) + camera_position;
+
+            ImGuiHelpers::RenderSimpleRect(draw_list, start_position, {20, 20}, 0xff0000ff, 2.0f);
+        }
+
         ImGui::PopStyleColor();
     }
     ImGui::End();
     ImGui::PopStyleVar();
 }
 
-bool Editor::ViewportPanel::on_event(Fussion::Event &e)
+bool Editor::ViewportPanel::on_event(Event &e)
 {
     (void)e;
     return false;
