@@ -24,14 +24,15 @@ namespace Fussion
         update_projection_matrix();
     }
 
-    mustuse glm::vec2 Camera2D::screen_to_world(const glm::vec2 &screen)
+    mustuse glm::vec3 Camera2D::screen_to_world(const glm::vec2 &screen)
     {
         return glm::unProject(glm::vec3(screen, 0.0f), glm::mat4(1.0f), m_projectionMatrix,
                               glm::vec4(0, 0, -m_screenWidth, m_screenHeight));
     }
 
-    mustuse glm::vec3 Camera2D::world_to_screen(const glm::vec3 &world)
+    mustuse glm::vec2 Camera2D::world_to_screen(const glm::vec3 &world)
     {
-        return world;
+        return glm::project(world, glm::mat4(1.0f), m_projectionMatrix,
+                            glm::vec4(0, 0, -m_screenWidth, m_screenHeight));
     }
 } // namespace Fussion

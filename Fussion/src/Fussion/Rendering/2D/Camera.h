@@ -34,7 +34,7 @@ namespace Fussion
         mustuse const glm::mat4 &view() const { return m_viewMatrix; }
         mustuse glm::mat4 view_projection() const { return m_projectionMatrix * glm::inverse(m_viewMatrix); }
 
-        mustuse glm::vec2 screen_to_world(const glm::vec2 &screen);
-        mustuse glm::vec3 world_to_screen(const glm::vec3 &world);
+        mustuse glm::vec3 screen_to_world(const glm::vec2 &screen);
+        mustuse glm::vec2 world_to_screen(const glm::vec3 &world);
     };
 } // namespace Fussion
