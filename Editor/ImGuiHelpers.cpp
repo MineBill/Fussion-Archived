@@ -195,3 +195,14 @@ bool ImGuiHelpers::ButtonCenteredOnLine(const char *label, float alignment)
 
     return ImGui::Button(label);
 }
+
+void ImGuiHelpers::RenderSimpleRect(ImDrawList *draw_list, glm::vec2 const &position, glm::vec2 const &size, u32 color, f32 width)
+{
+    (void)0;
+    ImGui::RenderRectFilledWithHole(
+            draw_list,
+            ImRect(position.x, position.y, position.x + size.x, position.y + size.y),
+            ImRect(position.x + width, position.y + width, position.x + size.x - width, position.y + size.y - width),
+            color,
+            0.0f);
+}

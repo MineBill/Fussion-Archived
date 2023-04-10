@@ -151,38 +151,39 @@ namespace Fussion::Renderer2D
             if (s_data.CurrentTextureIndex >= MaxTextureSlots) {
                 FSN_CORE_ERR("Cannot use more to_texture slots. Max is: {}", MaxTextureSlots);
             } else {
-
                 s_data.TextureSlots[s_data.CurrentTextureIndex] = texture;
                 textureIndex = static_cast<f32>(s_data.CurrentTextureIndex);
                 s_data.CurrentTextureIndex++;
             }
         }
 
-        auto trans = glm::translate(glm::mat4(1.0f), params.position);
-        auto rotationMatrix = glm::rotate(trans, params.rotation, {0, 0, 1});
+        /* auto trans = glm::translate(glm::mat4(1.0f), params.position);
+        trans = glm::rotate(trans, params.rotation_radians, {0, 0, 1}) * params.parent_transform; */
+        auto trans = glm::rotate(params.parent_transform, params.rotation_radians, {0, 0, 1});
+        trans = glm::translate(trans, params.position);
 
-        s_data.VertexBufferDataPtr->Position = rotationMatrix * glm::vec4{0, 0, 0, 1};
+        s_data.VertexBufferDataPtr->Position = trans * glm::vec4{0, 0, 0, 1};
         s_data.VertexBufferDataPtr->Color = params.tint_color;
         s_data.VertexBufferDataPtr->TextureCoords = {0, 0};
         s_data.VertexBufferDataPtr->TextureIndex = textureIndex;
         s_data.VertexBufferDataPtr++;
 
         s_data.VertexBufferDataPtr->Position =
-            rotationMatrix * glm::vec4(glm::vec3(1.0f, 0.0f, 0.0f) * params.scale, 1.0f);
+            trans * glm::vec4(glm::vec3(1.0f, 0.0f, 0.0f) * params.scale, 1.0f);
         s_data.VertexBufferDataPtr->Color = params.tint_color;
         s_data.VertexBufferDataPtr->TextureCoords = glm::vec2{1, 0} * params.uv_scale;
         s_data.VertexBufferDataPtr->TextureIndex = textureIndex;
         s_data.VertexBufferDataPtr++;
 
         s_data.VertexBufferDataPtr->Position =
-            rotationMatrix * glm::vec4(glm::vec3(1.0f, 1.0f, 0.0f) * params.scale, 1.0f);
+            trans * glm::vec4(glm::vec3(1.0f, 1.0f, 0.0f) * params.scale, 1.0f);
         s_data.VertexBufferDataPtr->Color = params.tint_color;
         s_data.VertexBufferDataPtr->TextureCoords = glm::vec2{1, 1} * params.uv_scale;
         s_data.VertexBufferDataPtr->TextureIndex = textureIndex;
         s_data.VertexBufferDataPtr++;
 
         s_data.VertexBufferDataPtr->Position =
-            rotationMatrix * glm::vec4(glm::vec3(0.0f, 1.0f, 0.0f) * params.scale, 1.0f);
+            trans * glm::vec4(glm::vec3(0.0f, 1.0f, 0.0f) * params.scale, 1.0f);
         s_data.VertexBufferDataPtr->Color = params.tint_color;
         s_data.VertexBufferDataPtr->TextureCoords = glm::vec2{0, 1} * params.uv_scale;
         s_data.VertexBufferDataPtr->TextureIndex = textureIndex;

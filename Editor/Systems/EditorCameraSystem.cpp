@@ -39,7 +39,7 @@ namespace Editor
             Fussion::Dispatcher dispatcher(event);
             dispatcher.dispatch<MouseMoved>([&](MouseMoved &) {
                 if (m_is_panning) {
-                    auto mouse = camera.camera.screen_to_world(Input::mouse());
+                    auto mouse = glm::vec2(camera.camera.screen_to_world(Input::mouse()));
                     auto offset = mouse - old_mouse;
                     old_mouse = mouse;
 

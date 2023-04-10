@@ -78,7 +78,7 @@ void Editor::PropertiesEditorPanel::transform_component_gui()
 
         ImGuiHelpers::BeginGroupPanel("Rotation", ImVec2(0, 0));
         ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
-        ImGui::DragFloat("##rotation", &m_selected_entity->transform().rotation, 0.1f, 0.0f, 0.0f, "%.1f");
+        ImGui::DragFloat("##rotation", &m_selected_entity->transform().rotation_degrees, 0.1f, 0.0f, 0.0f, "%.1f");
         ImGuiHelpers::EndGroupPanel();
 
         ImGuiHelpers::BeginGroupPanel("Scale", ImVec2(0, 0));
