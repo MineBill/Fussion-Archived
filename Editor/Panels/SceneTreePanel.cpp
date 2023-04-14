@@ -1,9 +1,9 @@
 #include "SceneTreePanel.h"
 #include <Fussion/Scene/Components.h>
 #include <Fussion/Scene/Entity.h>
+#define IMGUI_DEFINE_MATH_OPERATORS
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.h>
-#define IMGUI_DEFINE_MATH_OPERATORS
 #include <ImGuiFileDialog.h>
 #include <ImGuiHelpers.h>
 #include <filesystem>

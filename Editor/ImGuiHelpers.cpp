@@ -1,5 +1,5 @@
-#include "ImGuiHelpers.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
+#include "ImGuiHelpers.h"
 #include <imgui_internal.h>
 
 static ImVector<ImRect> s_GroupPanelLabelStack;
