@@ -11,7 +11,7 @@ namespace Editor
 {
     using namespace Fussion;
 
-    void EditorCameraSystem::run(entt::registry &registry, [[__maybe_unused__]] f32 delta)
+    void EditorCameraSystem::run(entt::registry &registry, [[maybe_unused]] f32 delta)
     {
         auto view = registry.view<EditorCameraComponent, CameraComponent, TransformComponent>();
         for (auto [entity, editor_camera, camera, transform] : view.each()) {
