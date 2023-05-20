@@ -3,12 +3,12 @@
 #include <Fussion/Scene/Components.h>
 #include <Fussion/Scene/Entity.h>
 #define IMGUI_DEFINE_MATH_OPERATORS
-#include <imgui.h>
-#include <misc/cpp/imgui_stdlib.h>
 #include <ImGuiFileDialog.h>
 #include <ImGuiHelpers.h>
 #include <filesystem>
+#include <imgui.h>
 #include <imgui_internal.h>
+#include <misc/cpp/imgui_stdlib.h>
 
 Editor::ViewportPanel::ViewportPanel()
 {
@@ -71,11 +71,36 @@ void Editor::ViewportPanel::on_draw(Optional<Entity> selected, Entity camera_ent
             // Draw the gizmo
             auto camera = camera_entity.get_component<CameraComponent>().camera;
 
-            auto screen_position = camera.world_to_screen(entity->transform().position);
+            auto screen_position = -camera.world_to_screen(entity->transform().position);
             auto camera_position = camera.world_to_screen(camera_entity.transform().position);
-            auto start_position = m_position - glm::vec2(screen_position) + camera_position;
+            // auto start_position = m_position - glm::vec2(screen_position) + camera_position * 0.0f;
+            auto content_region = ImGui::GetWindowContentRegionMax();
+            // https://github.com/ocornut/imgui/issues/1539#issuecomment-355738099
+            // The title bar height is FontSize + FramePadding.y * 2
+            auto &style = ImGui::GetStyle();
+            auto title_bar_height = style.FramePadding.y * 2 + ImGui::GetFontSize();
+            auto start_position = screen_position + camera_position +
+                                  glm::vec2(content_region.x / 2, content_region.y / 2 + title_bar_height) +
+                                  m_position / 2.0f;
 
-            ImGuiHelpers::RenderSimpleRect(draw_list, start_position, {20, 20}, 0xff0000ff, 2.0f);
+            // ImGuiHelpers::RenderSimpleRect(draw_list, start_position, {20, 20}, 0xff0000ff, 2.0f);
+            // ImGui::RenderArrow(draw_list, ImVec2(start_position.x, start_position.y), 0xff0000ff, 2);
+            auto constexpr arrow_width = 15.0f;
+            auto constexpr arrow_height = arrow_width * 1.25f;
+            auto constexpr line_width = 3.0f;
+            auto constexpr alpha = 0xaa000000;
+            auto constexpr red = 0x000000ff;
+            auto constexpr green = 0x0000ff00;
+            // Y Axis
+            auto y_axis_end = start_position - ImVec2(0, 30);
+            draw_list->AddLine(start_position, y_axis_end, green | alpha, line_width);
+            draw_list->AddTriangleFilled(y_axis_end - ImVec2(arrow_width, 0), y_axis_end - ImVec2(0, arrow_height),
+                                         y_axis_end + ImVec2(arrow_width, 0), green | alpha);
+            // X Axis
+            auto x_axis_end = start_position + ImVec2(30, 0);
+            draw_list->AddLine(start_position, x_axis_end, red | alpha, line_width);
+            draw_list->AddTriangleFilled(x_axis_end - ImVec2(0, arrow_width), x_axis_end + ImVec2(arrow_height, 0),
+                                         x_axis_end + ImVec2(0, arrow_width), red | alpha);
         }
 
         ImGui::PopStyleColor();

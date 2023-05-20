@@ -65,7 +65,7 @@ add_library(
         src/Fussion/Rendering/2D/Camera.h
 
         src/Fussion/Debug/Profiling.h
-        src/Fussion/Debug/Profiling.cpp)
+        src/Fussion/Debug/Profiling.cpp src/Fussion/Math/BoundingBox.cpp src/Fussion/Math/BoundingBox.h)
 add_subdirectory(src/Platform)
 
 if (LINUX)

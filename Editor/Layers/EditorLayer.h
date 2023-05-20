@@ -14,6 +14,7 @@ namespace Editor
         Fussion::Ref<Fussion::Texture> m_texture, m_second_texture;
 
         bool m_show_renderer{false};
+        bool m_show_demo_window{false};
 
         CameraComponent *m_scene_camera{nullptr};
         Entity m_scene_camera_entity{};

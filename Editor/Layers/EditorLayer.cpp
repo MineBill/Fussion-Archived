@@ -74,6 +74,9 @@ namespace Editor
         using namespace Fussion;
 
         main_interface(delta);
+        if (m_show_demo_window) {
+            ImGui::ShowDemoWindow(&m_show_demo_window);
+        }
 
         m_viewport_panel.framebuffer()->bind();
         Renderer2D::reset_stats();
@@ -123,6 +126,9 @@ namespace Editor
         if (ImGui::BeginMenu("Options")) {
             if (ImGui::MenuItem("quit")) {
                 Application::get().quit();
+            }
+            if (ImGui::MenuItem("Show Demo window")) {
+                m_show_demo_window = !m_show_demo_window;
             }
             ImGui::EndMenu();
         }

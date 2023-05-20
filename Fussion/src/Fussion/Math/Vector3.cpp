@@ -4,28 +4,28 @@
 
 using namespace Fussion;
 
-float Vector3::Length() const
+float Vector3::length() const
 {
-    return sqrtf(LengthSquared());
+    return sqrtf(length_squared());
 }
 
-float Vector3::LengthSquared() const
+float Vector3::length_squared() const
 {
     return x() * x() + y() * y() + z() * z();
 }
 
-Vector3 Vector3::Normalized() const
+Vector3 Vector3::normalized() const
 {
-    auto length = Length();
-    return *this / length;
+    auto len = length();
+    return *this / len;
 }
 
-Vector3 Vector3::Cross(const Vector3 &other) const
+Vector3 Vector3::cross(const Vector3 &other) const
 {
     return {y() * other.z() - other.y() * z(), z() * other.x() - other.z() * x(), x() * other.y() - other.x() * y()};
 }
 
-std::string Vector3::ToString() const
+String Vector3::to_string() const
 {
 #if FORMAT_IS_FINALLY_IN_THE_FUCKING_STANDARD
     return std::format("Vector3({}, {}, {})", x(), y(), z());
@@ -36,7 +36,7 @@ std::string Vector3::ToString() const
 #endif
 }
 
-float Vector3::Dot(const Vector3 &other) const
+float Vector3::dot(const Vector3 &other) const
 {
     return x() * other.x() + y() * other.y() + z() * other.z();
 }

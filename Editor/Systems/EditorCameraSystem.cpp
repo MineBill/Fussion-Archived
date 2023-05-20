@@ -16,11 +16,8 @@ namespace Editor
         auto view = registry.view<EditorCameraComponent, CameraComponent, TransformComponent>();
         for (auto [entity, editor_camera, camera, transform] : view.each()) {
             (void)entity;
-            if (Input::is_key_just_pressed(Key::F)) {
-                transform.position = {};
-            }
 
-            // @Note A lerp could possible be better here
+            // @Note A lerp could possibly be better here
             const auto size = camera.camera.size();
             const auto new_size = Math::move_towards(size, m_target_zoom, delta * m_smoothing_time);
             camera.camera.set_size(new_size);
