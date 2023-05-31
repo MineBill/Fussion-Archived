@@ -1,4 +1,5 @@
 #pragma once
+#include <Fussion/Math/BoundingBox.h>
 #include <Fussion/Rendering/Framebuffer.h>
 #include <Fussion/Scene/Components.h>
 #include <Fussion/Scene/Scene.h>
@@ -14,6 +15,7 @@ namespace Editor
         glm::vec2 m_position{};
         bool m_is_focused{false};
         Ref<Framebuffer> m_frame_buffer{};
+        BoundingBox m_box{{100, 100}, {200, 200}};
 
     public:
         ViewportPanel();

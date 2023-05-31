@@ -9,24 +9,6 @@ namespace Editor
     using namespace Fussion;
     EditorLayer *EditorLayer::s_instance = nullptr;
 
-    struct RotatorComponent {
-        f32 speed = 1.0f;
-    };
-
-    class TestRotatorSystem : public System
-    {
-    public:
-        void run(entt::registry &registry, f32 delta)
-        {
-            (void)registry;
-            auto view = registry.view<TransformComponent, RotatorComponent>();
-            for (auto [entity, transform, rotator] : view.each()) {
-                transform.rotation_degrees += rotator.speed * delta;
-                transform.scale.x = sinf(Application::time_since_start());
-            }
-        }
-    };
-
     void EditorLayer::on_load()
     {
         s_instance = this;
@@ -39,7 +21,7 @@ namespace Editor
         m_texture = Bitmap::GridPattern(100, 100, 2, 0xAAAAAAFF).to_texture();
 
         auto entity = m_scene.create("Checkerboard");
-        entity.add_component<SpriteComponent>(m_texture);
+        entity->add_component<SpriteComponent>(m_texture);
 
         m_scene_camera_entity = m_scene.create("Editor Camera");
         m_scene_camera_entity.add_component<EditorCameraComponent>();
@@ -99,6 +81,7 @@ namespace Editor
         });
 
         m_scene.on_event(e);
+        m_viewport_panel.on_event(e);
 
         return false;
     }

@@ -26,7 +26,7 @@ namespace Fussion
             children.children.push_back(child);
             return;
         }
-        add_component<ChildrenComponent>(std::vector<Entity>{child});
+        (void)add_component<ChildrenComponent>(std::vector<Entity>{child});
     }
 
     void Entity::remove_child(Fussion::Entity &child) const

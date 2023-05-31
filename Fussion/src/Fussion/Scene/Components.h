@@ -11,20 +11,28 @@ namespace Fussion
         String name{};
     };
 
-    struct TransformComponent {
-        glm::vec3 position{};
-        f32 rotation_degrees{};
-        glm::vec3 scale{1, 1, 1};
-        glm::mat4 m_transform{};
+    class TransformComponent
+    {
+        vec3 m_position{}, m_global_position{};
+        f32 m_rotation_degrees{}, m_global_rotation_degrees{};
+        vec3 m_scale{1, 1, 1}, m_global_scale;
+        mat4 m_transform{}, m_global_transform{};
 
-        glm::mat4 transform()
-        {
-            /* m_transform = glm::rotate(glm::mat4(1.0), glm::radians(rotation_degrees), {0, 0, 1});
-            m_transform = glm::translate(m_transform, position); */
-            m_transform = glm::translate(glm::mat4(1.0), position);
-            m_transform = glm::rotate(m_transform, glm::radians(rotation_degrees), {0, 0, 1});
-            return m_transform;
-        }
+        void update_matrix();
+
+    public:
+        mustuse vec3 position() const { return m_position; }
+        mustuse vec3 global_position() const { return m_global_position; }
+        mustuse vec3 scale() const { return m_scale; }
+        mustuse vec3 global_scale() const { return m_global_scale; }
+        mustuse f32 rotation_degrees() const { return m_rotation_degrees; }
+        mustuse f32 global_rotation_degrees() const { return m_global_rotation_degrees; }
+        mustuse mat4 transform() const { return m_transform; };
+        mustuse mat4 global_transform() const { return m_global_transform; };
+
+        void set_position(vec3 position);
+        void set_rotation_degrees(f32 rotation);
+        void set_scale(vec3 scale);
     };
 
     struct SpriteComponent {
@@ -32,14 +40,6 @@ namespace Fussion
         glm::vec4 tint_color{1, 1, 1, 1};
 
         explicit SpriteComponent(Ref<Texture> &other) { texture = other; }
-    };
-
-    struct CameraComponent {
-        glm::vec3 clear_color{0, 0, 0};
-        Camera2D camera;
-        bool primary = false;
-
-        explicit CameraComponent(Camera2D cam) : camera(cam) {}
     };
 
     /**

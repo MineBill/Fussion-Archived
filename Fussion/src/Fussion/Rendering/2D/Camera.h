@@ -5,8 +5,8 @@ namespace Fussion
 {
     class Camera2D
     {
-        glm::mat4 m_projectionMatrix{};
-        glm::mat4 m_viewMatrix{};
+        mat4 m_projectionMatrix{};
+        mat4 m_viewMatrix{};
 
         f32 m_size{1.0f};
         f32 m_aspect{};
@@ -30,11 +30,11 @@ namespace Fussion
         }
 
         mustuse f32 size() const { return m_size; }
-        mustuse const glm::mat4 &projection() const { return m_projectionMatrix; }
-        mustuse const glm::mat4 &view() const { return m_viewMatrix; }
-        mustuse glm::mat4 view_projection() const { return m_projectionMatrix * glm::inverse(m_viewMatrix); }
+        mustuse const mat4 &projection() const { return m_projectionMatrix; }
+        mustuse const mat4 &view() const { return m_viewMatrix; }
+        mustuse mat4 view_projection() const { return m_projectionMatrix * glm::inverse(m_viewMatrix); }
 
-        mustuse glm::vec3 screen_to_world(const glm::vec2 &screen);
-        mustuse glm::vec2 world_to_screen(const glm::vec3 &world);
+        mustuse vec3 screen_to_world(const vec2 &screen);
+        mustuse vec2 world_to_screen(const vec3 &world);
     };
 } // namespace Fussion

@@ -2,6 +2,9 @@
 #include "Fussion/Rendering/2D/Renderer2D.h"
 #include <Fussion/Scene/Components.h>
 #include <Fussion/Scene/Entity.h>
+#include <Fussion/Events/Event.h>
+#include <Fussion/Events/MouseEvents.h>
+#include <Fussion/Input/Input.h>
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include <ImGuiFileDialog.h>
 #include <ImGuiHelpers.h>
@@ -61,10 +64,12 @@ void Editor::ViewportPanel::on_draw(Optional<Entity> selected, Entity camera_ent
         ImGui::Text("FPS: %d", static_cast<i32>(1.0f / delta));
         ImGuiHelpers::EndGroupPanel();
 
+
         // Gizmos
         if (auto entity = selected) {
             (void)selected;
             auto draw_list = ImGui::GetCurrentWindow()->DrawList;
+            ImGuiHelpers::RenderSimpleRect(draw_list, m_box.start, m_box.end - m_box.start, 0xFF00FF00);
             // Get the selected entity position
             // Get the editor camera
             // Convert the entity position to screen space
@@ -111,6 +116,16 @@ void Editor::ViewportPanel::on_draw(Optional<Entity> selected, Entity camera_ent
 
 bool Editor::ViewportPanel::on_event(Event &e)
 {
-    (void)e;
+    Fussion::Dispatcher d(e);
+    d.dispatch<Fussion::MouseButtonPressed>([&](Fussion::MouseButtonPressed& mbp) {
+        if (mbp.button() == Fussion::MouseButton::Left) {
+            auto mouse = Fussion::Input::mouse();
+            if (BoundingBox(m_position, m_size).has_point(mouse)){
+                FSN_LOG("Mouse button pressed");
+                m_box.include(mouse);
+            }
+        }
+        return false;
+    });
     return false;
 }

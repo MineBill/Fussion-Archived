@@ -1,17 +1,23 @@
 #pragma once
+#include "Component.h"
 #include <Fussion/Scene/Scene.h>
+#include <array>
 #include <entt.hpp>
 
 namespace Fussion
 {
-    struct NameComponent;
-    struct TransformComponent;
+    static constexpr int EntityMaxComponents = 32;
+    using EntityID = u32;
+
+    // struct NameComponent;
+    // struct TransformComponent;
     class Entity final
     {
-        NameComponent *m_name{nullptr};
-        TransformComponent *m_transform{nullptr};
+        // NameComponent *m_name{nullptr};
+        // TransformComponent *m_transform{nullptr};
         Scene *m_scene{nullptr};
-        entt::entity m_id{entt::null};
+
+        std::array<Ptr<Component>, EntityMaxComponents> m_components{};
 
         void set_parent(Entity &parent);
 
@@ -21,19 +27,19 @@ namespace Fussion
         Entity(entt::entity id, Scene *scene);
 
         template<class T>
-        bool has_component() const
+        mustuse bool has_component() const
         {
-            return m_scene->m_registry.all_of<T>(m_id);
+            // return m_scene->m_registry.all_of<T>(m_id);
         }
 
         template<class T>
-        T &get_component() const // @Note Should this be const?
+        mustuse Ref<T> &get_component() const // @Note Should this be const?
         {
-            return m_scene->m_registry.get<T>(m_id);
+            // return m_scene->m_registry.get<T>(m_id);
         }
 
         template<typename T>
-        T *get_component_or_null() const
+        mustuse T *get_component_or_null() const
         {
             if (!has_component<T>())
                 return nullptr;
@@ -44,7 +50,7 @@ namespace Fussion
         T &add_component(Args &&...args)
         {
             FSN_CORE_ASSERT(!has_component<T>(), "Cannot have multiple components of T");
-            return m_scene->m_registry.emplace<T>(m_id, std::forward<Args>(args)...);
+            // return m_scene->m_registry.emplace<T>(m_id, std::forward<Args>(args)...);
         }
 
         void add_child(Entity &child);
@@ -52,7 +58,7 @@ namespace Fussion
         void destroy();
         bool is_grandparent_or_parent(Entity &entity) const;
 
-        mustuse entt::entity id() const { return m_id; }
+        // mustuse entt::entity id() const { return m_id; }
         mustuse NameComponent &name() { return *m_name; }
         mustuse TransformComponent &transform() { return *m_transform; }
         mustuse u32 entity_id() const;
